@@ -28,6 +28,7 @@ grumphp:
                     - ♻️ REFACTOR # Refactoring
                     - 🗑️ REMOVE # Suppression de fichiers
                     - 🐞 BUG # Bug
+                    - 🔏 SECURITY # Sécurité
                 scopes: ~
                 subject_pattern: >-
                     ([a-zA-Zа-яА-Я0-9-_ #@'\/\"]+)
