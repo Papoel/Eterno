@@ -1,0 +1,38 @@
+classDiagram
+direction BT
+class doctrine_migration_versions {
+   timestamp(0) executed_at
+   integer execution_time
+   varchar(191) version
+}
+class light {
+   integer user_account_id
+   varchar(50) firstname
+   varchar(50) lastname
+   varchar(50) username
+   timestamp(0) birthday_at
+   timestamp(0) deceased_at
+   timestamp(0) created_at
+   integer id
+}
+class message {
+   integer user_account_id
+   integer light_id
+   text message
+   timestamp(0) created_at
+   integer id
+}
+class users {
+   varchar(50) firstname
+   varchar(50) lastname
+   varchar(50) username
+   varchar(180) email
+   varchar(255) password
+   json roles
+   timestamp(0) created_at
+   integer id
+}
+
+light  -->  users : user_account_id:id
+message  -->  light : light_id:id
+message  -->  users : user_account_id:id
