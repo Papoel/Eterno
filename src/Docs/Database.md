@@ -7,12 +7,12 @@ Ce document fournit une documentation détaillée de la structure de la base de 
 ## Table "User"
 
 - `id` (int, clé primaire) : Identifiant unique de l'utilisateur.
-- `firstname` (varchar(255)) : Prénom de l'utilisateur.
-- `lastname` (varchar(255)) : Nom de famille de l'utilisateur.
-- `username` (varchar(255)) : Nom d'utilisateur (Pseudo) de l'utilisateur.
-- `email` (varchar(255)) : Adresse e-mail de l'utilisateur.
+- `firstname` (varchar(50)) : Prénom de l'utilisateur.
+- `lastname` (varchar(50)) : Nom de famille de l'utilisateur.
+- `username` (varchar(50)) : Nom d'utilisateur (Pseudo) de l'utilisateur.
+- `email` (varchar(180)) : Adresse e-mail de l'utilisateur.
 - `password` (varchar(255)) : Mot de passe de l'utilisateur (stocké de manière sécurisée, c'est-à-dire hashé).
-- `created_at` (timestamp) : Date et heure de création du compte utilisateur.
+- `createdAt` (DateTimeImmutable) : Date et heure de création du compte utilisateur.
 
 **Description** :
 - La table "User" stocke les informations d'identification de l'utilisateur, y compris son nom d'utilisateur, son adresse e-mail, son mot de passe et la date de création du compte.
@@ -21,11 +21,12 @@ Ce document fournit une documentation détaillée de la structure de la base de 
 
 - `id` (int, clé primaire) : Identifiant unique de chaque profil Lumière.
 - `user_id` (int, clé étrangère vers la table "User") : Identifiant de l'utilisateur qui a créé la Lumière.
-- `firstname` (varchar(255)) : Le prénom de la personne décédée que la Lumière représente.
-- `lastname` (varchar(255)) : Le nom de la personne décédée que la Lumière représente.
-- `date_of_birth` (date) : La date de naissance de la personne décédée.
-- `date_of_passing` (date) : La date de décès de la personne décédée.
-- `created_at` (timestamp) : Date et heure de création du profil Lumière.
+- `firstname` (varchar(50)) : Le prénom de la personne décédée que la Lumière représente.
+- `lastname` (varchar(50)) : Le nom de la personne décédée que la Lumière représente.
+- `username` (varchar(50)) : Le surnom/pseudo de la personne décédée que la Lumière représente.
+- `birthdayAt` (DateTimeImmutable) : La date de naissance de la personne décédée.
+- `deceasedAt` (DateTimeImmutable) : La date de décès de la personne décédée.
+- `createdAt` (DateTimeImmutable) : Date et heure de création du profil Lumière.
 
 **Description** :
 - La table "Light" représente les profils Lumière en mémoire des personnes décédées. Chaque profil est lié à un 
@@ -38,7 +39,7 @@ Ce document fournit une documentation détaillée de la structure de la base de 
 - `user_id` (int, clé étrangère vers la table "User") : Identifiant de l'utilisateur qui a envoyé le message.
 - `light_id` (int, clé étrangère vers la table "Light") : Identifiant de la Lumière à laquelle le message est associé.
 - `message` (text) : Le contenu du message.
-- `created_at` (timestamp) : Date et heure de création du message.
+- `createdAt` (DateTimeImmutable) : Date et heure de création du message.
 
 **Description** :
 - La table "Message" stocke les messages envoyés par les utilisateurs aux profils Lumière en mémoire des personnes décédées. 

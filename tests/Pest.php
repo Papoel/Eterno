@@ -24,8 +24,8 @@
 |
 */
 
-expect()->extend('toBeOne', function () {
-    return $this->toBe(1);
+expect()->extend(name: 'toBeOne', extend: function () {
+    return $this->toBe(expected: 1);
 });
 
 /*
