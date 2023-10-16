@@ -1,0 +1,33 @@
+version: '3'
+
+services:
+  ###> doctrine/doctrine-bundle ###
+  database:
+    image: postgres:16-alpine
+    container_name: database_eterno
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_DB: eterno_db
+      POSTGRES_PASSWORD: DevMode2023!
+    ports:
+      - "5432:5432"
+    volumes:
+      - database_data:/var/lib/postgresql/data:rw
+###< doctrine/doctrine-bundle ###
+
+###< sgbd/pgAdmin4 ###
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin_eterno
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: eterno@admin.fr
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "8085:80"
+###< sgbd/pgAdmin4 ###
+
+volumes:
+  database_data:
+networks:
+  dev:

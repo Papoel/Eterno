@@ -1,0 +1,33 @@
+grumphp:
+    stop_on_failure: true
+    tasks:
+        make:
+            make_file: Makefile
+            task: before-commit
+            triggered_by: [php, yml, md]
+        git_commit_message:
+            allow_empty_message: false # N'accepte pas les commits vides
+            enforce_capitalized_subject: false # Garantit que la ligne d’objet du message de validation commence par une lettre majuscule.
+            enforce_no_subject_punctuations: false # Garantit que la ligne d’objet du message de validation ne contient aucun caractère de ponctuation.
+            enforce_no_subject_trailing_period: false # Garantit que la ligne d’objet du message de validation ne comporte pas de point final.
+            enforce_single_lined_subject: true # Accepte les commits dont le sujet est sur une seule ligne
+            type_scope_conventions:
+                types:
+                    - 🎉 INIT # Initialisation du projet
+                    - ✨ NEW # Nouvelle fonctionnalité
+                    - 🐛 FIX # Correction de bug
+                    - 📖 DOCS # Documentation
+                    - 🧪 TEST # Tests
+                    - ➕ ADD # Ajout de dépendances
+                    - 📦 DEP # Mise à jour de dépendances
+                    - 🚀 RELEASE # Release
+                    - 🚧 WIP # Travail en cours
+                    - 🎨 STYLE # Style
+                    - 🤡 FRONT # Frontend
+                    - 🗃️ BACK # Backend
+                    - ♻️ REFACTOR # Refactoring
+                    - 🗑️ REMOVE # Suppression de fichiers
+                    - 🐞 BUG # Bug
+                scopes: ~
+                subject_pattern: >-
+                    ([a-zA-Zа-яА-Я0-9-_ #@'\/\"]+)
