@@ -44,8 +44,25 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function __construct()
     {
+        if (empty($this->roles)) {
+            $this->roles[] = 'ROLE_USER';
+        }
+
         $this->lights = new ArrayCollection();
         $this->messages = new ArrayCollection();
+    }
+
+    public function __toString(): string
+    {
+        if (null !== $this->username) {
+            return $this->username;
+        }
+
+        if (null !== $this->firstname && null !== $this->lastname) {
+            return ucfirst($this->firstname).' '.ucfirst($this->lastname);
+        }
+
+        return $this->email ?? '';
     }
 
     public function getId(): ?int

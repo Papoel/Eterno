@@ -51,9 +51,10 @@ PHPQA_RUN = $(DOCKER_RUN) --init --rm -v $(PWD):/project -w /project $(PHPQA)
 # --------------------
 
 # --------------------
-# PHPUNIT
+# TESTS
 # --------------------
 PHPUNIT = APP_ENV=test $(SYMFONY_BIN) php bin/phpunit
+PEST = ./$(BIN_VENDOR)pest
 # --------------------
 
 
@@ -220,10 +221,10 @@ qa-cs-fixer: ## Execute php-cs-fixer.
 .PHONY: qa-cs-fixer
 
 qa-phpstan: ## Execute phpstan.
-	$(PHPQA_RUN) phpstan analyse ./src --level=9
+	$(PHPQA_RUN) phpstan analyse --configuration=phpstan.neon
 .PHONY: qa-phpstan
 
-qa-security-checker: ## Vériier les dépendances avec security-checker.
+qa-security-checker: ## Verifier les dépendances avec security-checker.
 	$(SYMFONY_BIN) security:check
 .PHONY: qa-security-checker
 
@@ -346,4 +347,10 @@ init-db-tests-with-fixtures: ## Initialiser la base de données de test avec les
 # --------------------
 ## ********** 🧪 TESTS 🧪 ******************************************************************
 pest : ## Exécuter les tests avec Pest | ./vendor/bin/pest
-	./vendor/bin/pest
+	$(PEST)
+
+pest-c: ## Vérifier la couverture minimum des test (80%)
+	$(PEST) --coverage --min=80
+
+pest-e: ## Créer un rapport de couverture des tests avec Pest.
+	$(PEST) --coverage --coverage-html var/coverage

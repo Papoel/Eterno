@@ -7,9 +7,12 @@ use App\Entity\Traits\FirstLastUserNameTrait;
 use App\Repository\LightRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: LightRepository::class)]
+#[ORM\Table(name: '`lights`')]
+#[ORM\HasLifecycleCallbacks]
 class Light
 {
     use CreatedAtTrait;
@@ -20,11 +23,11 @@ class Light
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?\DateTimeImmutable $birthdayAt = null;
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $birthdayAt = null;
 
-    #[ORM\Column]
-    private ?\DateTimeImmutable $deceasedAt = null;
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $deceasedAt = null;
 
     #[ORM\ManyToOne(inversedBy: 'lights')]
     #[ORM\JoinColumn(nullable: false)]
@@ -44,24 +47,24 @@ class Light
         return $this->id;
     }
 
-    public function getBirthdayAt(): ?\DateTimeImmutable
+    public function getBirthdayAt(): ?\DateTimeInterface
     {
         return $this->birthdayAt;
     }
 
-    public function setBirthdayAt(?\DateTimeImmutable $birthdayAt): static
+    public function setBirthdayAt(?\DateTimeInterface $birthdayAt): static
     {
         $this->birthdayAt = $birthdayAt;
 
         return $this;
     }
 
-    public function getDeceasedAt(): ?\DateTimeImmutable
+    public function getDeceasedAt(): ?\DateTimeInterface
     {
         return $this->deceasedAt;
     }
 
-    public function setDeceasedAt(\DateTimeImmutable $deceasedAt): static
+    public function setDeceasedAt(\DateTimeInterface $deceasedAt): static
     {
         $this->deceasedAt = $deceasedAt;
 
