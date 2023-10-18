@@ -6,6 +6,7 @@ use App\Entity\Traits\CreatedAtTrait;
 use App\Repository\MessageRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: MessageRepository::class)]
 #[ORM\HasLifecycleCallbacks]
@@ -20,14 +21,23 @@ class Message
     private ?int $id = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: false)]
+    #[Assert\NotBlank]
+    #[Assert\Length(
+        min: 1,
+        max: 750,
+        minMessage: 'Votre message doit contenir au moins {{ limit }} caractères.',
+        maxMessage: 'Votre message ne peut pas contenir plus de {{ limit }} caractères.'
+    )]
     private string $message;
 
     #[ORM\ManyToOne(inversedBy: 'messages')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\Valid]
     private User $userAccount;
 
     #[ORM\ManyToOne(inversedBy: 'messages')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\Valid]
     private Light $light;
 
     public function getId(): ?int
