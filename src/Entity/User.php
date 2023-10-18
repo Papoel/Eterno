@@ -8,11 +8,14 @@ use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`users`')]
+#[UniqueEntity(fields: ['email'], message: 'Un compte existe déjà avec cette adresse email.')]
 #[ORM\HasLifecycleCallbacks]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -25,9 +28,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
+    #[Assert\Email(message: 'Veuillez saisir une adresse email valide.')]
+    #[Assert\NotBlank(message: 'Veuillez saisir une adresse email.')]
+    #[Assert\Length(max: 180, maxMessage: 'L\'adresse email ne peut pas dépasser {{ limit }} caractères.')]
     private ?string $email = null;
 
     #[ORM\Column]
+    #[Assert\NotBlank(message: 'Veuillez saisir un mot de passe.')]
+    #[Assert\Length(
+        min: 6,
+        max: 50,
+        minMessage: 'Le mot de passe doit contenir au moins {{ limit }} caractères.',
+        maxMessage: 'Le mot de passe ne peut pas dépasser {{ limit }} caractères.'
+    )]
     private string $password;
 
     /** @var array<string> */
@@ -35,10 +48,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private array $roles = [];
 
     /** @var Collection<int, Light> */
+    #[Assert\Valid]
     #[ORM\OneToMany(mappedBy: 'userAccount', targetEntity: Light::class, orphanRemoval: true)]
     private Collection $lights;
 
     /** @var Collection<int, Message> */
+    #[Assert\Valid]
     #[ORM\OneToMany(mappedBy: 'userAccount', targetEntity: Message::class, orphanRemoval: true)]
     private Collection $messages;
 
@@ -172,12 +187,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function removeMessage(Message $message): static
     {
-        if ($this->messages->removeElement($message)) {
-            // set the owning side to null (unless already changed)
-            if ($message->getUserAccount() === $this) {
-                /* @phpstan-ignore-next-line */
-                $message->setUserAccount(userAccount: null);
-            }
+        if ($message->getUserAccount() === $this) {
+            $this->messages->removeElement($message);
         }
 
         return $this;

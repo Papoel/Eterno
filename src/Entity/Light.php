@@ -9,6 +9,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: LightRepository::class)]
 #[ORM\Table(name: '`lights`')]
@@ -24,22 +25,34 @@ class Light
     private ?int $id = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    #[Assert\LessThanOrEqual(propertyPath: 'deceasedAt', message: 'La date de naissance doit être antérieure à la date de décès.')]
+    #[Assert\LessThanOrEqual(value: 'today', message: 'La date de naissance doit être antérieure à la date du jour.')]
+    #[Assert\Date(message: 'Veuillez saisir une date de naissance valide.')]
     private ?\DateTimeInterface $birthdayAt = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    #[Assert\GreaterThanOrEqual(propertyPath: 'birthdayAt', message: 'La date de décès doit être postérieure à la date de naissance.')]
+    #[Assert\LessThanOrEqual(value: 'today', message: 'La date de décès doit être antérieure ou égal à la date du jour.')]
     private ?\DateTimeInterface $deceasedAt = null;
 
     #[ORM\ManyToOne(inversedBy: 'lights')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\Valid]
     private ?User $userAccount = null;
 
     /** @var Collection<int, Message> */
     #[ORM\OneToMany(mappedBy: 'light', targetEntity: Message::class, orphanRemoval: true)]
+    #[Assert\Valid]
     private Collection $messages;
 
     public function __construct()
     {
         $this->messages = new ArrayCollection();
+    }
+
+    public function __toString(): string
+    {
+        return ucfirst(string: $this->getFirstname() ?? '');
     }
 
     public function getId(): ?int
@@ -103,12 +116,8 @@ class Light
 
     public function removeMessage(Message $message): static
     {
-        if ($this->messages->removeElement($message)) {
-            // set the owning side to null (unless already changed)
-            if ($message->getLight() === $this) {
-                /* @phpstan-ignore-next-line */
-                $message->setLight(light: null);
-            }
+        if ($message->getLight() === $this) {
+            $this->messages->removeElement($message);
         }
 
         return $this;

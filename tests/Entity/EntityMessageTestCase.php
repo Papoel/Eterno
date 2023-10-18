@@ -39,3 +39,17 @@ test(description: 'vérifie que la classe User comporte les getters et les sette
             ->toBeTrue();
     }
 });
+
+test(description: 'Doit retourner null quand j\'appel getId sur une Light non persisté', closure: function () {
+    $message = new Message();
+
+    expect($message->getId())->toBeNull();
+});
+
+test(description: 'Un message peut être ajouté', closure: function () {
+    $message = new Message();
+
+    $message->setMessage('Mon message');
+
+    expect($message->getMessage())->toBe('Mon message');
+});

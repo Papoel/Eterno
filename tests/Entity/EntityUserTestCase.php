@@ -2,10 +2,23 @@
 
 declare(strict_types=1);
 
+use App\Entity\Light;
+use App\Entity\Message;
 use App\Entity\User;
+use App\Tests\Abstract\EntityTestCase;
+use PHPUnit\Framework\ExpectationFailedException;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
+
 
 test(description: 'Vérifie que la classe User existe', closure: function (): void {
     $this->assertTrue(condition: class_exists(class: User::class));
+});
+
+test(description: 'Création d\'une instance de la classe User', closure: function (): void {
+    $user = new User();
+
+    expect($user)->toBeInstanceOf(class: User::class);
 });
 
 test(description: 'vérifie que la classe User comporte les propriétés requises', closure: function () {
@@ -68,6 +81,17 @@ test(description: 'Vérifie que la méthode removeLight existe', closure: functi
     expect($removeLightMethod)->toBeInstanceOf(class: ReflectionMethod::class);
 });
 
+test(description: 'Vérifie que les méthodes addLight et removeLight fonctionnent', closure: function () {
+    $user = new User();
+    $light = new Light();
+
+    $user->addLight($light);
+    expect($user->getLights())->toContain($light);
+
+    $user->removeLight($light);
+    expect($user->getLights())->not->toContain($light);
+});
+
 test(description: 'Vérifie que la méthode addMessage existe', closure: function () {
     $userReflection = new ReflectionClass(objectOrClass: User::class);
     try {
@@ -88,4 +112,99 @@ test(description: 'Vérifie que la méthode removeMessage existe', closure: func
     }
 
     expect($removeLightMethod)->toBeInstanceOf(class: ReflectionMethod::class);
+});
+
+test(description: 'Un utilisateur envoie un message à une Light', closure: function () {
+    $user = new User();
+    $light = new Light();
+    $message = new Message();
+
+    $user->addMessage($message);
+    $light->addMessage($message);
+
+    expect($user->getMessages())->toContain($message)
+        ->and($light->getMessages())->toContain($message);
+});
+
+test(description: 'Un utilisateur peut supprimer un message', closure: function () {
+    $user = new User();
+    $message = new Message();
+
+    $user->addMessage($message);
+    $user->removeMessage($message);
+
+    expect($user->getMessages())->not->toContain($message);
+});
+
+test(description: 'Doit retourner le nom complet de l\'utilisateur avec des majuscules', closure: function () {
+    $user = new User();
+    $user->setEmail(email: 'test@example.com');
+    $user->setFirstname(firstname: 'john');
+    $user->setLastname(lastname: 'doe');
+
+    expect($user->__toString())->toBe(expected: 'John Doe')
+        ->and($user->getFirstname())->toBe(expected: 'john')
+        ->and($user->getLastname())->toBe(expected: 'doe');
+});
+
+test(description: 'Doit retourner le mail de l\'utilisateur si lastname est vide', closure: function () {
+    $user = new User();
+    $user->setFirstname(firstname: 'john');
+    $user->setEmail(email: 'test@example.com');
+
+    expect($user->__toString())->toBe(expected: 'test@example.com');
+});
+
+test(description: 'Doit retourner le username si il est définis', closure: function () {
+    $user = new User();
+    $user->setUsername(username: 'killdag59');
+
+    expect($user->__toString())->toBe(expected: 'killdag59')
+        ->and($user->getUsername())->toBe(expected: 'killdag59');
+});
+
+test(description: 'Doit retourner null quand j\'appel getId sur un utilisateur non persisté', closure: function () {
+    $user = new User();
+
+    expect($user->getId())->toBeNull();
+});
+
+test(description: 'Doit retourner l\'email de l\'utilisateur', closure: function () {
+    $user = new User();
+    $user->setEmail(email: 'test@example.com');
+
+    expect($user->getEmail())->toBe(expected: 'test@example.com');
+});
+
+test(description: 'Doit enregistrer le mot de passe de l\'utilisateur', closure: function () {
+    $user = new User();
+    $user->setPassword(password: 'password');
+
+    expect($user->getPassword())->toBe(expected: 'password');
+});
+
+test(description: 'Le ROLE_USER doit être ajouté par défaut', closure: function () {
+    $user = new User();
+    expect($user->getRoles())->toContain('ROLE_USER');
+});
+
+test(description: 'Lorsqu\'un utilisateur est créé, il doit avoir le rôle ROLE_USER en plus des rôles qu\'on lui donne', closure: function () {
+    $user = new User();
+    $user->setRoles(roles: ['ROLE_ADMIN']);
+
+    expect($user->getRoles())->toContain('ROLE_USER');
+});
+
+test(description: 'Doit renvoyer l\'email de l\'utilisateur attendu lors de l\'appel à getUserIdentifier()', closure: function () {
+    $user = new User();
+    $user->setEmail(email: 'test@example.com');
+
+    expect($user->getUserIdentifier())->toBe(expected: 'test@example.com');
+});
+
+test(description: 'Ne doit pas avoir d\'implémentation spécifique pour eraseCredentials()', closure: function () {
+    $user = new User();
+    $user->eraseCredentials();
+
+    expect(value: null)->toBeNull();
 });
