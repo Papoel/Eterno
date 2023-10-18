@@ -3,6 +3,8 @@
 declare(strict_types=1);
 
 use App\Entity\Light;
+use App\Entity\Message;
+use App\Entity\User;
 
 test(description: 'Vérifier que l\'entité Light existe', closure: function (): void {
     $this->assertTrue(condition: class_exists(class: Light::class));
@@ -64,4 +66,65 @@ test(description: 'Vérifie que la méthode removeMessage existe', closure: func
     }
 
     expect($removeLightMethod)->toBeInstanceOf(class: ReflectionMethod::class);
+});
+
+test(description: 'Doit retourner null quand j\'appel getId sur une Light non persisté', closure: function () {
+    $light = new Light();
+
+    expect($light->getId())->toBeNull();
+});
+
+test(description: 'Doit retourner le firstname par défaut', closure: function () {
+    $light = new Light();
+    $light->setFirstname(firstname: 'kevin');
+
+    expect($light->__toString())->toBe(expected: 'Kevin');
+
+});
+
+test(description: 'Un message peut être ajouté à une Light', closure: function () {
+    $light = new Light();
+    $message = new Message();
+
+    $light->addMessage($message);
+
+    expect($light->getMessages())->toContain($message)
+        ->and($message->getLight())->toBe($light);
+});
+
+test(description: 'Un message peut être retiré d\'une Light', closure: function () {
+    $light = new Light();
+    $message = new Message();
+
+    $light->addMessage($message);
+    $light->removeMessage($message);
+
+    expect($light->getMessages())->not->toContain($message);
+});
+
+test(description: 'Un utilisateur peut être associé à une Light', closure: function () {
+    $light = new Light();
+    $user = new User();
+
+    $light->setUserAccount($user);
+
+    expect($light->getUserAccount())->toBe($user);
+});
+
+test(description: 'La date de naissance d\'une Light peut être définie', closure: function () {
+    $light = new Light();
+    $birthday = new \DateTime(datetime: '1982-09-21');
+
+    $light->setBirthdayAt($birthday);
+
+    expect($light->getBirthdayAt())->toBe($birthday);
+});
+
+test(description: 'La date de décès d\'une Light peut être définie', closure: function () {
+    $light = new Light();
+    $deceased = new \DateTime(datetime: '2023-09-06');
+
+    $light->setDeceasedAt($deceased);
+
+    expect($light->getDeceasedAt())->toBe($deceased);
 });
