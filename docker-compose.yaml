@@ -2,32 +2,53 @@ version: '3'
 
 services:
   ###> doctrine/doctrine-bundle ###
-  database:
-    image: postgres:16-alpine
+  db:
+    image: mariadb:latest
+    platform: linux/x86_64
     container_name: database_eterno
-    environment:
-      POSTGRES_USER: root
-      POSTGRES_DB: eterno_db
-      POSTGRES_PASSWORD: DevMode2023!
-    ports:
-      - "5432:5432"
-    volumes:
-      - database_data:/var/lib/postgresql/data:rw
-###< doctrine/doctrine-bundle ###
-
-###< sgbd/pgAdmin4 ###
-  pgadmin:
-    image: dpage/pgadmin4
-    container_name: pgadmin_eterno
     restart: always
+    volumes:
+      - db-data:/var/lib/mysql
     environment:
-      PGADMIN_DEFAULT_EMAIL: eterno@admin.fr
-      PGADMIN_DEFAULT_PASSWORD: admin
+      MYSQL_DATABASE: db_eterno
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+    networks:
+      - dev
+    ports:
+      - "3306:3306"
+  ###< doctrine/doctrine-bundle ###
+
+  ###> phpMyAdmin ###
+  phpmyadmin:
+    image: phpmyadmin
+    container_name: phpmyadmin_eterno
+    restart: always
+    depends_on:
+      - db
     ports:
       - "8085:80"
-###< sgbd/pgAdmin4 ###
+    environment:
+      PMA_HOST: db
+    networks:
+      - dev
+  ###< phpMyAdmin ###
 
-volumes:
-  database_data:
+  ###> MailDev ###
+  maildev:
+    image: maildev/maildev
+    container_name: maildev_eterno
+    command: bin/maildev --web 80 --smtp 25 --hide-extensions STARTTLS
+    # MAILER_DSN=smtp://127.0.0.1:1025
+    ports:
+      - "8081:80"
+      - "1025:25"
+    restart: always
+    networks:
+      - dev
+###< MailDev ###
+
 networks:
   dev:
+
+volumes:
+  db-data:

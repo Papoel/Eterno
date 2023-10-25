@@ -9,29 +9,32 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 trait FirstLastUserNameTrait
 {
-    #[ORM\Column(length: 50)]
+    public const LENGTH_FIELD_MAX = 50;
+
+    // define attribute columns and use const length for max length
+    #[ORM\Column(length: self::LENGTH_FIELD_MAX)]
     #[Assert\NotBlank(message: 'Veuillez saisir votre prénom.')]
     #[Assert\Length(
         min: 2,
-        max: 50,
+        max: self::LENGTH_FIELD_MAX,
         minMessage: 'Le prénom doit contenir au moins {{ limit }} caractères.',
         maxMessage: 'Le prénom ne peut pas dépasser {{ limit }} caractères.'
     )]
     private string $firstname;
 
-    #[ORM\Column(length: 50, nullable: true)]
+    #[ORM\Column(length: self::LENGTH_FIELD_MAX, nullable: true)]
     #[Assert\Length(
         min: 2,
-        max: 50,
+        max: self::LENGTH_FIELD_MAX,
         minMessage: 'Le nom doit contenir au moins {{ limit }} caractères.',
         maxMessage: 'Le nom ne peut pas dépasser {{ limit }} caractères.'
     )]
     private ?string $lastname = null;
 
-    #[ORM\Column(length: 50, nullable: true)]
+    #[ORM\Column(length: self::LENGTH_FIELD_MAX, nullable: true)]
     #[Assert\Length(
         min: 2,
-        max: 50,
+        max: self::LENGTH_FIELD_MAX,
         minMessage: 'Le nom d\'utilisateur doit contenir au moins {{ limit }} caractères.',
         maxMessage: 'Le nom d\'utilisateur ne peut pas dépasser {{ limit }} caractères.'
     )]

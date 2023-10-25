@@ -2,6 +2,9 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
 use App\Entity\Traits\CreatedAtTrait;
 use App\Entity\Traits\FirstLastUserNameTrait;
 use App\Repository\LightRepository;
@@ -14,6 +17,12 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: LightRepository::class)]
 #[ORM\Table(name: '`lights`')]
 #[ORM\HasLifecycleCallbacks]
+#[ApiResource(
+    operations: [
+        new Get(),
+        new GetCollection(),
+    ],
+)]
 class Light
 {
     use CreatedAtTrait;

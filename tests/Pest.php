@@ -11,7 +11,7 @@
 |
 */
 
-// uses(Tests\TestCase::class)->in('Feature');
+uses(App\Tests\ApiTestCase::class)->in('Feature/Api');
 
 /*
 |--------------------------------------------------------------------------
@@ -26,6 +26,12 @@
 
 expect()->extend(name: 'toBeOne', extend: function () {
     return $this->toBe(expected: 1);
+});
+
+
+expect()->extend(name: 'toMatchJson', extend: function (array $expected) {
+    $this->value = json_decode($this->value, associative: true, depth: 512, flags: JSON_THROW_ON_ERROR);
+    return $this->toMatchArray($expected);
 });
 
 /*

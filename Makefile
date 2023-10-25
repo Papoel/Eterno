@@ -5,15 +5,18 @@ PROJECT = Eterno
 AUTHOR = Papoel
 HTTP_PORT = 8000
 HOST_NAME = 127.0.0.1
-DB_NAME = eterno_db
+DB_NAME = db_eterno
 DB_USER = root
-DB_PASS = DevMode2023!
-DB_PORT = 5432
-DB_VERSION = 16
-DB_CHARSET = charset=utf8
+DB_PASS =
+DB_PORT = 3306
+DB_VERSION = 11.0.2
+SERVER_NAME = -MariaDB
+DB_CHARSET = charset=utf8mb4
 
-# La variable DATABASE_URL
-DATABASE_URL=postgresql://${DB_USER}:${DB_PASS}@${HOST_NAME}:${DB_PORT}/${DB_NAME}?serverVersion=${DB_VERSION}&${DB_CHARSET}
+# La variable DATABASE_URL pour postgresql
+# DATABASE_URL=postgresql://${DB_USER}:${DB_PASS}@${HOST_NAME}:${DB_PORT}/${DB_NAME}?serverVersion=${DB_VERSION}&${DB_CHARSET}
+# La variable DATABASE_URL pour mysql
+DATABASE_URL = mysql://${DB_USER}:${DB_PASS}@${HOST_NAME}:${DB_PORT}/${DB_NAME}?serverVersion=${DB_VERSION}${SERVER_NAME}&${DB_CHARSET}
 
 # --------------------
 # Commandes
@@ -347,7 +350,7 @@ init-db-tests-with-fixtures: ## Initialiser la base de données de test avec les
 # --------------------
 ## ********** 🧪 TESTS 🧪 ******************************************************************
 pest : ## Exécuter les tests avec Pest | ./vendor/bin/pest
-	$(PEST)
+	$(PEST) --bail # --bail arrête les tests à la première erreur
 
 pest-c: ## Vérifier la couverture minimum des test (80%)
 	$(PEST) --coverage --min=80

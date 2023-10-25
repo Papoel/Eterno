@@ -1,16 +1,21 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
-        {% block stylesheets %}
-        {% endblock %}
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="Un espace pour honorer et se souvenir de nos êtres chers disparus, où vous pouvez envoyer des messages à ceux qui sont partis.">
 
-        {% block javascripts %}
-        {% endblock %}
+        <!-- Balises pour le référencement -->
+        <title>Eterno - {% block title %}{% endblock %}</title>
+        <meta name="robots" content="index, follow"> <!-- Permet aux moteurs de recherche d'indexer la page -->
+
+
+        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
+
+        {% block stylesheets %}{% endblock %}
+        {% block javascripts %}{% endblock %}
     </head>
-    <body>
+    <body {% block body_attributes %}{% endblock %}>
         {% block body %}{% endblock %}
     </body>
 </html>
