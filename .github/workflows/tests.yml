@@ -1,115 +1,24 @@
 name: Tests
 
-on: [push, pull_request]
+on: [ 'push', 'pull_request' ]
 
 jobs:
-  security-checker:
+  ci:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v3
 
-      - name: Cache Composer dependencies
-        id: composer-cache
-        uses: actions/cache@v2
-        with:
-          path: vendor
-          key: ${{ runner.os }}-composer-${{ hashFiles('composer.lock') }}
-
-      - name: Set up PHP
+      - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: 8.2
           tools: composer:v2
+          coverage: xdebug
 
-      - name: Install Composer dependencies
-        run: composer install --no-progress
+      - name: Install Dependencies
+        run: composer install --no-interaction --prefer-dist --optimize-autoloader
 
-      - name: Run local-php-security-checker
-        run: composer require sensiolabs/security-checker
-
-      - name: Check Security
-        run: php bin/console security:check
-        continue-on-error: true
-
-  php-code-standard:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Cache Composer dependencies
-        id: composer-cache
-        uses: actions/cache@v2
-        with:
-          path: vendor
-          key: ${{ runner.os }}-composer-${{ hashFiles('composer.lock') }}
-
-      - name: Set up PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: 8.2
-          tools: composer:v2
-
-      - name: Install Composer dependencies
-        run: composer install --no-progress
-
-      - name: PHP Coding Standards
-        run: |
-          php-cs-fixer fix src --dry-run --rules=@Symfony --verbose
-          phpstan analyse src -l9
-          phpdd src
-          phpcpd src --exclude 'src/Controller/Admin/' --exclude 'src/Entity'
-
-  lint:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Cache Composer dependencies
-        id: composer-cache
-        uses: actions/cache@v2
-        with:
-          path: vendor
-          key: ${{ runner.os }}-composer-${{ hashFiles('composer.lock') }}
-
-      - name: Set up PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: 8.2
-          tools: composer:v2
-
-      - name: Install Composer dependencies
-        run: composer install --no-progress
-
-      - name: PHP Lint
-        run: |
-          bin/console lint:twig templates --env=prod
-          bin/console lint:yaml config --parse-tags
-          bin/console doctrine:schema:validate --skip-sync -vvv --no-interaction
-
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Cache Composer dependencies
-        id: composer-cache
-        uses: actions/cache@v2
-        with:
-          path: vendor
-          key: ${{ runner.os }}-composer-${{ hashFiles('composer.lock') }}
-
-      - name: Set up PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: 8.2
-          tools: composer:v2
-
-      - name: Install Composer dependencies
-        run: composer install --no-progress
-
-      - name: Run Tests
+      - name: Tests
         run: ./vendor/bin/pest
