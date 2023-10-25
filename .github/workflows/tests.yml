@@ -1,24 +1,36 @@
-name: Tests
+name: CI
 
-on: [ 'push', 'pull_request' ]
+on: [push, pull_request]
 
 jobs:
-  ci:
+  test:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-      - name: Setup PHP
+      - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: 8.2
           tools: composer:v2
-          coverage: xdebug
 
-      - name: Install Dependencies
+      - name: Install Composer Dependencies
         run: composer install --no-interaction --prefer-dist --optimize-autoloader
 
-      - name: Tests
+      - name: Set up MySQL
+        uses: amarischuk/setup-mysql@v1
+        with:
+          mysql-version: 8.0
+
+      - name: Create MySQL Database
+        run: mysql -e "CREATE DATABASE IF NOT EXISTS your_database_name"
+
+      - name: Run Tests
         run: ./vendor/bin/pest
+
+      - name: Clean Up
+        run: |
+          mysql -e "DROP DATABASE IF EXISTS your_database_name"
+          mysql -e "CREATE DATABASE IF NOT EXISTS your_database_name"
