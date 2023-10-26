@@ -35,9 +35,9 @@ jobs:
         run: |
           mkdir -p data
           touch data/database_test.db
-      - name: Extract Database URL from .env.test.local
+      - name: Extract Database URL from .env.test
         id: extract-db-url
-        run: echo "::set-output name=db_url::$(grep 'DATABASE_URL=' .env.test.local | cut -d'=' -f2-)"
+        run: echo "::set-output name=db_url::$(grep 'DATABASE_URL=' .env.test | cut -d'=' -f2-)"
       - name: Migrate database
         run: php bin/console doctrine:migrations:migrate --no-interaction --env=test
         env:
