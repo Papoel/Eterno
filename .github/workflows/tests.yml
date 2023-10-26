@@ -1,22 +1,60 @@
-name: Tests
-
+name: Full CI process for Symfony 6.3
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
-
-permissions:
-  contents: read
 
 jobs:
-  symfony-tests:
+  symfony:
+    name: Symfony 6.3.* (PHP ${{ matrix.php-versions }})
+    # https://hub.docker.com/_/ubuntu/
     runs-on: ubuntu-latest
+    services:
+      # https://docs.docker.com/samples/library/mysql/
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+    strategy:
+      fail-fast: true
+      matrix:
+        php-versions: ['8.2']
     steps:
-      - uses: shivammathur/setup-php@2cb9b829437ee246e9b3cac53555a39208ca6d28
+      # —— Setup Github actions 🐙 —————————————————————————————————————————————
+      # https://github.com/actions/checkout (official)
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      # https://github.com/shivammathur/setup-php (community)
+      - name: Setup PHP, extensions and composer with shivammathur/setup-php
+        uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.2'
-      - uses: actions/checkout@v3
+          php-version: ${{ matrix.php-versions }}
+          extensions: mbstring, xml, ctype, iconv, intl, pdo, pdo_mysql, dom, filter, gd, iconv, json, mbstring
+        env:
+          update: true
+
+      - name: Check PHP Version
+        run: php -v
+
+      ## —— Yarn 🐱 ————————————————————————————————————————————————————————————
+      #- name: Nodejs install
+      #  uses: actions/setup-node@v2
+      #  with:
+      #    node-version: '18'
+          #registry-url: npm.fontawesome.com
+      #- run: yarn install
+        #env:
+        #NODE_AUTH_TOKEN: ${{ secrets.FONTAWESOME_NPM_AUTH_TOKEN }}
+
+      #- name: Yarn build
+      #  run: yarn run encore production
+
+      # —— Composer 🧙‍️ —————————————————————————————————————————————————————————
+      - name: Validate composer.json and composer.lock
+        run: composer validate
+
       - name: Cache Composer packages
         id: composer-cache
         uses: actions/cache@v3
@@ -25,19 +63,40 @@ jobs:
           key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
           restore-keys: |
             ${{ runner.os }}-php-
+
       - name: Install Dependencies
         run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-      - name: Execute Docker container
-        run: docker-compose up -d
-      - name: Create Database
+
+      # —— Symfony 🎵 ——————————————————————————————————————————————————————————
+      - name: Check Symfony requirements
+        run: vendor/bin/requirements-checker
+
+      - name: Check the Symfony console
         run: |
-          mkdir -p data
-          touch data/database_test.db
-      - name: Migrate database
-        run: php bin/console doctrine:migrations:migrate --no-interaction --env=test
-      - name: Loading fixtures
-        run: php bin/console doctrine:fixtures:load --no-interaction --env=test
-      - name: Execute tests (Unit and Feature tests) via Pest
-        run: vendor/bin/pest
-      - name: Kill Docker container
-        run: docker-compose down --remove-orphans
+          bin/console about
+
+      ## —— Coding standards ✨ ————————————————————————————————————————————————
+      - name: Coding standards checks (php_codesniffer + php-cs-fixer)
+        run: make cs
+        if: matrix.php-versions == '8.2'
+
+      ## —— Static analysis ✨ —————————————————————————————————————————————————
+      - name: Static analysis of PHP code (PHPStan)
+        run: |
+          bin/console about --env=prod
+          make qa-phpstan
+
+      ## —— JWT 💫 —————————————————————————————————————————————————————————————
+      #- name: Generate the SSL keys
+      #  run: bin/console lexik:jwt:generate-keypair
+
+      ## —— Tests ✅ ———————————————————————————————————————————————————————————
+      # We use the dev env here
+      - name: Load Doctrine fixtures and populate the Elasticsearch indexes
+        run: |
+          make fixtures-load
+
+      - name: Run functionnal and unit tests
+        run: |
+          cp phpunit.xml.ci phpunit.xml
+          ./vendor/bin/pest
