@@ -1,73 +1,43 @@
 name: Full CI process for Symfony 6.3
 on:
   push:
+    branches:
+      - main
 
 jobs:
   symfony:
     name: Symfony 6.3.* (PHP ${{ matrix.php-versions }})
-    # https://hub.docker.com/_/ubuntu/
     runs-on: ubuntu-latest
-    services:
-      # https://docs.docker.com/samples/library/mysql/
-      mysql:
-        image: mysql:8.0
-        env:
-          MYSQL_ROOT_PASSWORD: root
-        ports:
-          - 3306:3306
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
     strategy:
-      fail-fast: true
       matrix:
-        php-versions: [ '8.2' ]
+        php-versions: ['8.2']
+
     steps:
-      # —— Setup Github actions 🐙 —————————————————————————————————————————————
-      # https://github.com/actions/checkout (official)
       - name: Checkout
         uses: actions/checkout@v2
 
-      # https://github.com/shivammathur/setup-php (community)
-      - name: Setup PHP, extensions and composer with shivammathur/setup-php
+      - name: Setup PHP, extensions, and Composer
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-versions }}
           extensions: mbstring, xml, ctype, iconv, intl, pdo, pdo_mysql, dom, filter, gd, iconv, json, mbstring
-        env:
-          update: true
 
       - name: Check PHP Version
         run: php -v
 
-          ## —— Yarn 🐱 ————————————————————————————————————————————————————————————
-          #- name: Nodejs install
-          #  uses: actions/setup-node@v2
-          #  with:
-          #    node-version: '18'
-        #registry-url: npm.fontawesome.com
-        #- run: yarn install
-        #env:
-        #NODE_AUTH_TOKEN: ${{ secrets.FONTAWESOME_NPM_AUTH_TOKEN }}
-
-      #- name: Yarn build
-      #  run: yarn run encore production
-
-      # —— Composer 🧙‍️ —————————————————————————————————————————————————————————
       - name: Validate composer.json and composer.lock
         run: composer validate
 
       - name: Cache Composer packages
-        id: composer-cache
-        uses: actions/cache@v3
+        uses: actions/cache@v2
         with:
           path: vendor
-          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-php-
+          key: composer-${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
+          restore-keys: composer-${{ runner.os }}-
 
       - name: Install Dependencies
-        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+        run: composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
-      # —— Symfony 🎵 ——————————————————————————————————————————————————————————
       - name: Check requirements with Composer
         run: composer check-platform-reqs
 
@@ -75,30 +45,24 @@ jobs:
         run: |
           bin/console about
 
-      ## —— Coding standards ✨ ————————————————————————————————————————————————
       - name: Coding standards checks (php_codesniffer + php-cs-fixer)
-        run: make qa-cs-fixer
         if: matrix.php-versions == '8.2'
+        run: make qa-cs-fixer
 
-      ## —— Static analysis ✨ —————————————————————————————————————————————————
       - name: Static analysis of PHP code (PHPStan)
         run: |
           make qa-phpstan
 
-      ## --- Database 🗃️ ———————————————————————————————————————————————————————
-      # We use the dev env here
       - name: Initialize the database
         run: |
-          DATABASE_URL="mysql://root:@172.18.0.1:3306/db_eterno?serverVersion=11.0.2-MariaDB&charset=utf8mb4"
-          make create-env DATABASE_URL="$DATABASE_URL"
+          make create-env
           bin/console d:d:d -f
           bin/console d:d:c
-          
+
       - name: Load Doctrine fixtures
         run: |
           make fixtures-load
 
-      ## —— Tests ✅ ———————————————————————————————————————————————————————————
       - name: Run functional and unit tests
         run: |
           if [ -f phpunit.xml.ci ]; then 
