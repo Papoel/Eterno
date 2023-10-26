@@ -83,7 +83,7 @@ create-env: ## Création du fichier '.env.local' et création de DATABASE_URL
 		sed -n -e '/^APP_ENV/p' -e '/^APP_SECRET/p' -e '/^MESSENGER_TRANSPORT_DSN/p' .env > .env.local; \
 		echo 'DATABASE_URL="${DATABASE_URL}"' >> .env.local; \
 	fi
-	@echo "La variable DATABASE_URL a été créée ou mise à jour dans le fichier .env.local avec succès !"
+	@echo "La variable DATABASE_URL (${DATABASE_URL}) a été ajoutée au fichier .env.local."
 
 check-dump: ## Vérifier les occurrences de {{ dump() }} dans les fichiers du dossier 'templates'
 	@echo "Vérification des occurrences de {{ dump() }} dans les fichiers du dossier 'templates'..."
