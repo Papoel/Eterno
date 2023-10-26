@@ -77,7 +77,7 @@ jobs:
 
       ## —— Coding standards ✨ ————————————————————————————————————————————————
       - name: Coding standards checks (php_codesniffer + php-cs-fixer)
-        run: make cs
+        run: make qa-cs-fixer
         if: matrix.php-versions == '8.2'
 
       ## —— Static analysis ✨ —————————————————————————————————————————————————
@@ -86,17 +86,13 @@ jobs:
           bin/console about --env=prod
           make qa-phpstan
 
-      ## —— JWT 💫 —————————————————————————————————————————————————————————————
-      #- name: Generate the SSL keys
-      #  run: bin/console lexik:jwt:generate-keypair
-
       ## —— Tests ✅ ———————————————————————————————————————————————————————————
       # We use the dev env here
       - name: Load Doctrine fixtures and populate the Elasticsearch indexes
         run: |
           make fixtures-load
 
-      - name: Run functionnal and unit tests
+      - name: Run functional and unit tests
         run: |
           cp phpunit.xml.ci phpunit.xml
           ./vendor/bin/pest
