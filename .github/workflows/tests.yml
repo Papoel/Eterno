@@ -68,14 +68,8 @@ jobs:
         run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
       # —— Symfony 🎵 ——————————————————————————————————————————————————————————
-      # Ajoutez cette étape pour installer le CLI Symfony
-      - name: Install Symfony CLI
-        run: |
-          wget https://get.symfony.com/cli/installer -O - | bash
-        if: runner.os == 'Linux'
-
-      - name: Check Symfony requirements
-        run: symfony check:requirements
+      - name: Check requirements with Composer
+        run: composer check-platform-reqs
 
       - name: Check the Symfony console
         run: |
