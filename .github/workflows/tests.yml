@@ -69,7 +69,7 @@ jobs:
 
       # —— Symfony 🎵 ——————————————————————————————————————————————————————————
       - name: Check Symfony requirements
-        run: vendor/bin/requirements-checker
+        run: symfony check:requirements
 
       - name: Check the Symfony console
         run: |
