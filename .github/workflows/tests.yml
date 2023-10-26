@@ -72,7 +72,6 @@ jobs:
       - name: Install Symfony CLI
         run: |
           wget https://get.symfony.com/cli/installer -O - | bash
-          export PATH="$HOME/.symfony/bin:$PATH"
         if: runner.os == 'Linux'
 
       - name: Check Symfony requirements
