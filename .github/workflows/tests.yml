@@ -100,5 +100,7 @@ jobs:
       ## —— Tests ✅ ———————————————————————————————————————————————————————————
       - name: Run functional and unit tests
         run: |
-          cp phpunit.xml.ci phpunit.xml
+          if [ -f phpunit.xml.ci ]; then 
+            cp phpunit.xml.ci phpunit.xml; 
+          fi
           ./vendor/bin/pest
