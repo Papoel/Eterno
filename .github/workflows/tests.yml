@@ -89,9 +89,9 @@ jobs:
       # We use the dev env here
       - name: Initialize the database
         run: |
-          make db-drop-test
-          make db-create-test
-          
+          bin/console d:d:d -f
+          bin/console d:d:c
+
       - name: Load Doctrine fixtures
         run: |
           make fixtures-load
