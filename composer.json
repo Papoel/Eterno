@@ -1,4 +1,6 @@
 {
+    "name": "papoel/eterno",
+    "description": "Permettre aux personnes endeuillés de créer un espace d'envoi de message à leurs proches",
     "type": "project",
     "license": "proprietary",
     "minimum-stability": "stable",
