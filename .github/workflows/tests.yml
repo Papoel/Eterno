@@ -19,7 +19,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        php-versions: ['8.2']
+        php-versions: [ '8.2' ]
     steps:
       # —— Setup Github actions 🐙 —————————————————————————————————————————————
       # https://github.com/actions/checkout (official)
@@ -38,13 +38,13 @@ jobs:
       - name: Check PHP Version
         run: php -v
 
-      ## —— Yarn 🐱 ————————————————————————————————————————————————————————————
-      #- name: Nodejs install
-      #  uses: actions/setup-node@v2
-      #  with:
-      #    node-version: '18'
-          #registry-url: npm.fontawesome.com
-      #- run: yarn install
+          ## —— Yarn 🐱 ————————————————————————————————————————————————————————————
+          #- name: Nodejs install
+          #  uses: actions/setup-node@v2
+          #  with:
+          #    node-version: '18'
+        #registry-url: npm.fontawesome.com
+        #- run: yarn install
         #env:
         #NODE_AUTH_TOKEN: ${{ secrets.FONTAWESOME_NPM_AUTH_TOKEN }}
 
@@ -89,10 +89,11 @@ jobs:
       # We use the dev env here
       - name: Initialize the database
         run: |
-          make create-env
+          DATABASE_URL="mysql://root:@172.18.0.1:3306/db_eterno?serverVersion=11.0.2-MariaDB&charset=utf8mb4"
+          make create-env DATABASE_URL="$DATABASE_URL"
           bin/console d:d:d -f
           bin/console d:d:c
-
+          
       - name: Load Doctrine fixtures
         run: |
           make fixtures-load
