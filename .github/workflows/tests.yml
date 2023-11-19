@@ -16,10 +16,13 @@ jobs:
       mysql:
         image: mysql:8.0
         env:
-          MYSQL_ROOT_PASSWORD: root_password
-          MYSQL_DATABASE: db_eterno
-          MYSQL_USER: db_user
-          MYSQL_PASSWORD: db_password
+          DB_HOST: '127.0.0.1'
+          DB_PORT: '3306'
+          MYSQL_USER: 'root'
+          MYSQL_PASSWORD: 'password'
+          MYSQL_DATABASE: 'db_eterno'
+          MYSQL_ROOT_PASSWORD: 'password'
+          
         ports:
           - 3306:3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
@@ -65,9 +68,8 @@ jobs:
 
       - name: Initialize the database
         run: |
-          make create-env
-          bin/console doctrine:database:create --if-not-exists
-          bin/console doctrine:schema:update --force
+          bin/console doctrine:database:create --if-not-exists --env=prod
+          bin/console doctrine:schema:update --force --env=prod
 
       - name: Load Doctrine fixtures
         run: make fixtures-load
