@@ -11,6 +11,18 @@ jobs:
     strategy:
       matrix:
         php-versions: ['8.2']
+    
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root_password
+          MYSQL_DATABASE: db_eterno
+          MYSQL_USER: db_user
+          MYSQL_PASSWORD: db_password
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
       - name: Checkout
@@ -42,26 +54,23 @@ jobs:
         run: composer check-platform-reqs
 
       - name: Check the Symfony console
-        run: |
-          bin/console about
+        run: bin/console about
 
       - name: Coding standards checks (php_codesniffer + php-cs-fixer)
         if: matrix.php-versions == '8.2'
         run: make qa-cs-fixer
 
       - name: Static analysis of PHP code (PHPStan)
-        run: |
-          make qa-phpstan
+        run: make qa-phpstan
 
       - name: Initialize the database
         run: |
           make create-env
-          bin/console d:d:d -f
-          bin/console d:d:c
+          bin/console doctrine:database:create --if-not-exists
+          bin/console doctrine:schema:update --force
 
       - name: Load Doctrine fixtures
-        run: |
-          make fixtures-load
+        run: make fixtures-load
 
       - name: Run functional and unit tests
         run: |
