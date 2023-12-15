@@ -1,21 +1,113 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" data-bs-theme="dark">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="author" content="Papoel">
         <meta name="description" content="Un espace pour honorer et se souvenir de nos êtres chers disparus, où vous pouvez envoyer des messages à ceux qui sont partis.">
 
         <!-- Balises pour le référencement -->
         <title>Eterno - {% block title %}{% endblock %}</title>
-        <meta name="robots" content="index, follow"> <!-- Permet aux moteurs de recherche d'indexer la page -->
-
-
+        <!-- Permet aux moteurs de recherche d'indexer la page -->
+        <meta name="robots" content="index, follow">
+        <!-- Favicon -->
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
 
-        {% block stylesheets %}{% endblock %}
+        <!-- Google Font -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+
+        <!-- Dark mode -->
+        <script>
+            const storedTheme = localStorage.getItem('theme')
+
+            const getPreferredTheme = () => {
+                if (storedTheme) {
+                    return storedTheme
+                }
+                return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'light'
+            }
+
+            const setTheme = function (theme) {
+                if (theme === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                    document.documentElement.setAttribute('data-bs-theme', 'dark')
+                } else {
+                    document.documentElement.setAttribute('data-bs-theme', theme)
+                }
+            }
+
+            setTheme(getPreferredTheme())
+
+            window.addEventListener('DOMContentLoaded', () => {
+                let el = document.querySelector('.theme-icon-active');
+                if(el !== 'undefined' && el !== null) {
+                    const showActiveTheme = theme => {
+                        const activeThemeIcon = document.querySelector('.theme-icon-active use')
+                        const btnToActive = document.querySelector(`[data-bs-theme-value="${theme}"]`)
+                        const svgOfActiveBtn = btnToActive.querySelector('.mode-switch use').getAttribute('href')
+
+                        document.querySelectorAll('[data-bs-theme-value]').forEach(element => {
+                            element.classList.remove('active')
+                        })
+
+                        btnToActive.classList.add('active')
+                        activeThemeIcon.setAttribute('href', svgOfActiveBtn)
+                    }
+
+                    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+                        if (storedTheme !== 'light' || storedTheme !== 'dark') {
+                            setTheme(getPreferredTheme())
+                        }
+                    })
+
+                    showActiveTheme(getPreferredTheme())
+
+                    document.querySelectorAll('[data-bs-theme-value]')
+                        .forEach(toggle => {
+                            toggle.addEventListener('click', () => {
+                                const theme = toggle.getAttribute('data-bs-theme-value')
+                                localStorage.setItem('theme', theme)
+                                setTheme(theme)
+                                showActiveTheme(theme)
+                            })
+                        })
+
+                }
+            })
+        </script>
+
+        <!-- Plugins CSS -->
+        <link rel="stylesheet" type="text/css" href="{{ asset('vendor/font-awesome/css/all.min.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ asset('vendor/bootstrap-icons/bootstrap-icons.min.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ asset('vendor/tiny-slider/tiny-slider.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ asset('vendor/glightbox-master/dist/css/glightbox.min.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ asset('vendor/plyr/dist/plyr.min.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ asset('vendor/flatpickr/dist/flatpickr.css') }}">
+
+
+        {% block stylesheets %}
+            <!-- Theme CSS -->
+            <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+        {% endblock %}
         {% block javascripts %}{% endblock %}
+            {{ importmap('app') }}
     </head>
+
     <body {% block body_attributes %}{% endblock %}>
         {% block body %}{% endblock %}
+
+        <!-- =======================
+        JS libraries, plugins and custom scripts -->
+
+        <!-- Bootstrap JS -->
+        <script src="{{ asset('vendor/bootstrap/dist/js/bootstrap.bundle.min.js')}}"></script>
+
+        <!-- Vendors -->
+        <script src="{{ asset('vendor/tiny-slider/tiny-slider.js') }}"></script>
+        <script src="{{ asset('vendor/glightbox-master/dist/js/glightbox.min.js') }}"></script>
+        <script src="{{ asset('vendor/plyr/plyr.js') }}"></script>
+
+        <!-- Theme Functions -->
+        <script src="{{ asset('js/functions.js') }}"></script>
     </body>
 </html>

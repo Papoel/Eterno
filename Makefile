@@ -74,6 +74,10 @@ stop: stop down ## Arrêter le projet | down
 send-mail: ## Envoi d'email | php bin/console messenger:consume -vv
 	$(SYMFONY) messenger:consume -vv
 
+before-commit: ## S'assurer que le code est propre avant de commiter !
+	$(MAKE) check-dump qa-cs-fixer qa-phpstan qa-security-checker qa-phpcpd qa-lint-twigs qa-lint-yaml qa-lint-container qa-lint-schema pest
+.PHONY: check-dump before-commit
+
 create-env: ## Création du fichier '.env.local' et création de DATABASE_URL
 	@echo "Création du fichier .env.local et copie de APP_ENV et APP_SECRET en cours..."
 	@if [ -f .env.local ]; then \
@@ -84,26 +88,6 @@ create-env: ## Création du fichier '.env.local' et création de DATABASE_URL
 		echo 'DATABASE_URL="${DATABASE_URL}"' >> .env.local; \
 	fi
 	@echo "La variable DATABASE_URL (${DATABASE_URL}) a été ajoutée au fichier .env.local."
-
-check-dump: ## Vérifier les occurrences de {{ dump() }} dans les fichiers du dossier 'templates'
-	@echo "Vérification des occurrences de {{ dump() }} dans les fichiers du dossier 'templates'..."
-	@if [ -d templates/ ]; then \
-		files_with_dump=$$(grep -r -n "{{ dump(" templates/ 2>&1); \
-		if [ -n "$$files_with_dump" ]; then \
-			echo "\033[31mErreur : Des occurrences de {{ dump() }} ont été trouvées dans les fichiers suivants :\033[0m"; \
-			echo "$$files_with_dump"; \
-			exit 1; \
-		else \
-			echo "\033[32mAucune occurrence de {{ dump() }} n'a été trouvée dans les fichiers du dossier 'templates'.\033[0m"; \
-		fi \
-	else \
-		echo "\033[31mLe dossier 'templates' n'existe pas. Assurez-vous qu'il est présent.\033[0m"; \
-		exit 1; \
-	fi
-
-before-commit: ## S'assurer que le code est propre avant de commiter !
-	$(MAKE) check-dump qa-cs-fixer qa-phpstan qa-security-checker qa-phpcpd qa-lint-twigs qa-lint-yaml qa-lint-container qa-lint-schema pest
-.PHONY: check-dump before-commit
 
 # --------------------
 # Commandes Symfony 🐘
@@ -159,8 +143,37 @@ security-check: ## Vérifier les vulnérabilités | symfony console security:che
 # Commandes de cache
 # --------------------
 ## ********** 🗑️ CACHE 🗑️ ******************************************************************
-cc: ## Vider le cache | symfony console cache:clear
-	$(SYMFONY) cache:clear
+clean-cache:
+	@echo "Effacer le dossier var/cache"
+	@rm -rf var/cache
+
+clean-log:
+	@echo "Effacer le dossier var/log"
+	@rm -rf var/log
+
+cache-clear: ## Effacer le cache | symfony console cache:clear
+	@echo "Effacer le cache"
+	@$(SYMFONY) cache:clear
+
+prompt-cc: ## Effacer le cache avec une invite de commande
+	# 1. La réponse est 'y' ou 'Y' : Effacer var/cache et var/log
+	# 2. La réponse est 'n' ou 'N' : Exécuter la commande 'cache-clear'
+	@read -p "Effacer le dossier var/cache et var/log ? (y/n): " answer; \
+	if [ "$$answer" = "y" ] || [ "$$answer" = "Y" ]; then \
+		$(MAKE) clean-cache clean-log; \
+		echo "\033[32mLes dossiers var/cache et var/log ont été supprimés avec succès !\033[0m"; \
+	elif [ "$$answer" = "n" ] || [ "$$answer" = "N" ]; then \
+		$(MAKE) cache-clear; \
+		echo "\033[32mLe cache a été vidé avec succès !\033[0m"; \
+	else \
+		echo "Réponse invalide"; \
+	fi
+
+cc: prompt-cc
+
+
+
+
 
 cc-prod: ## Vider le cache de production | symfony console cache:clear --env=prod
 	$(SYMFONY) cache:clear --env=prod
@@ -357,3 +370,19 @@ pest-c: ## Vérifier la couverture minimum des test (80%)
 
 pest-e: ## Créer un rapport de couverture des tests avec Pest.
 	$(PEST) --coverage --coverage-html var/coverage
+
+check-dump: ## Vérifier les occurrences de {{ dump() }} dans les fichiers du dossier 'templates'
+	@echo "Vérification des occurrences de {{ dump() }} dans les fichiers du dossier 'templates'..."
+	@if [ -d templates/ ]; then \
+		files_with_dump=$$(grep -r -n "{{ dump(" templates/ 2>&1); \
+		if [ -n "$$files_with_dump" ]; then \
+			echo "\033[31mErreur : Des occurrences de {{ dump() }} ont été trouvées dans les fichiers suivants :\033[0m"; \
+			echo "$$files_with_dump"; \
+			exit 1; \
+		else \
+			echo "\033[32mAucune occurrence de {{ dump() }} n'a été trouvée dans les fichiers du dossier 'templates'.\033[0m"; \
+		fi \
+	else \
+		echo "\033[31mLe dossier 'templates' n'existe pas. Assurez-vous qu'il est présent.\033[0m"; \
+		exit 1; \
+	fi
