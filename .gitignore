@@ -22,3 +22,7 @@
 /public/assets/
 /assets/vendor
 ###< symfony/asset-mapper ###
+
+###> symfony/upgrading ###
+symfony.asset-mapper.updates-for-deleted-files.patch
+###< symfony/upgrading ###
