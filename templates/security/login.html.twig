@@ -1,0 +1,87 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Connexion{% endblock %}
+
+{% block body %}
+    <!-- **************** MAIN CONTENT START **************** -->
+    <form method="post">
+        {% if error %}
+            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+        {% endif %}
+
+        {% if app.user %}
+            <div class="mb-3">
+                Vous êtes déjà connecté en tant que {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Se déconnecter</a>
+            </div>
+        {% endif %}
+
+        <!-- Container START -->
+        <div class="container">
+            <div class="row justify-content-center align-items-center vh-100 py-5">
+                <!-- Main content START -->
+                <div class="col-sm-10 col-md-8 col-lg-7 col-xl-6 col-xxl-5">
+                    <!-- Sign in START -->
+                    <div class="card card-body text-center p-4 p-sm-5">
+                        <!-- Title -->
+                        <h1 class="mb-2">Connexion</h1>
+                        <p class="mb-0">Vous n'avez pas de compte ?
+                            Faites la demande de création de compte à l'administrateur en cliquant sur le bouton ci-dessous.
+                        </p>
+                        <a href="#" class="btn btn-sm btn-warning my-2 mb-4">Faire une demande de création de compte</a>
+                        <!-- Form START -->
+                        <form class="mt-sm-4">
+                            <!-- Email -->
+                            <div class="mb-3 input-group">
+                                <label for="inputEmail"></label>
+                                <input id="inputEmail"
+                                       class="form-control"
+                                       name="email"
+                                       type="email"
+                                       value="{{ last_username }}"
+                                       placeholder="Entrer votre email"
+                                       autocomplete="email" required autofocus>
+                            </div>
+                            <!-- New password -->
+                            <div class="mb-3 position-relative">
+                                <!-- Password -->
+                                <div class="input-group">
+                                    <label for="inputPassword"></label>
+                                    <input id="inputPassword"
+                                           class="form-control fakepassword"
+                                           type="password"
+                                           name="password"
+                                           placeholder="Entrer votre mot de passe"
+                                           autocomplete="current-password" required>
+                                    <span class="input-group-text p-0">
+                                        <i class="fakepasswordicon mt-2 fa-solid fa-eye-slash cursor-pointer p-2 w-40px align-middle"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <!-- Remember me -->
+                            <div class="mb-3 d-sm-flex justify-content-between">
+                                <a href="forgot-password.html">Mot de passe oublié ?</a>
+                            </div>
+                            <!-- Token -->
+                            <input type="hidden" name="_csrf_token"
+                                   value="{{ csrf_token('authenticate') }}"
+                            >
+                            <!-- Button -->
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-lg btn-primary">Connexion</button>
+                            </div>
+                            <!-- Copyright -->
+                            <p class="mb-0 mt-3">©{{ 'now' | date('Y') }}
+                                <a target="_blank" href="https://www.github.com/Papoel">
+                                    Papoel &middot;
+                                </a> Tous droits réservés.
+                            </p>
+                        </form>
+                        <!-- Form END -->
+                    </div>
+                    <!-- Sign in START -->
+                </div>
+            </div> <!-- Row END -->
+        </div>
+        <!-- Container END -->
+    </form>
+{% endblock %}
