@@ -40,7 +40,7 @@ Header START -->
                 {% if not app.user %}
                     <li class="nav-item ms-2">
                         {# TODO: Lien vers la page de connexion #}
-                        <a class="nav-link bg-light icon-md btn btn-light p-0" href="#!">
+                        <a class="nav-link bg-light icon-md btn btn-light p-0" href="{{ path('app_login') }}">
                             <i class="bi bi-person-check fs-6"></i>
                         </a>
                     </li>
@@ -82,7 +82,7 @@ Header START -->
                             </li>
                             <li class="dropdown-divider"></li>
                             <li>
-                                <a class="dropdown-item bg-danger-soft-hover" href="sign-in-advance.html">
+                                <a class="dropdown-item bg-danger-soft-hover" href="{{ path('app_logout') }}">
                                     <i class="bi bi-power fa-fw me-2"></i>
                                     Déconnexion
                                 </a>
