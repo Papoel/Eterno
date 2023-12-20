@@ -168,6 +168,7 @@ prompt-cc: ## Effacer le cache avec une invite de commande
 	else \
 		echo "Réponse invalide"; \
 	fi
+	$(MAKE) cache-clear
 
 cc: prompt-cc
 
