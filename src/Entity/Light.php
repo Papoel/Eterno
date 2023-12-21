@@ -2,9 +2,6 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Metadata\ApiResource;
-use ApiPlatform\Metadata\Get;
-use ApiPlatform\Metadata\GetCollection;
 use App\Entity\Traits\CreatedAtTrait;
 use App\Entity\Traits\FirstLastUserNameTrait;
 use App\Repository\LightRepository;
@@ -17,12 +14,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: LightRepository::class)]
 #[ORM\Table(name: '`lights`')]
 #[ORM\HasLifecycleCallbacks]
-#[ApiResource(
-    operations: [
-        new Get(),
-        new GetCollection(),
-    ],
-)]
 class Light
 {
     use CreatedAtTrait;
@@ -34,15 +25,10 @@ class Light
     private ?int $id = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
-    #[Assert\LessThanOrEqual(propertyPath: 'deceasedAt', message: 'La date de naissance doit être antérieure à la date de décès.')]
-    #[Assert\LessThanOrEqual(value: 'today', message: 'La date de naissance doit être antérieure à la date du jour.')]
-    #[Assert\Date(message: 'Veuillez saisir une date de naissance valide.')]
-    private ?\DateTimeInterface $birthdayAt = null;
+    private ?\DateTime $birthdayAt = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
-    #[Assert\GreaterThanOrEqual(propertyPath: 'birthdayAt', message: 'La date de décès doit être postérieure à la date de naissance.')]
-    #[Assert\LessThanOrEqual(value: 'today', message: 'La date de décès doit être antérieure ou égal à la date du jour.')]
-    private ?\DateTimeInterface $deceasedAt = null;
+    private ?\DateTime $deceasedAt = null;
 
     #[ORM\ManyToOne(inversedBy: 'lights')]
     #[ORM\JoinColumn(nullable: false)]
@@ -69,24 +55,24 @@ class Light
         return $this->id;
     }
 
-    public function getBirthdayAt(): ?\DateTimeInterface
+    public function getBirthdayAt(): ?\DateTime
     {
         return $this->birthdayAt;
     }
 
-    public function setBirthdayAt(?\DateTimeInterface $birthdayAt): static
+    public function setBirthdayAt(?\DateTime $birthdayAt): static
     {
         $this->birthdayAt = $birthdayAt;
 
         return $this;
     }
 
-    public function getDeceasedAt(): ?\DateTimeInterface
+    public function getDeceasedAt(): ?\DateTime
     {
         return $this->deceasedAt;
     }
 
-    public function setDeceasedAt(\DateTimeInterface $deceasedAt): static
+    public function setDeceasedAt(\DateTime $deceasedAt): static
     {
         $this->deceasedAt = $deceasedAt;
 

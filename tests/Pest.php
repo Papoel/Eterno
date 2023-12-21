@@ -11,8 +11,6 @@
 |
 */
 
-uses(App\Tests\ApiTestCase::class)->in('Feature/Api');
-
 /*
 |--------------------------------------------------------------------------
 | Expectations

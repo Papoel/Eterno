@@ -5,9 +5,6 @@
  * @version 1.1.1
  **/
 
-console.log('From functions.js');
-
-
 /* =====================
 Table Of Content
 =========================
@@ -550,17 +547,19 @@ let e = {
 
 	// START: 13 Flat picker
 	flatPicker: function () {
-		var picker = e.select('.flatpickr');
+		const picker = e.select('.flatpickr');
 		if (e.isVariableDefined(picker)) {
-			console.log('inside if');
-			var element = e.selectAll('.flatpickr');
+			let element = e.selectAll('.flatpickr');
 			element.forEach(function (item) {
-				var mode = item.getAttribute('data-mode') == 'multiple' ? 'multiple' : item.getAttribute('data-mode') == 'range' ? 'range' : 'single';
-				var enableTime = item.getAttribute('data-enableTime') == 'true' ? true : false;
-				var noCalendar = item.getAttribute('data-noCalendar') == 'true' ? true : false;
-				var inline = item.getAttribute('data-inline') == 'true' ? true : false;
-				var dateFormat = item.getAttribute('data-dateFormat') ? item.getAttribute('data-dateFormat') : 'd-m-Y';
-				var French = {
+				// max date = today
+				let maxDate = new Date().fp_incr(0);
+				let enableTime = false;
+				let weekNumbers = false;
+				let altInput = true;
+				let dateFormat = "Y-m-d"; // Format for database
+				let altFormat = "d/m/Y"; // Format for display
+				let time_24hr = true;
+				let French = {
 					weekdays: {
 						shorthand: ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'],
 						longhand: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],
@@ -572,21 +571,22 @@ let e = {
 					weekAbbreviation: 'Sem',
 					scrollTitle: 'Défiler pour augmenter la valeur',
 					toggleTitle: 'Cliquer pour basculer',
-					amPM: ['AM', 'PM'],
+					// amPM: ['AM', 'PM'],
 					yearAriaLabel: 'Année',
 					time_24hr: true,
 					firstDayOfWeek: 1,
 				};
 
 				flatpickr(item, {
-					mode: mode,
 					enableTime: enableTime,
-					noCalendar: noCalendar,
-					inline: inline,
-					locale: French,
+					altInput: altInput,
 					dateFormat: dateFormat,
+					altFormat: altFormat,
+					time_24hr: time_24hr,
+					locale: French,
+					weekNumbers: weekNumbers,
+					maxDate: maxDate,
 				});
-
 			});
 		}
 	},
@@ -681,13 +681,14 @@ let e = {
 	// START: 17 pswMeter
 	pswMeter: function () {
 		if (e.isVariableDefined(e.select('#pswmeter'))) {
+			console.log('pswMeter is running ...');
 			const myPassMeter = passwordStrengthMeter({
 				containerElement: '#pswmeter',
-				passwordInput: '#psw-input',
+				passwordInput: '#change_password_newPassword_first',
 				showMessage: true,
 				messageContainer: '#pswmeter-message',
 				messagesList: [
-					'Saisir votre mot de passe...',
+					'Le mot de passe doit contenir au moins 8 caractères',
 					'Simple comme bonjour!',
 					'C\'est très simple',
 					'C\'est mieux ainsi',
@@ -706,25 +707,29 @@ let e = {
 	// END: pswMeter
 
 	// START: 18 Fake Password
-	fakePwd: function () {
-		if (e.isVariableDefined(e.select('.fakepassword'))) {
-			let password = e.select('.fakepassword');
-			let toggler = e.select('.fakepasswordicon');
+	fakePwd: function() {
+		document.addEventListener('DOMContentLoaded', function() {
+			const passwordFields = document.querySelectorAll('.fakepassword');
+			const togglerIcons = document.querySelectorAll('.fakepasswordicon');
 
-			let showHidePassword = () => {
-				if (password.type === 'password') {
-					password.setAttribute('type', 'text');
-					toggler.classList.add('fa-eye');
-				} else {
-					toggler.classList.remove('fa-eye');
-					password.setAttribute('type', 'password');
-				}
-			};
+			function togglePasswordVisibility(passwordField, togglerIcon) {
+				togglerIcon.addEventListener('click', function() {
+					if (passwordField.type === 'password') {
+						passwordField.type = 'text';
+						togglerIcon.classList.add('fa-eye');
+						togglerIcon.classList.remove('fa-eye-slash');
+					} else {
+						passwordField.type = 'password';
+						togglerIcon.classList.remove('fa-eye');
+						togglerIcon.classList.add('fa-eye-slash');
+					}
+				});
+			}
 
-			toggler.addEventListener('click', showHidePassword);
-		}
+			passwordFields.forEach(function(passwordField, index) {
+				togglePasswordVisibility(passwordField, togglerIcons[index]);
+			});
+		});
 	}
-	// END: Fake Password
-
 };
 e.init();

@@ -130,9 +130,17 @@
 
                         <!-- Account setting tab START -->
                         <div class="tab-pane show active fade" id="nav-setting-tab-1">
+                            {# TODO: Création template de notification + téléchargement de librairie type NOTYFY #}
+                            {% for label, messages in app.flashes %}
+                                {% for message in messages %}
+                                    <div class="alert alert-{{ label }} alert-dismissible fade show" role="alert">
+                                        {{ message }}
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+                                {% endfor %}
+                            {% endfor %}
                             <!-- Account settings START -->
                             <div class="card mb-4">
-
                                 <!-- Title START -->
                                 <div class="card-header border-0 pb-0">
                                     <h1 class="h5 card-title">Paramètres du compte</h1>
@@ -141,52 +149,22 @@
                                 <!-- Card header START -->
                                 <!-- Card body START -->
                                 <div class="card-body">
-                                    <!-- Form settings START -->
-                                    <form class="row g-3">
-                                        <!-- First name -->
-                                        <div class="col-sm-6 col-lg-4">
-                                            <label for="profile_firstname" class="form-label">Prénom</label>
-                                            <input id="profile_firstname" type="text" class="form-control" placeholder="" value="Pascal">
+                                    <!-- Formulaire de renseignements User START -->
+                                    {{ form_start(formUserData, {'attr': {'class': 'row g-3', 'id': 'form_profile'}}) }}
+                                        {{ form_row(formUserData.firstname) }}
+                                        {{ form_row(formUserData.lastname) }}
+                                        {{ form_row( formUserData.birthday) }}
+                                        <div class="d-flex justify-content-between gap-3">
+                                            {{ form_row( formUserData.username) }}
+                                            {{ form_row( formUserData.mobile) }}
                                         </div>
-                                        <!-- Last name -->
-                                        <div class="col-sm-6 col-lg-4">
-                                            <label for="profile_lastname" class="form-label">Nom</label>
-                                            <input id="profile_lastname" type="text" class="form-control" placeholder="" value="Briffard">
-                                        </div>
-                                        <!-- User name -->
-                                        <div class="col-sm-6">
-                                            <label for="profile_pseudo" class="form-label">Pseudo</label>
-                                            <input id="profile_pseudo" type="text" class="form-control" placeholder="" value="@Papoel">
-                                        </div>
-                                        <!-- Birthday -->
-                                        <div class="col-lg-6">
-                                            <label for="profile_birthday" class="form-label">Date de naissance </label>
-                                            <input id="profile_birthday" type="text" class="form-control flatpickr" value="20/02/1985">
-                                        </div>
-                                        <!-- Phone number -->
-                                        <div class="col-sm-6">
-                                            <label for="profile_mobile" class="form-label">Mobile</label>
-                                            <input id="profile_mobile" type="text" class="form-control"
-                                                   placeholder=""
-                                                   value="(+33) 766 345 110"
-                                            >
-                                        </div>
-                                        <!-- Phone number -->
-                                        <div class="col-sm-6 mb-3">
-                                            <label for="profile_email" class="form-label">Email</label>
-                                            <input id="profile_email" type="text" class="form-control"
-                                                   placeholder=""
-                                                   value="bridevproject@gmail.com"
-                                            >
-                                        </div>
-                                        <!-- Button  -->
                                         <div class="col-12 text-end">
                                             <button type="submit" class="btn btn-sm btn-primary mb-0">
                                                 Sauvegarder les modifications
                                             </button>
                                         </div>
-                                    </form>
-                                    <!-- Settings END -->
+                                    {{ form_end(formUserData) }}
+                                    <!-- Formulaire de renseignements User END -->
                                 </div>
                                 <!-- Card body END -->
                             </div>
@@ -194,48 +172,69 @@
 
                             <!-- Change your password START -->
                             <div class="card">
-                                <!-- Title START -->
                                 <div class="card-header border-0 pb-0">
                                     <h5 class="card-title">Modifier le mot de passe</h5>
-                                    <p class="mb-0">Vous recevrez une demande de confirmation par email.</p>
+                                    <p class="mb-0 text-muted">
+                                        Lors de votre prochaine connexion, vous devrez utiliser votre nouveau mot de passe.
+                                    </p>
                                 </div>
-                                <!-- Title START -->
                                 <div class="card-body">
-                                    <!-- Settings START -->
-                                    <form class="row g-3">
+                                    {{ form_start(formUserPassword, {'attr': {'class': 'row g-3', 'id': 'form_password_update'}}) }}
+
+                                        {% for message in app.session.flashBag.get('danger') %}
+                                            <div class="alert alert-danger">{{ message }}</div>
+                                        {% endfor %}
+
                                         <!-- Current password -->
                                         <div class="col-12">
-                                            <label for="profile_current_psw" class="form-label">Mot de passe actuel</label>
-                                            <input id="profile_current_psw" type="text" class="form-control" autocomplete="off">
-                                        </div>
-                                        <!-- New password -->
-                                        <div class="col-12">
-                                            <label for="psw-input" class="form-label">Nouveau mot de passe</label>
-                                            <!-- Input group -->
+                                            <label class="form-label" for="{{ formUserPassword.currentPassword.vars.id }}">
+                                                {{ formUserPassword.currentPassword.vars.label }}
+                                            </label>
                                             <div class="input-group">
-                                                <input id="psw-input" class="form-control fakepassword" type="password"
-                                                       placeholder="Entrer votre nouveau mot de passe" autocomplete="off">
+                                                {{ form_widget(formUserPassword.currentPassword) }}
                                                 <span class="input-group-text p-0">
-                                                    <i class="fakepasswordicon fa-solid fa-eye-slash cursor-pointer p-2 w-40px"></i>
+                                                    <i class="fakepasswordicon fa-solid fa-eye-slash cursor-pointer p-2 w-40px mt-2"></i>
                                                 </span>
                                             </div>
+                                        </div>
+
+                                        <!-- New password -->
+                                        <div class="col-12">
+                                            <label class="form-label" for="{{ formUserPassword.newPassword.first.vars.id }}">
+                                                {{ formUserPassword.newPassword.first.vars.label }}
+                                            </label>
+                                            {{ form_errors(formUserPassword.newPassword.first) }}
+                                            <div class="input-group">
+                                                {{ form_widget(formUserPassword.newPassword.first) }}
+                                                <span class="input-group-text p-0">
+                                                    <i class="fakepasswordicon fa-solid fa-eye-slash cursor-pointer p-2 w-40px mt-2"></i>
+                                                </span>
+                                            </div>
+
                                             <!-- Pswmeter -->
                                             <div id="pswmeter" class="mt-2"></div>
-                                            <div id="pswmeter-message" class="rounded mt-1"></div>
+                                            <div id="pswmeter-message" class="rounded mt-1 text-muted"></div>
                                         </div>
                                         <!-- Confirm password -->
                                         <div class="col-12">
-                                            <label for="profile_repeat_psw" class="form-label">Confirmer le mot de passe</label>
-                                            <input id="profile_repeat_psw" type="password" class="form-control" placeholder="">
+                                            <label class="form-label" for="{{ formUserPassword.newPassword.second.vars.id }}" class="form-label">
+                                                {{ formUserPassword.newPassword.second.vars.label }}
+                                            </label>
+                                            {{ form_errors(formUserPassword.newPassword.second) }}
+                                            <div class="input-group">
+                                                {{ form_widget(formUserPassword.newPassword.second) }}
+                                                <span class="input-group-text p-0">
+                                                    <i class="fakepasswordicon fa-solid fa-eye-slash cursor-pointer p-2 w-40px mt-2"></i>
+                                                </span>
+                                            </div>
                                         </div>
-                                        <!-- Button  -->
+
                                         <div class="col-12 text-end">
                                             <button type="submit" class="btn btn-sm btn-primary mb-0">
                                                 Mettre à jour le mot de passe
                                             </button>
                                         </div>
-                                    </form>
-                                    <!-- Settings END -->
+                                    {{ form_end(formUserPassword) }}
                                 </div>
                             </div>
                             <!-- Card END -->

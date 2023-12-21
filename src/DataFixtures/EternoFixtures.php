@@ -26,6 +26,8 @@ class EternoFixtures extends Fixture
         $admin->setFirstname(firstname: 'pascal');
         $admin->setLastname(lastname: 'briffard');
         $admin->setUsername(username: 'papoel');
+        $admin->setBirthday(birthday: new \DateTime(datetime: '1985-02-20'));
+        $admin->setMobile(mobile: '0766345110');
         $admin->setEmail(email: 'admin@eterno.fr');
         $hash = $this->passwordHasher->hashPassword(user: $admin, plainPassword: 'admin');
         $admin->setPassword(password: $hash);
@@ -43,6 +45,9 @@ class EternoFixtures extends Fixture
             $user->setEmail(email: 'email'.$i.'@eterno.fr');
             $hash = $this->passwordHasher->hashPassword(user: $user, plainPassword: 'password'.$i);
             $user->setPassword(password: $hash);
+            $user->setBirthday(birthday: $faker->dateTimeBetween(startDate: '-65 years', endDate: '-18 years'));
+            // Fake phone number format (FR) starting with 06 or 07
+            $user->setMobile(mobile: '0'.$faker->numberBetween(int1: 6, int2: 7).$faker->randomNumber(nbDigits: 8, strict: true));
 
             $manager->persist($user);
             $users[] = $user;
@@ -95,6 +100,7 @@ class EternoFixtures extends Fixture
             $message->setUserAccount(userAccount: $sender);
             $message->setLight(light: $recipient);
             $message->setMessage(message: $faker->text(maxNbChars: 200));
+            $message->setCreatedAt($faker->dateTimeBetween(startDate: '-6 months', endDate: 'yesterday'));
 
             $manager->persist($message);
         }
