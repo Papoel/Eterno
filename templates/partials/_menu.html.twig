@@ -32,7 +32,8 @@ Header START -->
                         </a>
                     </li>
                     <li class="nav-item ms-2">
-                        <a class="nav-link bg-light icon-md btn btn-light p-0" href="{{ path('profile_settings.index') }}">
+                        <a class="nav-link bg-light icon-md btn btn-light p-0"
+                           href="{{ path('profile_settings.index', {'id': app.user.id}) }}">
                             <i class="bi bi-gear-fill fs-6"> </i>
                         </a>
                     </li>
@@ -75,7 +76,8 @@ Header START -->
                             </li>
                             <!-- Links -->
                             <li>
-                                <a class="dropdown-item" href="{{ path('profile_settings.index') }}">
+                                <a class="dropdown-item"
+                                   href="{{ path('profile_settings.index', {'id': app.user.id}) }}">
                                     <i class="bi bi-gear fa-fw me-2"></i>
                                     Paramètres et confidentialité
                                 </a>
