@@ -208,3 +208,32 @@ test(description: 'Ne doit pas avoir d\'implémentation spécifique pour eraseCr
 
     expect(value: null)->toBeNull();
 });
+
+test(description: 'Doit retourner au moins le rôle ROLE_USER', closure: function () {
+    $user = new User();
+    $user->setRoles(roles: ['ROLE_ADMIN']);
+
+    expect($user->getRoles())->toContain(needles: 'ROLE_USER');
+});
+
+test(description: 'Doit retourner le nom complet de l\'utilisateur', closure: function () {
+    $user = new User();
+    $user->setFirstname(firstname: 'john');
+    $user->setLastname(lastname: 'doe');
+
+    expect($user->getFullname())->toBe(expected: 'john_doe');
+});
+
+test(description: 'Doit retourner la date d\'anniversaire de l\'utilisateur', closure: function () {
+    $user = new User();
+    $user->setBirthday(birthday: new DateTime());
+
+    expect($user->getBirthday())->toBeInstanceOf(class: DateTime::class);
+});
+
+test(description: 'Doit retourner le numéro de téléphone de l\'utilisateur', closure: function () {
+    $user = new User();
+    $user->setMobile(mobile: '0606060606');
+
+    expect($user->getMobile())->toBe(expected: '0606060606');
+});
