@@ -221,7 +221,7 @@ test(description: 'Doit retourner le nom complet de l\'utilisateur', closure: fu
     $user->setFirstname(firstname: 'john');
     $user->setLastname(lastname: 'doe');
 
-    expect($user->getFullname())->toBe(expected: 'john_doe');
+    expect($user->getFullname())->toBe(expected: 'john doe');
 });
 
 test(description: 'Doit retourner la date d\'anniversaire de l\'utilisateur', closure: function () {
