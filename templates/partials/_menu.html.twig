@@ -65,8 +65,10 @@ Header START -->
                                              alt="avatar">
                                     </div>
                                     <div>
-                                        <a class="h6 stretched-link" href="#">Pascal Briffard</a>
-                                        <p class="small m-0">Développeur Web</p>
+                                        <a class="h6 stretched-link" href="#">
+                                            {{ app.user.fullname }}
+                                        </a>
+                                        <p class="small m-0">{{ app.user.username }}</p>
                                     </div>
                                 </div>
                                 {# TODO: Rediriger vers la page des Lumoères #}
