@@ -50,6 +50,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private array $roles = [];
 
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    private ?\DateTime $birthday = null;
+
+    #[ORM\Column(length: 10, nullable: true)]
+    #[Assert\Length(max: 10, maxMessage: 'Votre numéro de téléphone ne peut pas dépasser {{ limit }} chiffres.')]
+    private ?string $mobile = null;
+
     /** @var Collection<int, Light> */
     #[Assert\Valid]
     #[ORM\OneToMany(mappedBy: 'userAccount', targetEntity: Light::class, orphanRemoval: true)]
@@ -59,13 +66,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\Valid]
     #[ORM\OneToMany(mappedBy: 'userAccount', targetEntity: Message::class, orphanRemoval: true)]
     private Collection $messages;
-
-    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
-    private ?\DateTime $birthday = null;
-
-    #[ORM\Column(length: 10, nullable: true)]
-    #[Assert\Length(max: 10, maxMessage: 'Votre numéro de téléphone ne peut pas dépasser {{ limit }} chiffres.')]
-    private ?string $mobile = null;
 
     public function __construct()
     {
@@ -92,7 +92,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getFullname(): string
     {
-        return $this->firstname.'_'.$this->lastname;
+        return $this->firstname.' '.$this->lastname;
     }
 
     public function getId(): ?Uuid

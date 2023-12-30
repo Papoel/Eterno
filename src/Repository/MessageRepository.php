@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Message;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -21,28 +22,35 @@ class MessageRepository extends ServiceEntityRepository
         parent::__construct($registry, Message::class);
     }
 
-    //    /**
-    //     * @return Message[] Returns an array of Message objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('m')
-    //            ->andWhere('m.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('m.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    /**
+     * @param int[] $lightsIds
+     *
+     * @return Message[]
+     */
+    public function findMessagesByUserAndLights(User $user, array $lightsIds): array
+    {
+        // 1. Get all messages from user (select * from messages where user_account_id = $user)
+        $messages = $user->getMessages()->toArray();
 
-    //    public function findOneBySomeField($value): ?Message
-    //    {
-    //        return $this->createQueryBuilder('m')
-    //            ->andWhere('m.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+        // from $messages, get messages to lights
+        return array_filter(
+            $messages,
+            callback: static function (Message $message) use ($lightsIds) {
+                $light = $message->getLight();
+                if (null !== $light) {
+                    return in_array(
+                        needle: $light->getId(),
+                        haystack: $lightsIds,
+                        strict: true
+                    );
+                }
+
+                return false;
+                /*return in_array(
+                    needle: $message->getLight()->getId(),
+                    haystack: $lightsIds, strict: true
+                );*/
+            }
+        );
+    }
 }

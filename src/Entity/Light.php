@@ -117,4 +117,17 @@ class Light
 
         return $this;
     }
+
+    public function getSentMessagesCount(): int
+    {
+        $count = 0;
+
+        foreach ($this->getMessages() as $message) {
+            if ($message->getUserAccount() === $this->getUserAccount()) {
+                ++$count;
+            }
+        }
+
+        return $count;
+    }
 }
