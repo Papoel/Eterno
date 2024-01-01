@@ -130,15 +130,8 @@
 
                         <!-- Account setting tab START -->
                         <div class="tab-pane show active fade" id="nav-setting-tab-1">
-                            {# TODO: Création template de notification + téléchargement de librairie type NOTYFY #}
-                            {% for label, messages in app.flashes %}
-                                {% for message in messages %}
-                                    <div class="alert alert-{{ label }} alert-dismissible fade show" role="alert">
-                                        {{ message }}
-                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                    </div>
-                                {% endfor %}
-                            {% endfor %}
+                            {# TODO: Téléchargement de librairie type NOTYFY #}
+                            {{ include('partials/_notifications.html.twig') }}
                             <!-- Account settings START -->
                             <div class="card mb-4">
                                 <!-- Title START -->
