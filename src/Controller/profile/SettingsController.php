@@ -3,12 +3,15 @@
 namespace App\Controller\profile;
 
 use App\Entity\User;
+use App\Form\Account\AvatarType;
 use App\Form\Account\ChangePasswordType;
 use App\Form\Account\UserDataType;
 use App\Services\PasswordManagerService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Finder\Finder;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -18,13 +21,13 @@ class SettingsController extends AbstractController
 {
     public function __construct(
         private readonly PasswordManagerService $passwordManagerService,
+        private readonly EntityManagerInterface $em,
     ) {
     }
 
     #[Route('/', name: 'index')]
     public function index(
         Request $request,
-        EntityManagerInterface $em,
         Security $security,
     ): Response {
         /** @var User $user */
@@ -36,13 +39,15 @@ class SettingsController extends AbstractController
 
         $formUserData = $this->createForm(type: UserDataType::class, data: $this->getUser());
         $formUserPassword = $this->createForm(type: ChangePasswordType::class, data: $this->getUser());
+        $formAvatar = $this->createForm(type: AvatarType::class, data: $this->getUser());
 
         $formUserData->handleRequest($request);
         $formUserPassword->handleRequest($request);
+        $formAvatar->handleRequest($request);
 
         // Form User Data
         if ($formUserData->isSubmitted() && $formUserData->isValid()) {
-            $em->flush();
+            $this->em->flush();
 
             $this->addFlash(type: 'success', message: 'Vos informations ont bien été mises à jour.');
 
@@ -99,9 +104,108 @@ class SettingsController extends AbstractController
             );
         }
 
+        // Form Avatar
+        if ($formAvatar->isSubmitted() && $formAvatar->isValid()) {
+            // Récupérer le fichier
+            $avatarFile = $formAvatar->get('avatarFile')->getData();
+
+            if (null !== $avatarFile) {
+                // Récupérer le type mime du fichier
+                /** @phpstan-ignore-next-line */
+                $avatarMimeType = $avatarFile->getMimeType();
+                // Lister les types de fichiers autorisés
+                $allowedMimeTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+
+                // Vérifier si le type mime du fichier est autorisé
+                if (!in_array(needle: $avatarMimeType, haystack: $allowedMimeTypes, strict: true)) {
+                    $this->addFlash(type: 'danger', message: 'Le type de fichier n\'est pas autorisé, un avatar par défaut a été appliqué.');
+                    // Définir AvatarFile à null dans la base de données
+                    $user->setAvatar(avatar: null);
+                    $this->em->flush();
+                    // REDIRECTION
+                    return $this->redirectToRoute(route: 'profile_settings.index');
+                }
+
+                // Enregistrer l'avatar.
+                /* @var UploadedFile $avatarFile */
+                /* @phpstan-ignore-next-line */
+                $user->setAvatarFile(avatarFile: $avatarFile);
+                $this->em->flush();
+                $this->addFlash(type: 'success', message: 'Votre avatar a bien été modifié.');
+            } else {
+                $this->addFlash(type: 'danger', message: 'Veuillez sélectionner un fichier avant de valider.');
+            }
+        }
+
         return $this->render(view: 'partials/settings/settings.html.twig', parameters: [
             'formUserData' => $formUserData->createView(),
             'formUserPassword' => $formUserPassword->createView(),
+            'formAvatar' => $formAvatar->createView(),
         ]);
+    }
+
+    #[Route('/supprimer-avatar', name: 'delete_avatar')]
+    public function deleteAvatar(): Response
+    {
+        /* @var User|null $user */
+        $user = $this->getUser();
+
+        // Vérifier si l'utilisateur est connecté
+        if (null === $user) {
+            $this->addFlash(type: 'danger', message: 'Vous devez être connecté pour effectuer cette action.');
+
+            return $this->redirectToRoute(route: 'app_login');
+        }
+
+        /** @phpstan-ignore-next-line */
+        $directory = $this->getParameter(name: 'kernel.project_dir').'/assets/uploads/avatar';
+
+        // Utiliser Finder pour lister les fichiers dans le dossier
+        $finder = new Finder();
+        $finder->in($directory);
+
+        $files = [];
+        foreach ($finder->files() as $file) {
+            $files[] = $file->getRelativePathname();
+        }
+
+        // Rechercher les fichiers manquants
+        $missingFiles = [];
+        foreach ($files as $file) {
+            /** @var User $user */
+            $avatarFileName = $user->getAvatar();
+            if (!in_array(needle: $avatarFileName, haystack: $files, strict: true)) {
+                // Mettre en base de données l'avatar à null
+                $user->setAvatar(avatar: null);
+                $this->em->flush();
+                $this->addFlash(type: 'danger', message: 'Votre avatar a été supprimé car il n\'existe plus dans le dossier.');
+            }
+        }
+
+        if ($user instanceof User) {
+            // Récupérer le nom de l'avatar puis le supprimer du dossier
+            $avatar = $user->getAvatar();
+            $uploadBasePath = $this->getParameter(name: 'upload_base_path');
+            $avatarPath = '';
+
+            if (null !== $uploadBasePath && null !== $avatar) {
+                /** @phpstan-ignore-next-line */
+                $avatarPath = $directory.'/'.$avatar;
+                // Vérifier si le fichier existe
+                if (file_exists(filename: $avatarPath)) {
+                    // Supprimer le fichier
+                    unlink(filename: $avatarPath);
+                    $user->setAvatar(avatar: null);
+                    $this->em->flush();
+                    $this->addFlash(type: 'success', message: 'Votre avatar a bien été supprimé.');
+                }
+            }
+        } else {
+            $this->addFlash(type: 'danger', message: 'Vous devez être connecté pour effectuer cette action.');
+
+            return $this->redirectToRoute(route: 'app_login');
+        }
+
+        return $this->redirectToRoute(route: 'profile_settings.index', parameters: ['id' => $user->getId()]);
     }
 }

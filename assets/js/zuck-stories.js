@@ -157,12 +157,12 @@ class Zuck {
                 // Story item (First way)
                 Zuck.buildTimelineItem(
                     "user-5",
-                    "assets/images/post/1by1/06.jpg",
+                    "assets/images/post/1by1/header.jpg",
                     "Samuel Bishop",
                     "",
                     timestamp(),
                     [
-                        ["user5-story1", "photo", 5, "assets/images/albums/06.jpg", "", '', false, false, timestamp()],
+                        ["user5-story1", "photo", 5, "assets/images/albums/header.jpg", "", '', false, false, timestamp()],
                     ]
                 ),
 
@@ -174,7 +174,7 @@ class Zuck {
                     "",
                     timestamp(),
                     [
-                        ["user6-story1", "photo", 5, "assets/images/albums/06.jpg", "", '', false, false, timestamp()],
+                        ["user6-story1", "photo", 5, "assets/images/albums/header.jpg", "", '', false, false, timestamp()],
                     ]
                 ),
 

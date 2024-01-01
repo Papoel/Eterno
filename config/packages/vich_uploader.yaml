@@ -1,0 +1,14 @@
+vich_uploader:
+    db_driver: orm
+
+    metadata:
+        type: attribute
+
+    mappings:
+        user_avatar:
+            uri_prefix: '%upload_base_path%'
+            upload_destination: '%kernel.project_dir%/assets/%upload_base_path%'
+            namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
+            inject_on_load: false
+            delete_on_update: true
+            delete_on_remove: true

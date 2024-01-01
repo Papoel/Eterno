@@ -115,8 +115,8 @@
                             <!-- Offcanvas body -->
                             <!-- Copyright -->
                             <p class="small text-center mt-1">
-                                ©{{ 'now' | date('Y') }} &middot;
-                                <span class="text-reset">Papoel</span>
+                                ©2023 - {{ 'now' | date('Y') }} &middot;
+                                <span class="text-reset">By Papoel</span>
                             </p>
                         </div>
                     </nav>
@@ -132,12 +132,66 @@
                         <div class="tab-pane show active fade" id="nav-setting-tab-1">
                             {# TODO: Téléchargement de librairie type NOTYFY #}
                             {{ include('partials/_notifications.html.twig') }}
+
                             <!-- Account settings START -->
-                            <div class="card mb-4">
+                            <section class="card mb-4">
                                 <!-- Title START -->
-                                <div class="card-header border-0 pb-0">
-                                    <h1 class="h5 card-title">Paramètres du compte</h1>
-                                    <p class="mb-0">C'est ici que vous allez mettre à jour vos informations.</p>
+                                <div class="d-flex justify-content-between">
+                                    <div class="card-header border-0 pb-0">
+                                        <h1 class="h5 card-title">Paramètres du compte</h1>
+                                        <p class="mb-0">C'est ici que vous allez mettre à jour vos informations.</p>
+                                    </div>
+
+                                    {#<div class="avatar avatar-xl mt-n5 mb-3">
+                                        <img class="avatar-img rounded-circle border border-white border-3" src="{{ asset('images/avatar/07.jpg') }}" alt="">
+                                        <span class="badge bg-primary position-absolute bottom-0 end-0 rounded-circle">
+                                            <i class="fa-solid fa-camera"></i>
+                                        </span>
+                                    </div>#}
+
+                                        <div class="avatar avatar-xl mt-n4 me-n0">
+                                            <a class="d-flex flex-column justify-content-end position-relative overflow-hidden rounded-circle bg-position-center flex-shrink-0"
+                                               href="#"
+                                               data-bs-toggle="dropdown"
+                                               aria-expanded="false"
+                                               style="width: 80px; height: 80px;
+                                                       background-image:url({{ asset('uploads/avatar/' ~ app.user.avatar ?? 'placeholder.jpg') }});
+                                                       background-size: cover;
+                                                       background-repeat: no-repeat;"
+                                            >
+                                                <span class="badge text-center" style="background-color: rgba(0, 0, 0, 0.5)">
+                                                    <i class="fa-solid fa-camera"></i>
+                                                </span>
+                                            </a>
+                                            <div class="dropdown-menu my-1" style="width: 350px">
+                                                <span class="dropdown-item fw-normal" href="#">
+                                                    <fieldset>
+                                                        {{ form_start(formAvatar) }}
+                                                            <div class="d-flex justify-content-between align-items-center">
+                                                                <i class="ai-camera fs-base opacity-70 me-2"></i>
+                                                                {{ form_widget(formAvatar.avatarFile, {'attr': {'class': 'form-control form-control-sm'}}) }}
+                                                            </div>
+                                                            <div class="form-errors">
+                                                                {{ form_errors(formAvatar.avatarFile) }}
+                                                            </div>
+                                                            <div class="d-flex justify-content-between mt-2">
+                                                                <button class="btn btn-sm btn-success ms-2" type="submit">
+                                                                    <span>Sauvegarder</span>
+                                                                </button>
+                                                                <a class="dropdown-item text-danger fw-normal text-end"
+                                                                   href="{{ path('profile_settings.delete_avatar', {'id': app.user.id}) }}">
+                                                                    <i class="ai-trash fs-base me-2"></i>
+                                                                    Effacer l'avatar
+                                                                </a>
+                                                            </div>
+                                                        {{ form_end(formAvatar) }}
+                                                    </fieldset>
+                                                </span>
+                                            </div>
+                                        </div>
+
+
+
                                 </div>
                                 <!-- Card header START -->
                                 <!-- Card body START -->
@@ -160,7 +214,7 @@
                                     <!-- Formulaire de renseignements User END -->
                                 </div>
                                 <!-- Card body END -->
-                            </div>
+                            </section>
                             <!-- Account settings END -->
 
                             <!-- Change your password START -->
