@@ -1,0 +1,70 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des lumières{% endblock %}
+
+{% block body %}
+
+    {{ include('partials/_menu.html.twig') }}
+    <main class="container my-5">
+
+        <h1 class="mb-4">Liste des lumières</h1>
+
+        {{ include('partials/_notifications.html.twig') }}
+
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>Prénom</th>
+                    <th>Nom</th>
+                    <th>Pseudo</th>
+                    <th>Date de naissance</th>
+                    <th>Date du décès</th>
+                    <th>Création Lumière</th>
+                    <th>Messages</th>
+                    <th class="text-end">actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for light in lights %}
+                <tr>
+                    <td>{{ light.firstname }}</td>
+                    <td>{{ light.lastname }}</td>
+                    <td>{{ light.username }}</td>
+                    <td>{{ light.birthdayAt ? light.birthdayAt|format_datetime('relative_long', 'none', locale='fr') }}</td>
+                    <td>{{ light.deceasedAt ? light.deceasedAt|format_datetime('relative_long', 'none', locale='fr') }}</td>
+                    <td>{{ light.createdAt ? light.createdAt|format_datetime('full', 'short', locale='fr')|capitalize }}</td>
+                    <td>{{ light.sentMessagesCount }}</td>
+                    <td class="d-flex justify-content-between">
+                        <a class="me-2 small" href="{{ path('app_light_show', {'id': light.id}) }}">
+                            <i class="fas fa-eye"></i>
+                            Voir
+                        </a>
+                        <a class="me-2 small" href="{{ path('app_light_edit', {'id': light.id}) }}">
+                            <i class="fas fa-edit"></i>
+                            Editer
+                        </a>
+
+                        <form method="post" action="{{ path('app_light_delete', {'id': light.id}) }}"
+                              onsubmit="return confirm('Voulez-vous vraiment supprimer cette lumière ?');">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ light.id) }}">
+                            <button class="border-0 small text-white bg-danger rounded-3">
+                                <i class="fas fa-heart-broken"></i>
+                                Effacer
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="8">Aucune lumière n'a été trouvée.</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <a href="{{ path('app_light_new') }}">
+            <button class="btn btn-primary">Ajouter une lumière</button>
+        </a>
+    </main>
+
+{% endblock %}

@@ -1,0 +1,63 @@
+{{ form_start(form, {'attr': {'class': 'row g-3'}}) }}
+    <div class="input-group mb-3">
+        <span class="input-group-text bg-light"
+              id="inputGroup-light-first-and-last-name">
+            Prénom et Nom de famille
+        </span>
+        {{ form_widget(form.firstname, {'attr': {
+            'aria-describedby': 'Prénom de votre lumière',
+            'aria-label': 'Prénom de votre lumière',
+            'placeholder': 'Prénom',
+        }}) }}
+        {{ form_widget(form.lastname, {'attr': {
+            'aria-describedby': 'Nom de famille de votre lumière',
+            'aria-label': 'Nom de famille de votre lumière',
+            'placeholder': 'Nom',
+        }}) }}
+    </div>
+
+    <div class="input-group mb-3">
+         <span class="input-group-text bg-light"
+              id="inputGroup-light-pseudo">
+            Pseudo
+        </span>
+        {{ form_widget(form.username, {'attr': {
+            'class': 'form-control col-6',
+            'aria-describedby': 'Pseudo de votre lumière',
+            'aria-label': 'Surnom de votre lumière',
+            'placeholder': 'Surnom (pseudo)',
+        }}) }}
+    </div>
+
+    <div class="input-group mb-3">
+        <span class="input-group-text bg-light"
+              id="inputGroup-light-birthday">
+            Date de naissance
+        </span>
+        {{ form_widget(form.birthdayAt, {'attr': {
+            'class': 'form-control col-6',
+            'aria-describedby': 'Date de naissance de votre lumière',
+            'aria-label': 'Date de naissance de votre lumière',
+        }}) }}
+        <span class="input-group-text bg-light"
+              id="inputGroup-light-deceased">
+            Date de décès
+        </span>
+        {{ form_widget(form.deceasedAt, {'attr': {
+            'class': 'form-control col-6',
+            'aria-describedby': 'Date de décès de votre lumière',
+            'aria-label': 'Date de décès de votre lumière',
+        }}) }}
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center">
+        <a href="{{ path('app_light_index') }}"
+           class="btn btn-sm btn-secondary-soft mt-3 rounded-2">
+            <i class="fas fa-arrow-left"></i>
+            Revenir à la liste
+        </a>
+
+        <button type="submit" class="w-25 btn {{ button_style }}">{{ button_label|default('Enregistrer') }}</button>
+    </div>
+
+{{ form_end(form) }}

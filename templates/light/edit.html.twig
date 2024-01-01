@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Modification Lumière {% endblock %}
+
+{% block body %}
+
+    {{ include('partials/_menu.html.twig') }}
+
+    <main class="container my-5">
+        <h1 class="mb-5">Modification de {{ light.firstname }} {{ light.lastname }}</h1>
+
+        {{ include('light/_form.html.twig', {'button_style': 'btn-sm btn-warning rounded-2', 'button_label': 'Mettre à jour'}) }}
+
+        {{ include('light/_delete_form.html.twig') }}
+
+    </main>
+
+{% endblock %}

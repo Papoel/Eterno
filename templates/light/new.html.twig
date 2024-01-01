@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Créer une nouvelle lumière{% endblock %}
+
+{% block body %}
+    {{ include('partials/_menu.html.twig') }}
+
+    <main class="container my-5">
+        <h1 class="mb-5">Créer une nouvelle lumière</h1>
+
+        {{ include('light/_form.html.twig', {'button_style': 'btn-sm bg-primary text-white rounded-2'}) }}
+
+    </main>
+
+{% endblock %}

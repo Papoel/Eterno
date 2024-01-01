@@ -100,7 +100,10 @@ class EternoFixtures extends Fixture
             $message->setUserAccount(userAccount: $sender);
             $message->setLight(light: $recipient);
             $message->setMessage(message: $faker->text(maxNbChars: 200));
-            $message->setCreatedAt($faker->dateTimeBetween(startDate: '-6 months', endDate: 'yesterday'));
+
+            $date = $faker->dateTimeBetween(startDate: '-6 months', endDate: 'yesterday');
+            $immutable = \DateTimeImmutable::createFromMutable($date);
+            $message->setCreatedAt($immutable);
 
             $manager->persist($message);
         }

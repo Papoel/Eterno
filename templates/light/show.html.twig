@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Profil de {{ light.firstname }} {{ light.lastname }}{% endblock %}
+
+{% block body %}
+
+    {{ include('partials/_menu.html.twig') }}
+
+    <main class="container">
+
+        <h1 class="mb-5">Profil de {{ light.firstname }} {{ light.lastname }}</h1>
+
+        <table class="table">
+            <tbody>
+                <tr>
+                    <th>Prénom</th>
+                    <td>{{ light.firstname }}</td>
+                </tr>
+                <tr>
+                    <th>Nom</th>
+                    <td>{{ light.lastname }}</td>
+                </tr>
+                <tr>
+                    <th>Pseudo</th>
+                    <td>{{ light.username }}</td>
+                </tr>
+                <tr>
+                    <th>Date de naissance</th>
+                    <td>{{ light.birthdayAt ? light.birthdayAt|format_datetime('relative_long', 'none', locale='fr')|capitalize }}</td>
+                </tr>
+                <tr>
+                    <th>Age</th>
+                    <td>{{ light.age }} ans</td>
+                </tr>
+                <tr>
+                    <th>Date du décès</th>
+                    <td>{{ light.deceasedAt ? light.deceasedAt|format_datetime('relative_long', 'none', locale='fr')|capitalize }}</td>
+                </tr>
+                <tr>
+                    <th>Date de création de la Lumière</th>
+                    <td>{{ light.createdAt ? light.createdAt|format_datetime('full', 'short', locale='fr')|capitalize }}</td>
+                </tr>
+                <tr>
+                    <th>Message envoyé</th>
+                    <td>{{ light.sentMessagesCount }}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="d-flex justify-content-between align-items-center">
+            <a href="{{ path('app_light_index') }}"
+               class="btn btn-sm btn-secondary-soft mt-3 rounded-2">
+                <i class="fas fa-arrow-left"></i>
+                Revenir à la liste
+            </a>
+
+            <a href="#" class="btn btn-sm btn-info mt-3">
+                <i class="fas fa-envelope-open-text"></i>
+                Accéder à la messagerie
+            </a>
+        </div>
+
+    </main>
+{% endblock %}

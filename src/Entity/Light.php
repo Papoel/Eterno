@@ -130,4 +130,21 @@ class Light
 
         return $count;
     }
+
+    public function getFullname(): string
+    {
+        return $this->getFirstname().' '.$this->getLastname();
+    }
+
+    public function getAge(): ?int
+    {
+        $birthday = $this->getBirthdayAt();
+        $deceased = $this->getDeceasedAt();
+
+        if ($birthday instanceof \DateTimeInterface && $deceased instanceof \DateTimeInterface) {
+            return $birthday->diff($deceased)->y;
+        }
+
+        return null;
+    }
 }
