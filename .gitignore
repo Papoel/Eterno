@@ -21,6 +21,8 @@
 ###> symfony/asset-mapper ###
 /public/assets/
 /assets/vendor
+/assets/uploads/avatar/*
+/assets/uploads/photos/*.*
 ###< symfony/asset-mapper ###
 
 ###> symfony/upgrading ###

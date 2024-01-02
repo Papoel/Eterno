@@ -6,6 +6,7 @@ use App\Entity\Message;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Uid\Uuid;
 
 /**
  * @extends ServiceEntityRepository<Message>
@@ -23,7 +24,10 @@ class MessageRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param int[] $lightsIds
+     * SELECT * FROM messages WHERE user_account_id = $user
+     * AND light_id IN ($lightsIds).
+     *
+     * @param Uuid[] $lightsIds
      *
      * @return Message[]
      */
@@ -32,25 +36,18 @@ class MessageRepository extends ServiceEntityRepository
         // 1. Get all messages from user (select * from messages where user_account_id = $user)
         $messages = $user->getMessages()->toArray();
 
-        // from $messages, get messages to lights
-        return array_filter(
-            $messages,
-            callback: static function (Message $message) use ($lightsIds) {
-                $light = $message->getLight();
-                if (null !== $light) {
-                    return in_array(
-                        needle: $light->getId(),
-                        haystack: $lightsIds,
-                        strict: true
-                    );
-                }
+        // from $messages, keep only messages where light_id is in $lightsIds
+        $messages = array_filter($messages, callback: static function (Message $message) use ($lightsIds) {
+            $lightId = $message->getLight()?->getId();
 
+            if (null === $lightId) {
                 return false;
-                /*return in_array(
-                    needle: $message->getLight()->getId(),
-                    haystack: $lightsIds, strict: true
-                );*/
             }
-        );
+
+            /* @phpstan-ignore-next-line */
+            return in_array($lightId->toRfc4122(), $lightsIds, strict: true);
+        });
+
+        return $messages;
     }
 }
