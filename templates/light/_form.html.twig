@@ -1,9 +1,10 @@
-{{ form_start(form, {'attr': {'class': 'row g-3'}}) }}
+<section>
+    {{ form_start(form, {'attr': {'class': 'row g-3'}}) }}
     <div class="input-group mb-3">
-        <span class="input-group-text bg-light"
-              id="inputGroup-light-first-and-last-name">
-            Prénom et Nom de famille
-        </span>
+            <span class="input-group-text bg-light"
+                  id="inputGroup-light-first-and-last-name">
+                Prénom et Nom de famille
+            </span>
         {{ form_widget(form.firstname, {'attr': {
             'aria-describedby': 'Prénom de votre lumière',
             'aria-label': 'Prénom de votre lumière',
@@ -17,10 +18,10 @@
     </div>
 
     <div class="input-group mb-3">
-         <span class="input-group-text bg-light"
-              id="inputGroup-light-pseudo">
-            Pseudo
-        </span>
+             <span class="input-group-text bg-light"
+                   id="inputGroup-light-pseudo">
+                Pseudo
+            </span>
         {{ form_widget(form.username, {'attr': {
             'class': 'form-control col-6',
             'aria-describedby': 'Pseudo de votre lumière',
@@ -30,10 +31,10 @@
     </div>
 
     <div class="input-group mb-3">
-        <span class="input-group-text bg-light"
-              id="inputGroup-light-birthday">
-            Date de naissance
-        </span>
+            <span class="input-group-text bg-light"
+                  id="inputGroup-light-birthday">
+                Date de naissance
+            </span>
         {{ form_widget(form.birthdayAt, {'attr': {
             'class': 'form-control col-6',
             'aria-describedby': 'Date de naissance de votre lumière',
@@ -41,12 +42,24 @@
         }}) }}
         <span class="input-group-text bg-light"
               id="inputGroup-light-deceased">
-            Date de décès
-        </span>
+                Date de décès
+            </span>
         {{ form_widget(form.deceasedAt, {'attr': {
             'class': 'form-control col-6',
             'aria-describedby': 'Date de décès de votre lumière',
             'aria-label': 'Date de décès de votre lumière',
+        }}) }}
+    </div>
+
+    <div class="input-group mb-3">
+        <span class="input-group-text bg-light"
+              id="inputGroup-light-birthday">
+            Photo de votre Lumière
+        </span>
+        {{ form_widget(form.photo, {'attr': {
+            'class': 'form-control col-6',
+            'aria-describedby': 'Date de naissance de votre lumière',
+            'aria-label': 'Date de naissance de votre lumière',
         }}) }}
     </div>
 
@@ -60,4 +73,5 @@
         <button type="submit" class="w-25 btn {{ button_style }}">{{ button_label|default('Enregistrer') }}</button>
     </div>
 
-{{ form_end(form) }}
+    {{ form_end(form) }}
+</section>

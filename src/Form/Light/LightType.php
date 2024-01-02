@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Form;
+namespace App\Form\Light;
 
 use App\Entity\Light;
+use App\EventSubscriber\PictureLightSubscriber;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -10,12 +11,20 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\NotNull;
+use Vich\UploaderBundle\Form\Type\VichFileType;
 
 class LightType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
+            ->add(child: 'photo', type: VichFileType::class, options: [
+                'label' => false,
+                'mapped' => false,
+                'required' => false,
+                'allow_delete' => false,
+                'download_uri' => false,
+            ])
             ->add(child: 'firstname', type: TextType::class, options: [
                 'row_attr' => [
                     'class' => 'rounded-0',
@@ -72,6 +81,7 @@ class LightType extends AbstractType
                 ],
                 'widget' => 'single_text',
             ])
+            ->addEventSubscriber(subscriber: new PictureLightSubscriber())
         ;
     }
 

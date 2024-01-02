@@ -50,12 +50,20 @@
                                         <div class="card" style="border-radius: 15px;">
                                             <div class="card-body p-4">
                                                 <div class="d-flex text-black">
-                                                    <div class="flex-shrink-0">
-                                                        {# TODO: Photo de profil de ma lumière #}
-                                                        <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-profiles/avatar-2.webp"
-                                                             alt="Generic placeholder image" class="img-fluid"
-                                                             style="width: 180px; border-radius: 10px;"
-                                                        >
+                                                    <div class="d-flex align-items-center">
+                                                        {% if light.photo is not same as 'default.jpg' %}
+                                                            <img src="{{ asset('uploads/photos/' ~ light.photo) }}"
+                                                                 alt="miniature {{ light.fullname }}"
+                                                                 class="img-fluid"
+                                                                 style="max-height: 180px; max-width: 180px; border-radius: 10px;"
+                                                            >
+                                                        {% else %}
+                                                            <img src="{{ asset('uploads/photos/default/' ~ light.photo) }}"
+                                                                 alt="miniature par défaut"
+                                                                 class="img-fluid"
+                                                                 style="max-height: 180px; max-width: 180px; border-radius: 10px;"
+                                                            >
+                                                        {% endif %}
                                                     </div>
                                                     <div class="flex-grow-1 ms-3">
 
@@ -115,7 +123,7 @@
                                                                 <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ light.id) }}">
                                                                 <button class="border-0 btn btn-danger flex-grow-1">
                                                                     <i class="fas fa-heart-broken"></i>
-                                                                    Etendre la lumière
+                                                                    Éteindre la lumière
                                                                 </button>
                                                             </form>
 

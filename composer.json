@@ -43,7 +43,8 @@
         "twig/extra-bundle": "^3.7",
         "twig/intl-extra": "^3.8",
         "twig/twig": "^3.7",
-        "vich/uploader-bundle": "^2.3"
+        "vich/uploader-bundle": "^2.3",
+        "ext-gd": "*"
     },
     "require-dev": {
         "dbrekelmans/bdi": "^1.1",

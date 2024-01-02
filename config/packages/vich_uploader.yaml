@@ -12,3 +12,11 @@ vich_uploader:
             inject_on_load: false
             delete_on_update: true
             delete_on_remove: true
+
+        light_photo:
+            uri_prefix: '%upload_light_photo%'
+            upload_destination: '%kernel.project_dir%/assets/%upload_light_photo%'
+            namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
+            inject_on_load: false
+            delete_on_update: true
+            delete_on_remove: true
