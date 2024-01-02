@@ -20,6 +20,7 @@
                     <th>Date de naissance</th>
                     <th>Date du décès</th>
                     <th>Création Lumière</th>
+                    <th>Photo</th>
                     <th>Messages</th>
                     <th class="text-end">actions</th>
                 </tr>
@@ -32,7 +33,15 @@
                     <td>{{ light.username }}</td>
                     <td>{{ light.birthdayAt ? light.birthdayAt|format_datetime('relative_long', 'none', locale='fr') }}</td>
                     <td>{{ light.deceasedAt ? light.deceasedAt|format_datetime('relative_long', 'none', locale='fr') }}</td>
-                    <td>{{ light.createdAt ? light.createdAt|format_datetime('full', 'short', locale='fr')|capitalize }}</td>
+                    <td>{{ light.createdAt ? light.createdAt|format_datetime('relative_long', 'short', locale='fr')|capitalize }}</td>
+                    <td>
+                        {% if light.photo is not same as 'default.jpg' %}
+                            <img src="{{ asset('uploads/photos/' ~ light.photo) }}" alt="miniature {{ light.fullname }}"
+                                 class="img-fluid rounded-1" width="80">
+                        {% else %}
+                            <img src="{{ asset('uploads/photos/default/' ~ light.photo) }}" alt="miniature {{ light.fullname }}"
+                                 class="img-fluid rounded-1" width="80">
+                        {% endif %}
                     <td>{{ light.sentMessagesCount }}</td>
                     <td class="d-flex justify-content-between">
                         <a class="me-2 small" href="{{ path('app_light_show', {'id': light.id}) }}">

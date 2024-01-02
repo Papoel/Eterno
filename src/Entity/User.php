@@ -10,19 +10,22 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`users`')]
 #[UniqueEntity(fields: ['email'], message: 'Un compte existe déjà avec cette adresse email.')]
 #[ORM\HasLifecycleCallbacks]
+#[Vich\Uploadable]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
-    use CreatedAtTrait;
     use FirstLastUserNameTrait;
+    use CreatedAtTrait;
 
     #[ORM\Id]
     #[ORM\Column(type: 'uuid', unique: true)]
@@ -56,6 +59,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 10, nullable: true)]
     #[Assert\Length(max: 10, maxMessage: 'Votre numéro de téléphone ne peut pas dépasser {{ limit }} chiffres.')]
     private ?string $mobile = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $avatar = null;
+
+    #[Vich\UploadableField(mapping: 'user_avatar', fileNameProperty: 'avatar')]
+    private ?File $avatarFile = null;
 
     /** @var Collection<int, Light> */
     #[Assert\Valid]
@@ -231,5 +240,76 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->mobile = $mobile;
 
         return $this;
+    }
+
+    public function getAvatar(): ?string
+    {
+        return $this->avatar;
+    }
+
+    public function setAvatar(?string $avatar): void
+    {
+        $this->avatar = $avatar;
+    }
+
+    public function getAvatarFile(): ?File
+    {
+        return $this->avatarFile;
+    }
+
+    /**
+     * If manually uploading a file (i.e. not using Symfony Form) ensure an instance
+     * of 'UploadedFile' is injected into this setter to trigger the update. If this
+     * bundle's configuration parameter 'inject_on_load' is set to 'true' this setter
+     * must be able to accept an instance of 'File' as the bundle will inject one here
+     * during Doctrine hydration.
+     *
+     * @throws \Exception
+     */
+    public function setAvatarFile(File $avatarFile = null): void
+    {
+        $this->avatarFile = $avatarFile;
+
+        if (null !== $avatarFile) {
+            $timezone = new \DateTimeZone(timezone: 'Europe/Paris');
+            $this->updatedAt = new \DateTimeImmutable(timezone: $timezone);
+        }
+    }
+
+    public function __serialize(): array
+    {
+        return [
+            'id' => $this->id,
+            'email' => $this->email,
+            'password' => $this->password,
+            'roles' => $this->roles,
+            'birthday' => $this->birthday,
+            'mobile' => $this->mobile,
+            'avatar' => $this->avatar,
+            'firstname' => $this->firstname,
+            'lastname' => $this->lastname,
+            'username' => $this->username,
+            'createdAt' => $this->createdAt,
+            'updatedAt' => $this->updatedAt,
+        ];
+    }
+
+    /**
+     * @phpstan-ignore-next-line
+     */
+    public function __unserialize(array $data): void
+    {
+        $this->id = $data['id'];
+        $this->email = $data['email'];
+        $this->password = $data['password'];
+        $this->roles = $data['roles'];
+        $this->birthday = $data['birthday'];
+        $this->mobile = $data['mobile'];
+        $this->avatar = $data['avatar'];
+        $this->firstname = $data['firstname'];
+        $this->lastname = $data['lastname'];
+        $this->username = $data['username'];
+        $this->createdAt = $data['createdAt'];
+        $this->updatedAt = $data['updatedAt'];
     }
 }

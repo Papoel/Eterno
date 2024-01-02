@@ -9,11 +9,14 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: LightRepository::class)]
 #[ORM\Table(name: '`lights`')]
 #[ORM\HasLifecycleCallbacks]
+#[Vich\Uploadable]
 class Light
 {
     use CreatedAtTrait;
@@ -29,6 +32,12 @@ class Light
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTime $deceasedAt = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $photo = null;
+
+    #[Vich\UploadableField(mapping: 'light_photo', fileNameProperty: 'photo')]
+    private ?File $photoFile = null;
 
     #[ORM\ManyToOne(inversedBy: 'lights')]
     #[ORM\JoinColumn(nullable: false)]
@@ -116,6 +125,34 @@ class Light
         }
 
         return $this;
+    }
+
+    public function getPhoto(): ?string
+    {
+        return $this->photo;
+    }
+
+    public function setPhoto(?string $photo): void
+    {
+        $this->photo = $photo;
+    }
+
+    public function getPhotoFile(): ?File
+    {
+        return $this->photoFile;
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function setPhotoFile(File $photoFile = null): void
+    {
+        $this->photoFile = $photoFile;
+
+        if (null !== $photoFile) {
+            $timezone = new \DateTimeZone(timezone: 'Europe/Paris');
+            $this->updatedAt = new \DateTimeImmutable(timezone: $timezone);
+        }
     }
 
     public function getSentMessagesCount(): int
