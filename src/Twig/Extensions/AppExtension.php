@@ -27,7 +27,7 @@ class AppExtension extends AbstractExtension
 
         return match (true) {
             0 === $years && 0 === $months && 0 === $days => 'Aujourd\'hui',
-            0 === $years && 0 === $months && 1 === $days => 'Hier',
+            0 === $years && 0 === $months && 1 === $days => 'Une journée',
             0 === $years && 0 === $months && $days > 1 => sprintf('%d jours', $days),
             0 === $years && 1 === $months && 0 === $days => '1 mois',
             0 === $years && 1 === $months && 1 === $days => '1 mois et 1 jour',
