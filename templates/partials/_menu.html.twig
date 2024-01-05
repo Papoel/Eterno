@@ -27,7 +27,7 @@ Header START -->
             <ul class="nav flex-nowrap align-items-center ms-sm-3 list-unstyled">
                 {% if app.user %}
                     <li class="nav-item ms-2">
-                        <a class="nav-link bg-light icon-md btn btn-light p-0" href="#">
+                        <a class="nav-link bg-light icon-md btn btn-light p-0" href="{{ path('app_messaging_index') }}">
                             <i class="bi bi-chat-left-text-fill fs-6"></i>
                         </a>
                     </li>
@@ -66,10 +66,10 @@ Header START -->
                                              alt="avatar">
                                     </div>
                                     <div>
-                                        <a class="h6 stretched-link" href="#">
+                                        <a class="h6 stretched-link text-capitalize" href="#">
                                             {{ app.user.fullname }}
                                         </a>
-                                        <p class="small m-0">{{ app.user.username }}</p>
+                                        <p class="small m-0 text-capitalize">{{ app.user.username }}</p>
                                     </div>
                                 </div>
                                 <a class="dropdown-item btn btn-primary-soft btn-sm my-2 text-center"

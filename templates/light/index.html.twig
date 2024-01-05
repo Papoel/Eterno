@@ -11,9 +11,9 @@
 
         {{ include('partials/_notifications.html.twig') }}
 
-        <table class="table table-bordered table-hover">
+        <table class="table table-bordered table-hover align-middle">
             <thead>
-                <tr>
+                <tr class="text-center">
                     <th>Prénom</th>
                     <th>Nom</th>
                     <th>Pseudo</th>
@@ -22,12 +22,12 @@
                     <th>Création Lumière</th>
                     <th>Photo</th>
                     <th>Messages</th>
-                    <th class="text-end">actions</th>
+                    <th class="bg-primary-subtle">actions</th>
                 </tr>
             </thead>
             <tbody>
             {% for light in lights %}
-                <tr>
+                <tr class="text-center">
                     <td>{{ light.firstname }}</td>
                     <td>{{ light.lastname }}</td>
                     <td>{{ light.username }}</td>
@@ -43,24 +43,29 @@
                                  class="img-fluid rounded-1" width="80">
                         {% endif %}
                     <td>{{ light.sentMessagesCount }}</td>
-                    <td class="d-flex justify-content-between">
-                        <a class="me-2 small" href="{{ path('app_light_show', {'id': light.id}) }}">
-                            <i class="fas fa-eye"></i>
-                            Voir
-                        </a>
-                        <a class="me-2 small" href="{{ path('app_light_edit', {'id': light.id}) }}">
-                            <i class="fas fa-edit"></i>
-                            Editer
-                        </a>
 
-                        <form method="post" action="{{ path('app_light_delete', {'id': light.id}) }}"
-                              onsubmit="return confirm('Voulez-vous vraiment supprimer cette lumière ?');">
-                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ light.id) }}">
-                            <button class="border-0 small text-white bg-danger rounded-3">
-                                <i class="fas fa-heart-broken"></i>
-                                Effacer
-                            </button>
-                        </form>
+                    <td>
+                        <div class="d-flex justify-content-center">
+                            <a class="me-2 small" href="{{ path('app_light_show', {'id': light.id}) }}">
+                                <i class="fas fa-eye"></i>
+                                Voir
+                            </a>
+                            <a class="me-2 small" href="{{ path('app_light_edit', {'id': light.id}) }}">
+                                <i class="fas fa-edit"></i>
+                                Éditer
+                            </a>
+                        </div>
+
+                        <fieldset class="d-flex justify-content-center align-items-center mt-2">
+                            <form method="post" action="{{ path('app_light_delete', {'id': light.id}) }}"
+                                  onsubmit="return confirm('Voulez-vous vraiment supprimer cette lumière ?');">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ light.id) }}">
+                                <button class="border-0 small text-white bg-danger rounded-3">
+                                    <i class="fas fa-heart-broken"></i>
+                                    Effacer
+                                </button>
+                            </form>
+                        </fieldset>
                     </td>
                 </tr>
             {% else %}
