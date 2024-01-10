@@ -12,7 +12,7 @@ test(description: 'vérifie que la classe Message comporte les propriétés requ
     $message = new Message();
 
     expect(value: property_exists(object_or_class: $message, property: 'id'))->toBeTrue()
-        ->and(value: property_exists(object_or_class: $message, property: 'message'))->toBeTrue()
+        ->and(value: property_exists(object_or_class: $message, property: 'content'))->toBeTrue()
         ->and(value: property_exists(object_or_class: $message, property: 'createdAt'))->toBeTrue()
         ->and(value: property_exists(object_or_class: $message, property: 'userAccount'))->toBeTrue()
         ->and(value: property_exists(object_or_class: $message, property: 'light'))->toBeTrue();
@@ -49,7 +49,7 @@ test(description: 'Doit retourner null quand j\'appel getId sur une Light non pe
 test(description: 'Un message peut être ajouté', closure: function () {
     $message = new Message();
 
-    $message->setMessage('Mon message');
+    $message->setContent('Mon message');
 
-    expect($message->getMessage())->toBe('Mon message');
+    expect($message->getContent())->toBe('Mon message');
 });

@@ -6,9 +6,6 @@ use App\Entity\Light;
 use App\Entity\Message;
 use App\Entity\User;
 use App\Tests\Abstract\EntityTestCase;
-use PHPUnit\Framework\ExpectationFailedException;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 
 test(description: 'Vérifie que la classe User existe', closure: function (): void {
