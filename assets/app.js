@@ -10,13 +10,11 @@ import './vendor/bootstrap-icons/bootstrap-icons.min.css';
 import './vendor/glightbox-master/dist/css/glightbox.min.css';
 import './vendor/overlayscrollbars/css/overlayscrollbars.min.css';
 import './vendor/choices/styles/choices.min.css';
-import './vendor/zuck/dist/zuck.min.css';
 import './vendor/plyr/dist/plyr.min.css';
 import './vendor/tiny-slider/tiny-slider.css';
 
 // Import JS Folder
 import './js/functions.js';
-import './js/zuck-stories.js';
 
 // Import Vendor JS
 import './vendor/bootstrap/dist/js/bootstrap.min.js';
@@ -25,16 +23,7 @@ import './vendor/glightbox-master/dist/js/glightbox.min.js';
 import './vendor/OverlayScrollbars-master/js/OverlayScrollbars.min.js';
 import './vendor/choices/choices.index.js';
 import './vendor/colors/colors.index.js';
-import './vendor/zuck/dist/zuck.css.min.js';
 import './vendor/plyr/plyr.js';
 import './vendor/tiny-slider/tiny-slider.js';
-
-/*
- * Welcome to your app's main JavaScript file!
- *
- * This file will be included onto the page via the importmap() Twig function,
- * which should already be in your base.html.twig.
- */
-import './styles/app.css';
 
 console.log('This log comes from assets/app.js - welcome to AssetMapper! 🎉');
