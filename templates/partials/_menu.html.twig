@@ -26,11 +26,11 @@ Header START -->
             <!-- Nav right START -->
             <ul class="nav flex-nowrap align-items-center ms-sm-3 list-unstyled">
                 {% if app.user %}
-                    <li class="nav-item ms-2">
-                        <a class="nav-link bg-light icon-md btn btn-light p-0" href="{{ path('app_messaging_index') }}">
+                    {#<li class="nav-item ms-2">
+                        <a class="nav-link bg-light icon-md btn btn-light p-0" href="#!">
                             <i class="bi bi-chat-left-text-fill fs-6"></i>
                         </a>
-                    </li>
+                    </li>#}
                     <li class="nav-item ms-2">
                         <a class="nav-link bg-light icon-md btn btn-light p-0"
                            href="{{ path('profile_settings.index', {'id': app.user.id}) }}">
