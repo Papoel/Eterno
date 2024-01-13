@@ -99,7 +99,7 @@ class EternoFixtures extends Fixture
             // Assure-toi que le message est envoyé par un utilisateur vers un light.
             $message->setUserAccount(userAccount: $sender);
             $message->setLight(light: $recipient);
-            $message->setMessage(message: $faker->text(maxNbChars: 200));
+            $message->setContent(content: $faker->text(maxNbChars: 200));
 
             $date = $faker->dateTimeBetween(startDate: '-6 months', endDate: 'yesterday');
             $immutable = \DateTimeImmutable::createFromMutable($date);

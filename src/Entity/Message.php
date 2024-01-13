@@ -30,7 +30,7 @@ class Message
         minMessage: 'Votre message doit contenir au moins {{ limit }} caractères.',
         maxMessage: 'Votre message ne peut pas contenir plus de {{ limit }} caractères.'
     )]
-    private string $message;
+    private string $content;
 
     #[ORM\ManyToOne(inversedBy: 'messages')]
     #[ORM\JoinColumn(nullable: false)]
@@ -47,14 +47,14 @@ class Message
         return $this->id;
     }
 
-    public function getMessage(): ?string
+    public function getContent(): ?string
     {
-        return $this->message;
+        return $this->content;
     }
 
-    public function setMessage(string $message): static
+    public function setContent(string $content): static
     {
-        $this->message = $message;
+        $this->content = $content;
 
         return $this;
     }
