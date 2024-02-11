@@ -709,8 +709,8 @@ let e = {
 	// START: 18 Fake Password
 	fakePwd: function() {
 		document.addEventListener('DOMContentLoaded', function() {
-			const passwordFields = document.querySelectorAll('.fakepassword');
-			const togglerIcons = document.querySelectorAll('.fakepasswordicon');
+			const passwordFields = document.querySelectorAll('.password');
+			const togglerIcons = document.querySelectorAll('.password-icon');
 
 			function togglePasswordVisibility(passwordField, togglerIcon) {
 				togglerIcon.addEventListener('click', function() {
@@ -732,4 +732,5 @@ let e = {
 		});
 	}
 };
+
 e.init();
