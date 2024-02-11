@@ -1,4 +1,3 @@
-import './bootstrap.js';
 // Import CSS Folder
 import './css/app.css';
 import './css/color.css';
