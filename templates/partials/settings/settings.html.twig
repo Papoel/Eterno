@@ -1,5 +1,5 @@
 {% extends('base.html.twig') %}
-{#{% extends 'base.html.twig' %}#}
+{# {% extends 'base.html.twig' %} #}
 
 {% block stylesheet %}
     <link rel="stylesheet" type="text/css" href="{{ asset('vendor/choices/styles/choices.min.css') }}">
@@ -54,6 +54,14 @@
                                                     <span> Compte </span>
                                                 </a>
                                             </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link d-flex mb-0" href="{{ path('app_light_index') }}">
+                                                    <img class="me-2 h-20px fa-fw"
+                                                         src="{{ asset('images/icon/bulb-outline-filled.svg') }}"
+                                                         alt="">
+                                                    <span> Gestion des lumières </span>
+                                                </a>
+                                            </li>
                                             <li class="nav-item" data-bs-dismiss="offcanvas">
                                                 <a class="nav-link d-flex mb-0" href="#nav-setting-tab-2"
                                                    data-bs-toggle="tab">
@@ -99,16 +107,19 @@
                                                     <span class="text-danger">Clôturer le compte </span>
                                                 </a>
                                             </li>
+                                            <li class="divider"></li>
+                                            <li class="nav-item">
+                                                <a class="nav-link d-flex mb-0" href="{{ path('app_logout') }}">
+                                                    <img class="me-2 h-20px fa-fw text-danger"
+                                                         src="{{ asset('images/icon/logout-user.svg') }}"
+                                                         alt="">
+                                                    <span>Déconnexion</span>
+                                                </a>
+                                            </li>
                                         </ul>
                                         <!-- Side Nav END -->
                                     </div>
                                     <!-- Card body END -->
-                                    <!-- Card footer -->
-                                    <div class="card-footer text-center py-2">
-                                        <a class="btn btn-link text-secondary btn-sm" href="#!">
-                                            Vue du profil
-                                        </a>
-                                    </div>
                                 </div>
                                 <!-- Card END -->
                             </div>
@@ -142,17 +153,19 @@
                                         <p class="mb-0">C'est ici que vous allez mettre à jour vos informations.</p>
                                     </div>
 
-                                    <div class="avatar avatar-xl mt-n4 me-n0">
+                                    <div class="avatar avatar-xl mt-n4 me-1">
                                         <a class="d-flex flex-column justify-content-end position-relative overflow-hidden rounded-circle bg-position-center flex-shrink-0"
                                            href="#"
                                            data-bs-toggle="dropdown"
                                            aria-expanded="false"
                                            style="width: 80px; height: 80px;
+                                                   margin-top: 7px;
                                                    background-image:url({{ asset('uploads/avatar/' ~ app.user.avatar ?? 'placeholder.jpg') }});
                                                    background-size: cover;
                                                    background-repeat: no-repeat;"
                                         >
-                                            <span class="badge text-center" style="background-color: rgba(0, 0, 0, 0.5)">
+                                            <span class="badge text-center"
+                                                  style="background-color: rgba(0, 0, 0, 0.5)">
                                                 <i class="fa-solid fa-camera"></i>
                                             </span>
                                         </a>
@@ -184,25 +197,24 @@
                                     </div>
 
 
-
                                 </div>
                                 <!-- Card header START -->
                                 <!-- Card body START -->
                                 <div class="card-body">
                                     <!-- Formulaire de renseignements User START -->
                                     {{ form_start(formUserData, {'attr': {'class': 'row g-3', 'id': 'form_profile'}}) }}
-                                        {{ form_row(formUserData.firstname) }}
-                                        {{ form_row(formUserData.lastname) }}
-                                        {{ form_row( formUserData.birthday) }}
-                                        <div class="d-flex justify-content-between gap-3">
-                                            {{ form_row( formUserData.username) }}
-                                            {{ form_row( formUserData.mobile) }}
-                                        </div>
-                                        <div class="col-12 text-end">
-                                            <button type="submit" class="btn btn-sm btn-primary mb-0">
-                                                Sauvegarder les modifications
-                                            </button>
-                                        </div>
+                                    {{ form_row(formUserData.firstname) }}
+                                    {{ form_row(formUserData.lastname) }}
+                                    {{ form_row( formUserData.birthday) }}
+                                    <div class="d-flex justify-content-between gap-3">
+                                        {{ form_row( formUserData.username) }}
+                                        {{ form_row( formUserData.mobile) }}
+                                    </div>
+                                    <div class="col-12 text-end">
+                                        <button type="submit" class="btn btn-sm btn-primary mb-0">
+                                            Sauvegarder les modifications
+                                        </button>
+                                    </div>
                                     {{ form_end(formUserData) }}
                                     <!-- Formulaire de renseignements User END -->
                                 </div>
@@ -215,65 +227,77 @@
                                 <div class="card-header border-0 pb-0">
                                     <h5 class="card-title">Modifier le mot de passe</h5>
                                     <p class="mb-0 text-muted">
-                                        Lors de votre prochaine connexion, vous devrez utiliser votre nouveau mot de passe.
+                                        Lors de votre prochaine connexion, vous devrez utiliser votre nouveau mot de
+                                        passe.
                                     </p>
                                 </div>
                                 <div class="card-body">
                                     {{ form_start(formUserPassword, {'attr': {'class': 'row g-3', 'id': 'form_password_update'}}) }}
-
-                                        {% for message in app.session.flashBag.get('danger') %}
-                                            <div class="alert alert-danger">{{ message }}</div>
-                                        {% endfor %}
-
-                                        <!-- Current password -->
-                                        <div class="col-12">
-                                            <label class="form-label" for="{{ formUserPassword.currentPassword.vars.id }}">
-                                                {{ formUserPassword.currentPassword.vars.label }}
-                                            </label>
-                                            <div class="input-group">
-                                                {{ form_widget(formUserPassword.currentPassword) }}
-                                                <span class="input-group-text p-0">
-                                                    <i class="fakepasswordicon fa-solid fa-eye-slash cursor-pointer p-2 w-40px mt-2"></i>
-                                                </span>
+                                    <!-- Current password -->
+                                    <div class="col-12">
+                                        <label class="form-label" for="{{ formUserPassword.currentPassword.vars.id }}">
+                                            {{ formUserPassword.currentPassword.vars.label }}
+                                        </label>
+                                        {% if formUserPassword.currentPassword.vars.errors|length > 0 %}
+                                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                                {{ form_errors(formUserPassword.currentPassword) }}
                                             </div>
+                                        {% endif %}
+                                        <div class="input-group">
+                                            {{ form_widget(formUserPassword.currentPassword) }}
+                                            <span class="input-group-text p-0">
+                                                <i class="password-icon fa-solid fa-eye-slash cursor-pointer p-2 w-40px mt-2"></i>
+                                            </span>
                                         </div>
+                                    </div>
 
-                                        <!-- New password -->
-                                        <div class="col-12">
-                                            <label class="form-label" for="{{ formUserPassword.newPassword.first.vars.id }}">
-                                                {{ formUserPassword.newPassword.first.vars.label }}
-                                            </label>
-                                            {{ form_errors(formUserPassword.newPassword.first) }}
-                                            <div class="input-group">
-                                                {{ form_widget(formUserPassword.newPassword.first) }}
-                                                <span class="input-group-text p-0">
-                                                    <i class="fakepasswordicon fa-solid fa-eye-slash cursor-pointer p-2 w-40px mt-2"></i>
-                                                </span>
+                                    <!-- New password -->
+                                    <div class="col-12">
+                                        <label class="form-label"
+                                               for="{{ formUserPassword.newPassword.first.vars.id }}">
+                                            {{ formUserPassword.newPassword.first.vars.label }}
+                                        </label>
+                                        {% if formUserPassword.newPassword.first.vars.errors|length > 0 %}
+                                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                                {{ form_errors(formUserPassword.newPassword.first) }}
                                             </div>
-
-                                            <!-- Pswmeter -->
-                                            <div id="pswmeter" class="mt-2"></div>
-                                            <div id="pswmeter-message" class="rounded mt-1 text-muted"></div>
-                                        </div>
-                                        <!-- Confirm password -->
-                                        <div class="col-12">
-                                            <label class="form-label" for="{{ formUserPassword.newPassword.second.vars.id }}" class="form-label">
-                                                {{ formUserPassword.newPassword.second.vars.label }}
-                                            </label>
-                                            {{ form_errors(formUserPassword.newPassword.second) }}
-                                            <div class="input-group">
-                                                {{ form_widget(formUserPassword.newPassword.second) }}
-                                                <span class="input-group-text p-0">
-                                                    <i class="fakepasswordicon fa-solid fa-eye-slash cursor-pointer p-2 w-40px mt-2"></i>
+                                        {% endif %}
+                                        <div class="input-group">
+                                            {{ form_widget(formUserPassword.newPassword.first) }}
+                                            <span class="input-group-text p-0">
+                                                    <i class="password-icon fa-solid fa-eye-slash cursor-pointer p-2 w-40px mt-2"></i>
                                                 </span>
-                                            </div>
                                         </div>
 
-                                        <div class="col-12 text-end">
-                                            <button type="submit" class="btn btn-sm btn-primary mb-0">
-                                                Mettre à jour le mot de passe
-                                            </button>
+                                        <!-- Pswmeter -->
+                                        <div id="pswmeter" class="mt-2"></div>
+                                        <div id="pswmeter-message" class="rounded mt-1 text-muted"></div>
+                                    </div>
+                                    <!-- Confirm password -->
+                                    <div class="col-12">
+                                        <label class="form-label"
+                                               for="{{ formUserPassword.newPassword.second.vars.id }}"
+                                               class="form-label">
+                                            {{ formUserPassword.newPassword.second.vars.label }}
+                                        </label>
+                                        {% if formUserPassword.newPassword.second.vars.errors|length > 0 %}
+                                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                                {{ form_errors(formUserPassword.newPassword.second) }}
+                                            </div>
+                                        {% endif %}
+                                        <div class="input-group">
+                                            {{ form_widget(formUserPassword.newPassword.second) }}
+                                            <span class="input-group-text p-0">
+                                                <i class="password-icon fa-solid fa-eye-slash cursor-pointer p-2 w-40px mt-2"></i>
+                                            </span>
                                         </div>
+                                    </div>
+
+                                    <div class="col-12 text-end">
+                                        <button type="submit" class="btn btn-sm btn-primary mb-0">
+                                            Mettre à jour le mot de passe
+                                        </button>
+                                    </div>
                                     {{ form_end(formUserPassword) }}
                                 </div>
                             </div>
@@ -480,7 +504,7 @@
                                 </div>
                             </div>
                             <!-- Notification END -->
-                        </div>#}
+                        </div> #}
                         <!-- Notification tab END -->
 
                         <!-- CARD NOT YET AVAILABLE -->
@@ -579,7 +603,7 @@
                                 </div>
                             </div>
                             <!-- Privacy and safety END -->
-                        </div>#}
+                        </div> #}
                         <!-- Privacy and safety tab END -->
 
                         <!-- CARD NOT YET AVAILABLE -->
@@ -775,7 +799,7 @@
                                 </div>
                             </div>
                             <!-- Communications  END -->
-                        </div>#}
+                        </div> #}
                         <!-- Communications tab END -->
 
                         <!-- CARD NOT YET AVAILABLE -->
@@ -946,9 +970,11 @@
                                     <!-- Delete START -->
                                     <h6>Avant de vous lancer</h6>
                                     <p class="mb-0">
-                                        Prenez le temps de réfléchir à ce que vous allez perdre en supprimant votre compte.
+                                        Prenez le temps de réfléchir à ce que vous allez perdre en supprimant votre
+                                        compte.
                                         <br>
-                                        <strong>Aucune donnée ne sera conservée, et vous ne pourrez pas revenir en arrière.</strong>
+                                        <strong>Aucune donnée ne sera conservée, et vous ne pourrez pas revenir en
+                                            arrière.</strong>
                                     </p>
                                     <div class="form-check form-check-md my-4">
                                         <input class="form-check-input" type="checkbox" value=""
@@ -957,7 +983,8 @@
                                             J'ai bien compris les conséquences de cette action.
                                         </label>
                                     </div>
-                                    <a href="#" class="btn btn-success-soft btn-sm mb-2 mb-sm-0">Conserver mon compte</a>
+                                    <a href="#" class="btn btn-success-soft btn-sm mb-2 mb-sm-0">Conserver mon
+                                        compte</a>
                                     <a href="#" class="btn btn-danger btn-sm mb-0">Supprimer mon compte</a>
                                     <!-- Delete END -->
                                 </div>

@@ -119,7 +119,7 @@
 
 
                                                             <form method="post" action="{{ path('app_light_delete', {'id': light.id}) }}"
-                                                                  onsubmit="return confirm('Voulez-vous vraiment supprimer cette lumière ?');">
+                                                                  onsubmit="return confirm('Voulez-vous vraiment effacer {{ light.fullname }}?. Vous ne pourrez plus revenir en arrière, les messages seront également effacés.')">
                                                                 <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ light.id) }}">
                                                                 <button class="border-0 btn btn-danger flex-grow-1">
                                                                     <i class="fas fa-heart-broken"></i>

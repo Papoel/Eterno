@@ -12,4 +12,5 @@ return [
     Symfony\Bundle\WebProfilerBundle\WebProfilerBundle::class => ['dev' => true, 'test' => true],
     Nelmio\CorsBundle\NelmioCorsBundle::class => ['all' => true],
     Vich\UploaderBundle\VichUploaderBundle::class => ['all' => true],
+    # NeoxDoctrineSecure\NeoxDoctrineSecureBundle\NeoxDoctrineSecureBundle::class => ['all' => true],
 ];

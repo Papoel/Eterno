@@ -16494,7 +16494,7 @@ a.badge:hover {
     line-height: 1.5;
 }
 
-.fakepasswordicon {
+.fake-password-icon {
     height: 100%;
     display: -webkit-box;
     display: -ms-flexbox;
@@ -16508,7 +16508,7 @@ a.badge:hover {
     cursor: pointer;
 }
 
-.fakepasswordicon.fa-eye:before {
+.fake-password-icon.fa-eye:before {
     content: "\f06e" !important;
 }
 

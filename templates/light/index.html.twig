@@ -22,7 +22,8 @@
                     <th>Création Lumière</th>
                     <th>Photo</th>
                     <th>Messages</th>
-                    <th class="bg-primary-subtle">actions</th>
+                    <th>actions</th>
+                    <th>Dire au revoir</th>
                 </tr>
             </thead>
             <tbody>
@@ -55,10 +56,11 @@
                                 Éditer
                             </a>
                         </div>
-
+                    </td>
+                    <td>
                         <fieldset class="d-flex justify-content-center align-items-center mt-2">
                             <form method="post" action="{{ path('app_light_delete', {'id': light.id}) }}"
-                                  onsubmit="return confirm('Voulez-vous vraiment supprimer cette lumière ?');">
+                                  onsubmit="return confirm('Voulez-vous vraiment effacer {{ light.fullname }}?. Vous ne pourrez plus revenir en arrière, les messages seront également effacés.')">
                                 <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ light.id) }}">
                                 <button class="border-0 small text-white bg-danger rounded-3">
                                     <i class="fas fa-heart-broken"></i>
@@ -67,6 +69,8 @@
                             </form>
                         </fieldset>
                     </td>
+
+
                 </tr>
             {% else %}
                 <tr>
