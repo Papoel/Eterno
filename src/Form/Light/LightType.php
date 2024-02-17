@@ -55,6 +55,7 @@ class LightType extends AbstractType
                 'attr' => [
                     'class' => 'form-control col-6',
                 ],
+                'required' => false,
             ])
             ->add(child: 'birthdayAt', type: DateType::class, options: [
                 'row_attr' => [

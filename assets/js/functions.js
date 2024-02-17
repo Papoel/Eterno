@@ -87,6 +87,7 @@ let e = {
 			e.avatarImg(),
 			e.customScrollbar(),
 			e.pswMeter();
+			e.fakePwd();
 	},
 	isVariableDefined: function (el) {
 		return typeof !!el && (el) != 'undefined' && el != null;
@@ -229,8 +230,9 @@ let e = {
 	// END: Preloader
 
 	// START: 02 Navbar dropdown hover
-	navbarDropdownHover: function () {
+/*	navbarDropdownHover: function () {
 		e.onAll('.dropdown-menu a.dropdown-item.dropdown-toggle', 'click', function (event) {
+			alert('clicked');
 			let element = this;
 			event.preventDefault();
 			event.stopImmediatePropagation();
@@ -251,7 +253,7 @@ let e = {
 				});
 			}
 		});
-	},
+	},*/
 	// END: Navbar dropdown hover
 
 	// START: 03 Tiny Slider
@@ -709,11 +711,12 @@ let e = {
 	// START: 18 Fake Password
 	fakePwd: function() {
 		document.addEventListener('DOMContentLoaded', function() {
-			const passwordFields = document.querySelectorAll('.fakepassword');
-			const togglerIcons = document.querySelectorAll('.fakepasswordicon');
+			const passwordFields = document.querySelectorAll('.password');
+			const togglerIcons = document.querySelectorAll('.password-icon');
 
 			function togglePasswordVisibility(passwordField, togglerIcon) {
 				togglerIcon.addEventListener('click', function() {
+
 					if (passwordField.type === 'password') {
 						passwordField.type = 'text';
 						togglerIcon.classList.add('fa-eye');
@@ -732,4 +735,5 @@ let e = {
 		});
 	}
 };
+
 e.init();

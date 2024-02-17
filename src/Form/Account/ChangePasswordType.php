@@ -27,9 +27,8 @@ class ChangePasswordType extends AbstractType
                     'class' => 'form-label',
                 ],
                 'attr' => [
-                    'class' => 'form-control fakepassword',
+                    'class' => 'form-control password',
                     'placeholder' => 'Mot de passe actuel',
-                    'data-toggle' => 'password',
                 ],
                 'mapped' => false,
             ])
@@ -43,7 +42,7 @@ class ChangePasswordType extends AbstractType
                         'class' => 'form-label',
                     ],
                     'attr' => [
-                        'class' => 'form-control fakepassword',
+                        'class' => 'form-control password',
                         'placeholder' => 'Nouveau mot de passe',
                     ],
                 ],
@@ -53,7 +52,7 @@ class ChangePasswordType extends AbstractType
                         'class' => 'form-label mt-2',
                     ],
                     'attr' => [
-                        'class' => 'form-control fakepassword',
+                        'class' => 'form-control password',
                         'placeholder' => 'Confirmer le nouveau mot de passe',
                     ],
                 ],

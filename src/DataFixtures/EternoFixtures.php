@@ -89,7 +89,7 @@ class EternoFixtures extends Fixture
         }
 
         /* Générer des messages de User vers Light */
-        for ($i = 1; $i <= 150; ++$i) {
+        /*for ($i = 1; $i <= 150; ++$i) {
             $message = new Message();
             $sender = $faker->randomElement($users);
 
@@ -106,7 +106,7 @@ class EternoFixtures extends Fixture
             $message->setCreatedAt($immutable);
 
             $manager->persist($message);
-        }
+        }*/
         $manager->flush();
     }
 }

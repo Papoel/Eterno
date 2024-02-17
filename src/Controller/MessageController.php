@@ -95,6 +95,12 @@ class MessageController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute(route: 'app_home', parameters: [], status: Response::HTTP_SEE_OTHER);
+        $light = $message->getLight();
+        $receiver = $light?->getId();
+
+        // return to app_message_new
+        return $this->redirectToRoute(route: 'app_message_new', parameters: [
+            'receiver' => $receiver,
+        ]);
     }
 }
