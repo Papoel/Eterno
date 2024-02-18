@@ -9,8 +9,10 @@ use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Callback;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\NotNull;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Vich\UploaderBundle\Form\Type\VichFileType;
 
 class LightType extends AbstractType
@@ -81,6 +83,17 @@ class LightType extends AbstractType
                     'id' => 'profile_birthday',
                 ],
                 'widget' => 'single_text',
+                'constraints' => [
+                   new Callback(callback: function ($object, ExecutionContextInterface $context) {
+                       $today = new \DateTime();
+
+                       if ($object > $today) {
+                           $context->buildViolation(message: 'La date de décès ne peut pas être supérieure à la date du jour.')
+                                ->atPath(path: 'deceasedAt')
+                                ->addViolation();
+                       }
+                   }),
+                ],
             ])
             ->addEventSubscriber(subscriber: new PictureLightSubscriber())
         ;

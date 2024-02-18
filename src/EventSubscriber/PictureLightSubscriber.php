@@ -18,6 +18,9 @@ class PictureLightSubscriber implements EventSubscriberInterface
         ];
     }
 
+    /**
+     * @throws \Exception
+     */
     public function onPostSubmit(FormEvent $event): void
     {
         $this->setDefaultPicture($event);
