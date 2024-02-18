@@ -243,8 +243,5 @@
         "files": [
             "config/packages/vich_uploader.yaml"
         ]
-    },
-    "xorgxx/neox-doctrine-secure-bundle": {
-        "version": "dev-master"
     }
 }

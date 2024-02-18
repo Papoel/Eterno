@@ -16,6 +16,15 @@
             'placeholder': 'Nom',
         }}) }}
     </div>
+    {% if form_errors(form.firstname) %}
+        <div class="alert alert-danger">
+            {{ form_errors(form.firstname) }}
+    {% endif %}
+    {% if form_errors(form.lastname) %}
+        </div><div class="alert alert-danger">
+            {{ form_errors(form.lastname) }}
+        </div>
+    {% endif %}
 
     <div class="input-group mb-3">
              <span class="input-group-text bg-light"
@@ -43,13 +52,23 @@
         <span class="input-group-text bg-light"
               id="inputGroup-light-deceased">
                 Date de décès
-            </span>
+        </span>
         {{ form_widget(form.deceasedAt, {'attr': {
             'class': 'form-control col-6',
             'aria-describedby': 'Date de décès de votre lumière',
             'aria-label': 'Date de décès de votre lumière',
         }}) }}
     </div>
+    {% if form_errors(form.birthdayAt) %}
+        <div class="alert alert-danger">
+            {{ form_errors(form.birthdayAt) }}
+        </div>
+    {% endif %}
+    {% if form_errors(form.deceasedAt) %}
+        <div class="alert alert-danger">
+            {{ form_errors(form.deceasedAt) }}
+        </div>
+    {% endif %}
 
     <div class="input-group mb-3">
         <span class="input-group-text bg-light"
@@ -62,6 +81,11 @@
             'aria-label': 'Date de naissance de votre lumière',
         }}) }}
     </div>
+    {% if form_errors(form.photo) %}
+        <div class="alert alert-danger">
+            {{ form_errors(form.photo) }}
+        </div>
+    {% endif %}
 
     <div class="d-flex justify-content-between align-items-center">
         <a href="{{ path('app_light_index') }}"
