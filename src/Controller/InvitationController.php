@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Entity\Invitation;
 use App\Entity\User;
 use App\Form\Account\RegistrationFormType;
-use App\Repository\InvitationRepository;
 use App\Security\MainAuthenticator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -13,23 +12,14 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
-use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 
 class InvitationController extends AbstractController
 {
     public function __construct(
-        private Readonly EntityManagerInterface $entityManager,
-        private Readonly UserPasswordHasherInterface $userPasswordHasher
+        private readonly EntityManagerInterface $entityManager,
+        private readonly UserPasswordHasherInterface $userPasswordHasher
     ) {
-    }
-
-    #[Route('/invitation', name: 'app_check')]
-    public function check(InvitationRepository $repo): Response
-    {
-        $invitation = $repo->findall();
-        dd($invitation);
     }
 
     #[Route('/invitation/{uuid}', name: 'app_invitation')]
@@ -41,6 +31,7 @@ class InvitationController extends AbstractController
     ): Response {
         if ($invitation->isAccepted()) {
             $this->addFlash(type: 'info', message: 'Vous avez déjà accepté l\'invitation, veuillez vous connecter');
+
             return $this->redirectToRoute(route: 'app_login');
         }
 
@@ -50,21 +41,22 @@ class InvitationController extends AbstractController
         $form = $this->createForm(type: RegistrationFormType::class, data: $user);
         $form->handleRequest($request);
 
-
         if ($form->isSubmitted() && $form->isValid()) {
             // Verify if the email is already used in the database
             $userInDb = $this->entityManager->getRepository(User::class)->findOneBy(['email' => $form->get('email')->getData()]);
             if ($userInDb) {
                 $this->addFlash(type: 'danger', message: 'Cet email est déjà utilisé');
+
                 return $this->redirectToRoute(route: 'app_login');
             }
 
-            $password = $form->get('password')->getData();
-            // encode the plain password
+            /** @phpstan-ignore-next-line */
+            $plainPassword = (string) $form->get('password')->getData();
+
             $user->setPassword(
-                $this->userPasswordHasher->hashPassword(
-                    $user,
-                    $form->get('password')->getData()
+                password: $this->userPasswordHasher->hashPassword(
+                    user: $user,
+                    plainPassword: $plainPassword
                 )
             );
 
@@ -74,6 +66,7 @@ class InvitationController extends AbstractController
             $this->entityManager->persist($user);
             $this->entityManager->flush();
 
+            /* @phpstan-ignore-next-line */
             return $userAuthenticator->authenticateUser(
                 $user,
                 $authenticator,

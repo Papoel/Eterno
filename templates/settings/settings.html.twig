@@ -369,7 +369,6 @@
                             </div>
                                 <!-- End of List of all Invitation send -->
 
-
                             {# <a href="#"
                                    class="btn btn-primary-soft btn-sm mt-1 mt-md-0">
                                     <i class="bi bi-check2"></i> Accepté
@@ -884,6 +883,12 @@
                 const createdAt = new Date(element.getAttribute('data-created-at'));
                 const expirationDate = new Date(createdAt.getTime() + 30 * 24 * 60 * 60 * 1000); // Adding one month
                 let remainingTime = expirationDate - Date.now();
+
+                if (remainingTime <= 0) {
+                    element.innerText = "En cours de suppression";
+                    element.classList.add('bg-danger');
+                    return; // Exit the loop for this element
+                }
 
                 let days = Math.floor(remainingTime / (1000 * 60 * 60 * 24));
                 let hours = Math.floor((remainingTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));

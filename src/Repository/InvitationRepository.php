@@ -21,28 +21,18 @@ class InvitationRepository extends ServiceEntityRepository
         parent::__construct($registry, Invitation::class);
     }
 
-//    /**
-//     * @return Invitation[] Returns an array of Invitation objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('i')
-//            ->andWhere('i.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('i.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
-
-//    public function findOneBySomeField($value): ?Invitation
-//    {
-//        return $this->createQueryBuilder('i')
-//            ->andWhere('i.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    /**
+     * @return Invitation[]
+     */
+    public function findExpiredInvitations(\DateTimeImmutable $oneMonthAgo): array
+    {
+        /* @phpstan-ignore-next-line */
+        return $this->createQueryBuilder(alias: 'i')
+            ->andWhere('i.accepted = :accepted')
+            ->andWhere('i.createdAt < :oneMonthAgo')
+            ->setParameter(key: 'accepted', value: false)
+            ->setParameter(key: 'oneMonthAgo', value: $oneMonthAgo)
+            ->getQuery()
+            ->getResult();
+    }
 }

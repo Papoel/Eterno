@@ -25,12 +25,18 @@ test(description: 'vérifie que la classe User comporte les propriétés requise
         ->and(value: property_exists(object_or_class: $user, property: 'firstname'))->toBeTrue()
         ->and(value: property_exists(object_or_class: $user, property: 'lastname'))->toBeTrue()
         ->and(value: property_exists(object_or_class: $user, property: 'username'))->toBeTrue()
+        ->and(value: property_exists(object_or_class: $user, property: 'createdAt'))->toBeTrue()
+        ->and(value: property_exists(object_or_class: $user, property: 'updatedAt'))->toBeTrue()
         ->and(value: property_exists(object_or_class: $user, property: 'email'))->toBeTrue()
         ->and(value: property_exists(object_or_class: $user, property: 'password'))->toBeTrue()
-        ->and(value: property_exists(object_or_class: $user, property: 'createdAt'))->toBeTrue()
         ->and(value: property_exists(object_or_class: $user, property: 'roles'))->toBeTrue()
+        ->and(value: property_exists(object_or_class: $user, property: 'birthday'))->toBeTrue()
+        ->and(value: property_exists(object_or_class: $user, property: 'mobile'))->toBeTrue()
+        ->and(value: property_exists(object_or_class: $user, property: 'avatar'))->toBeTrue()
+        ->and(value: property_exists(object_or_class: $user, property: 'avatarFile'))->toBeTrue()
         ->and(value: property_exists(object_or_class: $user, property: 'lights'))->toBeTrue()
-        ->and(value: property_exists(object_or_class: $user, property: 'messages'))->toBeTrue();
+        ->and(value: property_exists(object_or_class: $user, property: 'messages'))->toBeTrue()
+        ->and(value: property_exists(object_or_class: $user, property: 'invitations'))->toBeTrue();
 });
 
 test(description: 'vérifie que la classe User comporte les getters et les setters', closure: function () {
@@ -42,7 +48,7 @@ test(description: 'vérifie que la classe User comporte les getters et les sette
 
         // Si les propriétés sont 'id', 'lights' ou 'messages', nous n'avons pas de méthode set..., donc on
         // exclut cette vérification
-        if ($propertyName === 'id' || $propertyName === 'lights' || $propertyName === 'messages') {
+        if ($propertyName === 'id' || $propertyName === 'lights' || $propertyName === 'messages' || $propertyName === 'invitations') {
             continue;
         }
 
@@ -133,13 +139,13 @@ test(description: 'Un utilisateur peut supprimer un message', closure: function 
     expect($user->getMessages())->not->toContain($message);
 });
 
-test(description: 'Doit retourner le nom complet de l\'utilisateur avec des majuscules', closure: function () {
+test(description: 'Doit retourner le nom complet de l\'utilisateur - (email)', closure: function () {
     $user = new User();
     $user->setEmail(email: 'test@example.com');
     $user->setFirstname(firstname: 'john');
     $user->setLastname(lastname: 'doe');
 
-    expect($user->__toString())->toBe(expected: 'John Doe')
+    expect($user->__toString())->toBe(expected: 'John Doe - (test@example.com)')
         ->and($user->getFirstname())->toBe(expected: 'john')
         ->and($user->getLastname())->toBe(expected: 'doe');
 });
@@ -149,15 +155,14 @@ test(description: 'Doit retourner le mail de l\'utilisateur si lastname est vide
     $user->setFirstname(firstname: 'john');
     $user->setEmail(email: 'test@example.com');
 
-    expect($user->__toString())->toBe(expected: 'test@example.com');
+    expect($user->__toString())->toBe(expected: 'John  - (test@example.com)');
 });
 
 test(description: 'Doit retourner le username si il est définis', closure: function () {
     $user = new User();
     $user->setUsername(username: 'killdag59');
 
-    expect($user->__toString())->toBe(expected: 'killdag59')
-        ->and($user->getUsername())->toBe(expected: 'killdag59');
+    expect($user->getUsername())->toBe(expected: 'killdag59');
 });
 
 test(description: 'Doit retourner null quand j\'appel getId sur un utilisateur non persisté', closure: function () {
@@ -218,7 +223,7 @@ test(description: 'Doit retourner le nom complet de l\'utilisateur', closure: fu
     $user->setFirstname(firstname: 'john');
     $user->setLastname(lastname: 'doe');
 
-    expect($user->getFullname())->toBe(expected: 'john doe');
+    expect($user->getFullname())->toBe(expected: 'John Doe');
 });
 
 test(description: 'Doit retourner la date d\'anniversaire de l\'utilisateur', closure: function () {

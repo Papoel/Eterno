@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: InvitationRepository::class)]
+#[ORM\Table(name: 'invitations')]
 class Invitation
 {
     use CreatedAtTrait;
@@ -29,12 +30,16 @@ class Invitation
     #[ORM\Column]
     private ?bool $accepted = false;
 
-
-
     // Create UUID when a new invitation is created
+
+    /**
+     * @throws \Exception
+     */
     public function __construct()
     {
-        $this->createdAt = new \DateTimeImmutable();
+        $timezone = new \DateTimeZone(timezone: 'Europe/Paris');
+        $this->createdAt = new \DateTimeImmutable(datetime: 'now', timezone: $timezone);
+
         $this->uuid = Uuid::v4();
     }
 

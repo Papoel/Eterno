@@ -76,6 +76,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'userAccount', targetEntity: Message::class, orphanRemoval: true)]
     private Collection $messages;
 
+    /** @var Collection<int, Invitation> */
     #[ORM\OneToMany(mappedBy: 'friend', targetEntity: Invitation::class)]
     private Collection $invitations;
 
@@ -92,12 +93,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function __toString(): string
     {
-        return $this->getFullname() . ' - (' . $this->email . ')';
+        return $this->getFullname().' - ('.$this->email.')';
     }
 
     public function getFullname(): string
     {
-        return ucfirst($this->firstname) .' '. ucfirst($this->lastname);
+        $firstname = $this->firstname ?? '';
+        $lastname = $this->lastname ?? '';
+
+        return ucfirst($firstname).' '.ucfirst($lastname);
     }
 
     public function getId(): ?Uuid

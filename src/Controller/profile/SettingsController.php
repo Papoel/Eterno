@@ -2,6 +2,7 @@
 
 namespace App\Controller\profile;
 
+use App\Entity\Invitation;
 use App\Entity\User;
 use App\Form\Account\AvatarType;
 use App\Form\Account\ChangePasswordType;
@@ -164,7 +165,11 @@ class SettingsController extends AbstractController
                 ]);
             }
 
-            $formInvitation->getData()->setFriend(friend: $user);
+            if ($formInvitation->getData() instanceof Invitation) {
+                $formInvitation->getData()->setFriend(friend: $user);
+            }
+
+            /* @phpstan-ignore-next-line */
             $this->em->persist($formInvitation->getData());
             $this->em->flush();
 
