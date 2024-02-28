@@ -4,7 +4,10 @@
 
 {% block body %}
     <!-- **************** MAIN CONTENT START **************** -->
+
     <form method="post">
+
+
         {% if error %}
             <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
         {% endif %}
@@ -18,17 +21,24 @@
 
         <!-- Container START -->
         <div class="container">
+
             <div class="row justify-content-center align-items-center vh-100 py-5">
                 <!-- Main content START -->
                 <div class="col-sm-10 col-md-8 col-lg-7 col-xl-6 col-xxl-5">
+                    {{ include('partials/_notifications.html.twig') }}
                     <!-- Sign in START -->
-                    <div class="card card-body text-center p-4 p-sm-5">
+                    <div class="card card-body text-center p-4 p-sm-5 shadow-lg">
                         <!-- Title -->
-                        <h1 class="mb-2">Connexion</h1>
-                        <p class="mb-0">Vous n'avez pas de compte ?
-                            Faites la demande de création de compte à l'administrateur en cliquant sur le bouton ci-dessous.
+                        <h1 class="mb-2"
+                        style="font-size: 2.5rem;
+                        background: linear-gradient(90deg, #ff8a00, #e52e71); -webkit-background-clip: text;
+                        -webkit-text-fill-color: transparent;">
+                            Connexion
+                        </h1>
+                        <p class="mb-2">Connectez-vous à votre compte pour continuer.</p>
+                        <p class="bg-warning-subtle p-2 mb-4 text-start text-dark-emphasis rounded-1">
+                            Vous pourrez inviter vos amis à rejoindre notre plateforme, une fois connecté.
                         </p>
-                        <a href="#" class="btn btn-sm btn-warning my-2 mb-4">Faire une demande de création de compte</a>
                         <!-- Form START -->
                         <form class="mt-sm-4">
                             <!-- Email -->
@@ -58,17 +68,21 @@
                                     </span>
                                 </div>
                             </div>
-                            <!-- Remember me -->
-                            <div class="mb-3 d-sm-flex justify-content-between">
-                                <a href="forgot-password.html">Mot de passe oublié ?</a>
+                            <!-- Simple link for reset password -->
+                            <div class="mb-3 text-end">
+                                <a href="#" class="btn btn-sm btn-link text-info-emphasis">
+                                    Mot de passe oublié ?
+                                </a>
                             </div>
+
+
                             <!-- Token -->
                             <input type="hidden" name="_csrf_token"
                                    value="{{ csrf_token('authenticate') }}"
                             >
                             <!-- Button -->
                             <div class="d-grid">
-                                <button type="submit" class="btn btn-lg btn-primary">Connexion</button>
+                                <button type="submit" class="btn btn-lg btn-primary-soft">Connexion</button>
                             </div>
                             <!-- Copyright -->
                             <p class="mb-0 mt-3">©{{ 'now' | date('Y') }}

@@ -22,7 +22,7 @@
                         <button class="border-0 bg-transparent" type="button" data-bs-toggle="offcanvas"
                                 data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
                             <span class="btn btn-primary"><i class="fa-solid fa-sliders-h"></i></span>
-                            <span class="h6 mb-0 fw-bold d-lg-none ms-2">Paramètres</span>
+                            <span class="h6 mb-0 fw-bold d-lg-none ms-2">Menu</span>
                         </button>
                     </div>
                     <!-- Advanced filter responsive toggler END -->
@@ -66,9 +66,9 @@
                                                 <a class="nav-link d-flex mb-0" href="#nav-setting-tab-2"
                                                    data-bs-toggle="tab">
                                                     <img class="me-2 h-20px fa-fw"
-                                                         src="{{ asset('images/icon/notification-outlined-filled.svg') }}"
+                                                         src="{{ asset('images/icon/handshake-outline-filled.svg') }}"
                                                          alt="">
-                                                    <span> Notification </span>
+                                                    <span> Invitation </span>
                                                 </a>
                                             </li>
                                             <li class="nav-item" data-bs-dismiss="offcanvas">
@@ -265,8 +265,8 @@
                                         <div class="input-group">
                                             {{ form_widget(formUserPassword.newPassword.first) }}
                                             <span class="input-group-text p-0">
-                                                    <i class="password-icon fa-solid fa-eye-slash cursor-pointer p-2 w-40px mt-2"></i>
-                                                </span>
+                                                <i class="password-icon fa-solid fa-eye-slash cursor-pointer p-2 w-40px mt-2"></i>
+                                            </span>
                                         </div>
 
                                         <!-- Pswmeter -->
@@ -306,7 +306,7 @@
                         <!-- Account setting tab END -->
 
                         <!-- CARD NOT YET AVAILABLE -->
-                        <div class="tab-pane fade" id="nav-setting-tab-2">
+                        {# <div class="tab-pane fade" id="nav-setting-tab-2">
                             <div class="card">
                                 <!-- Title START -->
                                 <div class="card-header border-0 pb-0">
@@ -316,195 +316,66 @@
                                 <!-- BODY -->
                                 <div class="card-footer"></div>
                             </div>
-                        </div>
+                        </div> #}
                         <!-- CARD NOT YET AVAILABLE -->
 
-                        {# <div class="tab-pane fade" id="nav-setting-tab-2">
-                            <!-- Notification START -->
-                            <div class="card">
-                                <!-- Card header START -->
+                        <div class="tab-pane fade" id="nav-setting-tab-2">
+                            <!-- Invitation START -->
+                            <div class="card ">
                                 <div class="card-header border-0 pb-0">
-                                    <h5 class="card-title">Notification</h5>
-                                    <p class="mb-0">Tried law yet style child. The bore of true of no be deal.
-                                        Frequently sufficient to be unaffected. The furnished she concluded depending
-                                        procuring concealed. </p>
+                                    <h5 class="card-title mb-0">Invitations</h5>
+                                    <p class="mb-0">Invitez vos amis à rejoindre cette application.</p>
                                 </div>
-                                <!-- Card header START -->
-                                <!-- Card body START -->
-                                <div class="card-body pb-0">
-                                    <!-- Notification START -->
-                                    <ul class="list-group list-group-flush">
-                                        <!-- Notification list item -->
-                                        <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-3">
-                                            <div class="me-2">
-                                                <h6 class="mb-0">Likes and Comments</h6>
-                                                <p class="small mb-0">Joy say painful removed reached end.</p>
-                                            </div>
-                                            <div class="form-check form-switch">
-                                                <input class="form-check-input" type="checkbox" role="switch"
-                                                       id="NotiSwitchCheckChecked" checked>
-                                            </div>
-                                        </li>
-                                        <!-- Notification list item -->
-                                        <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-3">
-                                            <div class="me-2">
-                                                <h6 class="mb-0">Reply to My comments</h6>
-                                                <p class="small mb-0">Ask a quick six seven offer see among.</p>
-                                            </div>
-                                            <div class="form-check form-switch">
-                                                <input class="form-check-input" type="checkbox" role="switch"
-                                                       id="NotiSwitchCheckChecked2" checked>
-                                            </div>
-                                        </li>
-                                        <!-- Notification list item -->
-                                        <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-3">
-                                            <div class="me-2">
-                                                <h6 class="mb-0">Subscriptions</h6>
-                                                <p class="small mb-0">Preference any astonished unreserved Mrs.</p>
-                                            </div>
-                                            <div class="form-check form-switch">
-                                                <input class="form-check-input" type="checkbox" role="switch"
-                                                       id="NotiSwitchCheckChecked3">
-                                            </div>
-                                        </li>
-                                        <!-- Notification list item -->
-                                        <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-3">
-                                            <div class="me-2">
-                                                <h6 class="mb-0">Birthdays</h6>
-                                                <p class="small mb-0">Contented he gentleman agreeable do be</p>
-                                            </div>
-                                            <div class="form-check form-switch">
-                                                <input class="form-check-input" type="checkbox" role="switch"
-                                                       id="NotiSwitchCheckChecked4">
-                                            </div>
-                                        </li>
-                                        <!-- Notification list item -->
-                                        <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-3">
-                                            <div class="me-2">
-                                                <h6 class="mb-0">Events</h6>
-                                                <p class="small mb-0">Fulfilled direction use continually.</p>
-                                            </div>
-                                            <div class="form-check form-switch">
-                                                <input class="form-check-input" type="checkbox" role="switch"
-                                                       id="NotiSwitchCheckChecked5" checked>
-                                            </div>
-                                        </li>
-                                        <!-- Notification list item -->
-                                        <li class="list-group-item px-0 py-3">
-                                            <!-- Accordion START -->
-                                            <div class="accordion accordion-flush border-0" id="emailNotifications">
-                                                <!-- Accordion item -->
-                                                <div class="accordion-item bg-transparent">
-                                                    <h2 class="accordion-header" id="flush-headingOne">
-                                                        <a href="#!"
-                                                           class="accordion-button mb-0 p-0 collapsed bg-transparent shadow-none"
-                                                           data-bs-toggle="collapse" data-bs-target="#flush-collapseOne"
-                                                           aria-expanded="false" aria-controls="flush-collapseOne">
-                              <span>
-                                <span class="mb-0 h6 d-block">Email notifications</span>
-                                <small class="small mb-0 text-secondary">As hastened oh produced prospect. </small>
-                              </span>
-                                                        </a>
-                                                    </h2>
-                                                    <div id="flush-collapseOne" class="accordion-collapse collapse"
-                                                         aria-labelledby="flush-headingOne"
-                                                         data-bs-parent="#emailNotifications">
-                                                        <div class="accordion-body p-0 pt-3">
-                                                            <!-- Notification list item -->
-                                                            <div class="form-check">
-                                                                <input class="form-check-input" type="checkbox" value=""
-                                                                       id="NotiSwitchCheckChecked6" checked>
-                                                                <label class="form-check-label"
-                                                                       for="NotiSwitchCheckChecked6">
-                                                                    Product emails
-                                                                </label>
-                                                            </div>
-                                                            <!-- Notification list item -->
-                                                            <div class="form-check">
-                                                                <input class="form-check-input" type="checkbox" value=""
-                                                                       id="NotiSwitchCheckChecke7">
-                                                                <label class="form-check-label"
-                                                                       for="NotiSwitchCheckChecke7">
-                                                                    Feedback emails
-                                                                </label>
-                                                            </div>
-                                                            <hr>
-                                                            <div class="mt-3">
-                                                                <h6>Email frequency</h6>
-                                                                <!-- Notification list item -->
-                                                                <div class="form-check">
-                                                                    <input class="form-check-input" type="radio"
-                                                                           name="NotiRadio" id="NotiRadio1">
-                                                                    <label class="form-check-label" for="NotiRadio1">
-                                                                        Daily
-                                                                    </label>
-                                                                </div>
-                                                                <!-- Notification list item -->
-                                                                <div class="form-check">
-                                                                    <input class="form-check-input" type="radio"
-                                                                           name="NotiRadio" id="NotiRadio2" checked>
-                                                                    <label class="form-check-label" for="NotiRadio2">
-                                                                        Weekly
-                                                                    </label>
-                                                                </div>
-                                                                <!-- Notification list item -->
-                                                                <div class="form-check">
-                                                                    <input class="form-check-input" type="radio"
-                                                                           name="NotiRadio" id="NotiRadio3">
-                                                                    <label class="form-check-label" for="NotiRadio3">
-                                                                        Periodically
-                                                                    </label>
-                                                                </div>
-                                                                <!-- Notification list item -->
-                                                                <div class="form-check">
-                                                                    <input class="form-check-input" type="radio"
-                                                                           name="NotiRadio" id="NotiRadio4" checked>
-                                                                    <label class="form-check-label" for="NotiRadio4">
-                                                                        Off
-                                                                    </label>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <!-- Accordion END -->
-                                        </li>
-                                        <!-- Notification list item -->
-                                        <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-3">
-                                            <div class="me-2">
-                                                <h6 class="mb-0">Push notifications</h6>
-                                                <p class="small mb-0">Rendered six say his striking confined. </p>
-                                            </div>
-                                            <div class="form-check form-switch">
-                                                <input class="form-check-input" type="checkbox" role="switch"
-                                                       id="NotiSwitchCheckChecked8" checked>
-                                            </div>
-                                        </li>
-                                        <!-- Notification list item -->
-                                        <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-3">
-                                            <div class="me-2">
-                                                <h6 class="mb-0">Weekly account summary <span
-                                                            class="badge bg-primary smaller"> Pro only</span></h6>
-                                                <p class="small mb-0">Rendered six say his striking confined. </p>
-                                            </div>
-                                            <div class="form-check form-switch">
-                                                <input class="form-check-input" type="checkbox" role="switch"
-                                                       id="NotiSwitchCheckChecked9" disabled>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                    <!-- Notification END -->
-
-                                </div>
-                                <!-- Card body END -->
-                                <!-- Button save -->
-                                <div class="card-footer pt-0 text-end border-0">
-                                    <button type="submit" class="btn btn-sm btn-primary mb-0">Save changes</button>
+                                <div class="card-body">
+                                    {{ form_start(formInvitation, {'attr': {'class': 'row g-3', 'id': 'form_invitation'}}) }}
+                                        {{ form_row(formInvitation.email) }}
+                                        <div class="col-12 text-end mb-2">
+                                            <button type="submit" class="btn btn-primary-soft btn-sm mt-1 mt-md-0">
+                                                <i class="bi bi-check2"></i>
+                                                Envoyer l'invitation
+                                            </button>
+                                        </div>
+                                    {{ form_end(formInvitation) }}
                                 </div>
                             </div>
-                            <!-- Notification END -->
-                        </div> #}
+                            <!-- Invitation END -->
+
+                            <!-- List of all Invitation send -->
+                            <div class="card mt-3">
+                                <div class="card-header border-0 pb-0">
+                                    <h5 class="card-title mb-0">Liste des invitations envoyées</h5>
+                                    <p class="mb-0">Retrouvez ici la liste de toutes les invitations que vous avez envoyées.</p>
+                                    <small class="text-primary">Les invitations sont valables pendant 1 mois.</small>
+                                </div>
+                                <div class="card-body">
+                                    <ol class="list-group list-group-numbered mb-1">
+                                        {% for invitation in invitations %}
+                                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                                <div class="ms-2 me-auto">
+                                                    <div class="fw-bold">{{ invitation.email }}</div>
+                                                    {{ invitation.createdAt|format_datetime('relative_long', 'short', locale='fr')|capitalize }}
+                                                </div>
+                                                {% if not invitation.accepted %}
+                                                    <span class="badge bg-warning rounded-pill text-center text-dark" style="position: absolute; left: 60%; top: 25%">En attente</span>
+                                                    <span style="position: absolute; right: .5rem; top: 25%" class="badge bg-info rounded-pill remaining-time" id="remainingTime_{{ loop.index }}"
+                                                          data-created-at="{{ invitation.createdAt|date("Y-m-d\TH:i:sP") }}">Calcul...</span>
+                                                {% else %}
+                                                    <span class="badge bg-success rounded-pill ms-2" style="position: absolute; right: .5rem; top: 25%">Accepté</span>
+                                                {% endif %}
+                                            </li>
+                                        {% endfor %}
+                                    </ol>
+                                </div>
+                            </div>
+                                <!-- End of List of all Invitation send -->
+
+
+                            {# <a href="#"
+                                   class="btn btn-primary-soft btn-sm mt-1 mt-md-0">
+                                    <i class="bi bi-check2"></i> Accepté
+                                </a> #}
+                            <!-- Invitation END -->
+                        </div>
                         <!-- Notification tab END -->
 
                         <!-- CARD NOT YET AVAILABLE -->
@@ -1004,6 +875,31 @@
 
     </main>
     <!-- **************** MAIN CONTENT END **************** -->
+    <script>
+        // Function to calculate and update remaining time for each invitation
+        function updateRemainingTime() {
+            const remainingTimeElements = document.querySelectorAll('.remaining-time');
+
+            remainingTimeElements.forEach(element => {
+                const createdAt = new Date(element.getAttribute('data-created-at'));
+                const expirationDate = new Date(createdAt.getTime() + 30 * 24 * 60 * 60 * 1000); // Adding one month
+                let remainingTime = expirationDate - Date.now();
+
+                let days = Math.floor(remainingTime / (1000 * 60 * 60 * 24));
+                let hours = Math.floor((remainingTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                let minutes = Math.floor((remainingTime % (1000 * 60 * 60)) / (1000 * 60));
+                let seconds = Math.floor((remainingTime % (1000 * 60)) / 1000);
+
+                element.innerText = days + " j " + hours + " h " + minutes + " min " + seconds + " sec";
+            });
+        }
+
+        // Update remaining time initially and then every second
+        updateRemainingTime();
+        setInterval(updateRemainingTime, 1000);
+    </script>
+
+
 
     {% block javascripts %}
         <script src="{{ asset('vendor/pswmeter/pswmeter.min.js') }}"></script>

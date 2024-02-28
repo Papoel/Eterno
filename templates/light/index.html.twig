@@ -51,12 +51,12 @@
                         {% endif %}
                     </td>
 
+                    <td>{{ light.birthdayAt ? light.birthdayAt|format_datetime('relative_long', 'none', locale='fr') }}</td>
+
                     <td>
-                        {{ light.birthdayAt ? light.birthdayAt|format_datetime('relative_long', 'none', locale='fr') }}
+                        {{ light.deceasedAt ? light.deceasedAt|format_datetime('relative_long', 'none', locale='fr') }}
                         <br> ({{ light.age }} ans)
                     </td>
-
-                    <td>{{ light.deceasedAt ? light.deceasedAt|format_datetime('relative_long', 'none', locale='fr') }}</td>
 
                     <td>{{ light.createdAt ? light.createdAt|format_datetime('relative_long', 'short', locale='fr')|capitalize }}</td>
 
@@ -91,7 +91,11 @@
                 </tr>
             {% else %}
                 <tr>
-                    <td colspan="8">Aucune lumière n'a été trouvée.</td>
+                    <td class="py-3" colspan="10">
+                        <span class="h2 lead text-center text-primary">
+                            Aucune lumière n'a été trouvée.
+                        </span>
+                    </td>
                 </tr>
             {% endfor %}
             </tbody>

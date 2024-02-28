@@ -59,7 +59,10 @@ class ChangePasswordType extends AbstractType
                 'invalid_message' => 'Les mots de passe doivent être identiques.',
                 'constraints' => [
                     new NotBlank(),
-                    new Length(min: 8),
+                    new Length(
+                        min: 6,
+                        minMessage: 'Votre mot de passe doit contenir au moins {{ limit }} caractères.'
+                    ),
                 ],
             ])
         ;
