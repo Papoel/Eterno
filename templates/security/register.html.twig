@@ -1,0 +1,115 @@
+{% extends '../../base.html.twig' %}
+
+{% block title %}Inscription sur invitation{% endblock %}
+
+{% block body %}
+    <div class="container">
+
+        <div class="row justify-content-center align-items-center vh-100 py-5">
+            <div class="col-sm-10 col-md-8 col-lg-7 col-xl-6 col-xxl-5">
+                <div class="card card-body text-center p-4 p-sm-5 shadow-lg">
+                    <h1 class="mb-2"
+                        style="font-size: 2.5rem;
+                        background: linear-gradient(90deg, #ff8a00, #e52e71); -webkit-background-clip: text;
+                        -webkit-text-fill-color: transparent;"
+                    > Inscription
+                    </h1>
+
+                    <p class="mb-0 text-start">Vous avez été invité à rejoindre la plateforme.
+                        <br>Créez votre compte pour continuer.
+                    </p>
+
+                    {{ form_start(registrationForm, {'attr': {'class': 'mt-sm-4', 'id': 'registration-form-by-invitation'}}) }}
+
+                    {# Display form errors #}
+                    {% set formErrors = registrationForm.vars.errors.form.getErrors(true) %}
+                    {% if formErrors|length > 0 %}
+                        <div class="alert alert-danger alert-dismissible fade show text-start" role="alert">
+                            <strong>Erreur !</strong> Veuillez corriger les erreurs ci-dessous et réessayer.
+                            <br>
+                            <ul class="mb-0 mt-3">
+                                {% for error in formErrors %}
+                                    <li>{{ error.message }}</li>
+                                {% endfor %}
+                            </ul>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                        {% if formErrors[0].message == 'Un compte existe déjà avec cette adresse email.' %}
+                            <div class="alert alert-info alert-dismissible fade show text-start" role="alert">
+                                <strong>Info !</strong> Un compte existe déjà avec cette adresse email.
+                                <br>
+                                <a href="{{ path('app_login') }}" class="alert-link">Connectez-vous</a> à votre compte.
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        {% endif %}
+                    {% endif %}
+
+                    <div class="mb-3 input-group">
+                        <label for="inputFirstname"></label>
+                        {{ form_widget(registrationForm.firstname, {
+                            'attr': {
+                                'placeholder': 'Entrer votre prénom',
+                                'class': 'form-control',
+                                'autocomplete': 'given-name',
+                                'required': 'required',
+                                'autofocus': 'autofocus',
+                                'style': 'border-radius: 0.4rem'
+                            }
+                        }) }}
+                    </div>
+
+                    <div class="mb-3 input-group">
+                        <label for="inputEmail"></label>
+                        {{ form_widget(registrationForm.email, {
+                            'attr': {
+                                'placeholder': 'Entrer votre email',
+                                'class': 'form-control',
+                                'autocomplete': 'email',
+                                'required': 'required',
+                                'autofocus': 'autofocus',
+                                'type': 'email',
+                                'style': 'border-radius: 0.4rem'
+                            }
+                        }) }}
+                    </div>
+
+                    <div class="col-12">
+
+                        <div class="input-group mb-3">
+                            {{ form_widget(registrationForm.password.first) }}
+                            <span class="input-group-text p-0">
+                                <i class="password-icon fa-solid fa-eye-slash cursor-pointer p-2 w-40px mt-2"></i>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+
+                        <div class="input-group mb-3">
+                            {{ form_widget(registrationForm.password.second) }}
+                            <span class="input-group-text p-0">
+                                <i class="password-icon fa-solid fa-eye-slash cursor-pointer p-2 w-40px mt-2"></i>
+                            </span>
+                        </div>
+                    </div>
+
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+                    <div class="d-grid">
+                        {% if app.user %}
+                            <div class="alert alert-danger text-start">
+                                Vous ne pouvez pas vous inscrire si vous êtes déjà connecté.
+                                <br>
+                                <a href="{{ path('app_logout') }}" class="alert-link">Cliquez ici pour vous déconnecter</a>
+                            </div>
+                        {% endif %}
+                        <button type="submit" class="btn btn-lg btn-primary-soft" {{ app.user ? 'disabled' }}>
+                            S'inscrire
+                        </button>
+                    </div>
+                    {{ form_end(registrationForm) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

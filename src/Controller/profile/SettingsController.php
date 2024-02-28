@@ -2,10 +2,13 @@
 
 namespace App\Controller\profile;
 
+use App\Entity\Invitation;
 use App\Entity\User;
 use App\Form\Account\AvatarType;
 use App\Form\Account\ChangePasswordType;
+use App\Form\Account\InvitationType;
 use App\Form\Account\UserDataType;
+use App\Repository\InvitationRepository;
 use App\Services\PasswordManagerService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -25,10 +28,14 @@ class SettingsController extends AbstractController
     ) {
     }
 
+    /**
+     * @throws \Exception
+     */
     #[Route('/', name: 'index')]
     public function index(
         Request $request,
         Security $security,
+        InvitationRepository $invitationRepository
     ): Response {
         /** @var User $user */
         $user = $security->getUser();
@@ -40,10 +47,12 @@ class SettingsController extends AbstractController
         $formUserData = $this->createForm(type: UserDataType::class, data: $this->getUser());
         $formUserPassword = $this->createForm(type: ChangePasswordType::class, data: $this->getUser());
         $formAvatar = $this->createForm(type: AvatarType::class, data: $this->getUser());
+        $formInvitation = $this->createForm(type: InvitationType::class);
 
         $formUserData->handleRequest($request);
         $formUserPassword->handleRequest($request);
         $formAvatar->handleRequest($request);
+        $formInvitation->handleRequest($request);
 
         // Form User Data
         if ($formUserData->isSubmitted() && $formUserData->isValid()) {
@@ -137,10 +146,49 @@ class SettingsController extends AbstractController
             }
         }
 
-        return $this->render(view: 'partials/settings/settings.html.twig', parameters: [
+        // Form Invitation
+        if ($formInvitation->isSubmitted() && $formInvitation->isValid()) {
+            // Vérifier si l'email existe d'invitation existe déjà dans la base de données
+            $invitation = $invitationRepository->findOneBy(['email' => $formInvitation->get('email')->getData()]);
+
+            if (null !== $invitation) {
+                $status = $invitation->isAccepted() ? 'acceptée' : 'en attente';
+
+                if ($invitation->isAccepted()) {
+                    $this->addFlash(type: 'success', message: 'Cet utilisateur a déjà reçu une invitation, son invitation est '.$status.'.');
+                } else {
+                    $this->addFlash(type: 'warning', message: 'Cet utilisateur a déjà reçu une invitation, veuillez patienter.');
+                }
+
+                return $this->redirectToRoute(route: 'profile_settings.index', parameters: [
+                    'id' => $user->getId(),
+                ]);
+            }
+
+            if ($formInvitation->getData() instanceof Invitation) {
+                $formInvitation->getData()->setFriend(friend: $user);
+            }
+
+            /* @phpstan-ignore-next-line */
+            $this->em->persist($formInvitation->getData());
+            $this->em->flush();
+
+            $this->addFlash(type: 'success', message: 'Votre invitation a bien été envoyée.');
+
+            return $this->redirectToRoute(route: 'profile_settings.index', parameters: [
+                'id' => $user->getId(),
+            ]);
+        }
+
+        // Get Invitation send by the user
+        $invitations = $invitationRepository->findBy(['friend' => $user]);
+
+        return $this->render(view: 'settings/settings.html.twig', parameters: [
             'formUserData' => $formUserData->createView(),
             'formUserPassword' => $formUserPassword->createView(),
             'formAvatar' => $formAvatar->createView(),
+            'formInvitation' => $formInvitation->createView(),
+            'invitations' => $invitations,
         ]);
     }
 

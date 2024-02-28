@@ -65,6 +65,7 @@ class UserDataType extends AbstractType
                     'class' => 'form-control',
                     'id' => 'profile_username',
                 ],
+                'required' => false,
             ])
             ->add(child: 'birthday', type: DateType::class, options: [
                 'row_attr' => [
@@ -79,6 +80,7 @@ class UserDataType extends AbstractType
                     'id' => 'profile_birthday',
                 ],
                 'widget' => 'single_text',
+                'required' => false,
             ])
             ->add(child: 'mobile', type: TelType::class, options: [
                 'row_attr' => [
@@ -92,6 +94,7 @@ class UserDataType extends AbstractType
                     'class' => 'form-control',
                     'id' => 'profile_mobile',
                 ],
+                'required' => false,
             ])
         ;
     }

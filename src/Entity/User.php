@@ -76,6 +76,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'userAccount', targetEntity: Message::class, orphanRemoval: true)]
     private Collection $messages;
 
+    /** @var Collection<int, Invitation> */
+    #[ORM\OneToMany(mappedBy: 'friend', targetEntity: Invitation::class)]
+    private Collection $invitations;
+
     public function __construct()
     {
         if (empty($this->roles)) {
@@ -84,24 +88,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         $this->lights = new ArrayCollection();
         $this->messages = new ArrayCollection();
+        $this->invitations = new ArrayCollection();
     }
 
     public function __toString(): string
     {
-        if (null !== $this->username) {
-            return $this->username;
-        }
-
-        if (null !== $this->firstname && null !== $this->lastname) {
-            return ucfirst($this->firstname).' '.ucfirst($this->lastname);
-        }
-
-        return $this->email ?? '';
+        return $this->getFullname().' - ('.$this->email.')';
     }
 
     public function getFullname(): string
     {
-        return $this->firstname.' '.$this->lastname;
+        $firstname = $this->firstname ?? '';
+        $lastname = $this->lastname ?? '';
+
+        return ucfirst($firstname).' '.ucfirst($lastname);
     }
 
     public function getId(): ?Uuid
@@ -311,5 +311,35 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->username = $data['username'];
         $this->createdAt = $data['createdAt'];
         $this->updatedAt = $data['updatedAt'];
+    }
+
+    /**
+     * @return Collection<int, Invitation>
+     */
+    public function getInvitations(): Collection
+    {
+        return $this->invitations;
+    }
+
+    public function addInvitation(Invitation $invitation): static
+    {
+        if (!$this->invitations->contains($invitation)) {
+            $this->invitations->add($invitation);
+            $invitation->setFriend($this);
+        }
+
+        return $this;
+    }
+
+    public function removeInvitation(Invitation $invitation): static
+    {
+        if ($this->invitations->removeElement($invitation)) {
+            // set the owning side to null (unless already changed)
+            if ($invitation->getFriend() === $this) {
+                $invitation->setFriend(null);
+            }
+        }
+
+        return $this;
     }
 }

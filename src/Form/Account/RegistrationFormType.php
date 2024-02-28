@@ -1,67 +1,86 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Form\Account;
 
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\NotNull;
 
-class ChangePasswordType extends AbstractType
+class RegistrationFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add(child: 'currentPassword', type: PasswordType::class, options: [
+            ->add(child: 'firstname', type: TextType::class, options: [
                 'row_attr' => [
-                    'class' => 'col-12',
+                    'class' => 'col-sm-6 col-lg-4',
                 ],
-                'label' => 'Mot de passe actuel',
+                'label' => 'Prénom',
                 'label_attr' => [
                     'class' => 'form-label',
                 ],
                 'attr' => [
-                    'class' => 'form-control password',
-                    'placeholder' => 'Mot de passe actuel',
+                    'class' => 'form-control text-capitalize',
+                    'id' => 'profile_firstname',
                 ],
-                'mapped' => false,
+                'required' => false,
+                'constraints' => [
+                    new NotBlank(message: 'Veuillez renseigner votre prénom.'),
+                    new NotNull(message: 'Veuillez renseigner votre prénom.'),
+                ],
             ])
-            ->add(child: 'newPassword', type: RepeatedType::class, options: [
+
+            ->add(child: 'email', type: EmailType::class, options: [
+                'row_attr' => [
+                    'class' => 'col-12',
+                ],
+                'label' => 'Email',
+                'label_attr' => [
+                    'class' => 'form-label',
+                ],
+                'attr' => [
+                    'class' => 'form-control col-12',
+                    'placeholder' => 'Email',
+                ],
+            ])
+
+            ->add(child: 'password', type: RepeatedType::class, options: [
                 'type' => PasswordType::class,
                 'required' => true,
-                'mapped' => false,
                 'first_options' => [
-                    'label' => 'Nouveau mot de passe',
+                    'label' => 'Mot de passe',
                     'label_attr' => [
                         'class' => 'form-label',
                     ],
                     'attr' => [
                         'class' => 'form-control password',
-                        'placeholder' => 'Nouveau mot de passe',
+                        'placeholder' => 'Mot de passe',
                     ],
                 ],
                 'second_options' => [
-                    'label' => 'Confirmer le nouveau mot de passe',
+                    'label' => 'Confirmer le mot de passe',
                     'label_attr' => [
-                        'class' => 'form-label mt-2',
+                        'class' => 'form-label',
                     ],
                     'attr' => [
                         'class' => 'form-control password',
-                        'placeholder' => 'Confirmer le nouveau mot de passe',
+                        'placeholder' => 'Confirmer le mot de passe',
                     ],
                 ],
                 'invalid_message' => 'Les mots de passe doivent être identiques.',
                 'constraints' => [
-                    new NotBlank(),
+                    new NotBlank(message: 'Veuillez renseigner un mot de passe.'),
                     new Length(
                         min: 6,
-                        minMessage: 'Votre mot de passe doit contenir au moins {{ limit }} caractères.'
+                        minMessage: 'Votre mot de passe doit contenir au moins {{ limit }} caractères.',
                     ),
                 ],
             ])
@@ -70,7 +89,7 @@ class ChangePasswordType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults(defaults: [
+        $resolver->setDefaults([
             'data_class' => User::class,
         ]);
     }
