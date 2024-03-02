@@ -27,7 +27,7 @@ class Light
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
-    private ?uuid $id = null;
+    private ?Uuid $id = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTime $birthdayAt = null;
@@ -147,7 +147,7 @@ class Light
     /**
      * @throws \Exception
      */
-    public function setPhotoFile(File $photoFile = null): void
+    public function setPhotoFile(?File $photoFile = null): void
     {
         $this->photoFile = $photoFile;
 
