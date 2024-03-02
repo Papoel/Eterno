@@ -85,7 +85,7 @@
                                 <div class="chat-conversation-content custom-scrollbar mt-2 msg-body">
                                     {% if light.sentMessagesCount == 0 %}
                                         <div class="text-center">
-                                            <img src="{{ asset('images/bg/wait-msg.png') }}" alt="Aucun message" class="img-fluid" style="height: 45rem">
+                                            <img src="{{ asset('images/bg/wait-msg.png') }}" alt="Aucun message" class="img-fluid" style="max-height: 560px">
                                             <h5 class="mt-5">
                                                 <span class="text-center text-muted">Envoyez votre premier message à {{ light.firstname }}</span>
                                                 <img class="me-2 h-20px fa-fw text-danger"
@@ -97,17 +97,33 @@
                                     {% else %}
                                         {% for message in messages %}
                                             {% if message.light.getId().toRfc4122() == light.getId().toRfc4122() %}
-                                                <div class="d-flex mb-1">
+                                                <div class="mb-1">
                                                     <div id="msgs"></div>
-                                                    <div class="flex-grow-1">
-                                                        <div class="d-flex justify-content-between">
-                                                            <div id="messages">
-                                                                <!-- Display messages from light id (on click on sidebar) -->
-                                                                <div class="bg-light text-secondary p-2 px-3 rounded-2 messages msg to">
-                                                                    {{ message.content }}
+                                                    <div class="">
+                                                        <article>
+                                                            <div id="messages" class="bg-light text-secondary p-2 px-3 rounded-2">
+                                                                {{ message.content }}
+                                                                <div class="small">
+                                                                    <div class="d-flex justify-content-end">
+                                                                        {% set today = "now"|date("d/m") %}
+                                                                        {% if message.createdAt|date('d/m') is same as (today) %}
+                                                                            <small class="mt-2 text-muted">
+                                                                                Aujourd'hui à {{ message.createdAt|date('H:i') }}
+                                                                            </small>
+                                                                        {% else %}
+                                                                            {{ message.createdAt|date('d/m à H:i') }}
+                                                                        {% endif %}
+                                                                        <form method="post" action="{{ path('app_message_delete', {'id': message.id}) }}"
+                                                                              onsubmit="return confirm('Voulez-vous vraiment effacer ce message ?')">
+                                                                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ message.id) }}">
+                                                                            <button class="text-danger btn">
+                                                                                <i class="bi bi-trash"></i>
+                                                                            </button>
+                                                                        </form>
+                                                                    </div>
                                                                 </div>
                                                             </div>
-                                                            <div class="small my-2">
+                                                            {#<div class="small my-2">
                                                                 {% set today = "now"|date("d/m") %}
                                                                 {% if message.createdAt|date('d/m') is same as (today) %}
                                                                     Aujourd'hui à {{ message.createdAt|date('H:i') }}
@@ -123,8 +139,8 @@
                                                                         </button>
                                                                     </form>
                                                                 </div>
-                                                            </div>
-                                                        </div>
+                                                            </div>#}
+                                                        </article>
                                                         {# Delete One message #}
                                                     </div>
                                                 </div>
