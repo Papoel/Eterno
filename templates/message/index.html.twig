@@ -111,7 +111,9 @@
                                                                                 Aujourd'hui à {{ message.createdAt|date('H:i') }}
                                                                             </small>
                                                                         {% else %}
-                                                                            {{ message.createdAt|date('d/m à H:i') }}
+                                                                            <small class="mt-2 text-muted">
+                                                                                {{ message.createdAt|date('d/m/Y à H:i') }}
+                                                                            </small>
                                                                         {% endif %}
                                                                         <form method="post" action="{{ path('app_message_delete', {'id': message.id}) }}"
                                                                               onsubmit="return confirm('Voulez-vous vraiment effacer ce message ?')">

@@ -131,6 +131,7 @@ class SettingsController extends AbstractController
                     // Définir AvatarFile à null dans la base de données
                     $user->setAvatar(avatar: null);
                     $this->em->flush();
+
                     // REDIRECTION
                     return $this->redirectToRoute(route: 'profile_settings.index');
                 }

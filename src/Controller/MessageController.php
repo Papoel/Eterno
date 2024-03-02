@@ -8,6 +8,8 @@ use App\Entity\User;
 use App\Form\Message\MessageType;
 use App\Repository\LightRepository;
 use App\Repository\MessageRepository;
+use App\Services\DecryptService;
+use App\Services\EncryptService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,17 +22,23 @@ use Symfony\Component\Uid\Uuid;
 #[IsGranted('ROLE_USER')]
 class MessageController extends AbstractController
 {
+    public function __construct(
+        private EncryptService $encryptService,
+        private DecryptService $decryptService,
+        private EntityManagerInterface $entityManager,
+    ) {
+    }
+
     #[Route('/new/{receiver}', name: 'app_message_new', methods: ['GET', 'POST'])]
     public function new(
         Request $request,
         MessageRepository $messageRepository,
         LightRepository $lightRepository,
-        EntityManagerInterface $entityManager
     ): Response {
         /** @var User|null $user */
         $user = $this->getUser();
         $lights = [];
-        $userMessages = [];
+        // $userMessages = [];
 
         // 1. Je récupère tous les objets Light de l'utilisateur connecté
         if (null !== $user) {
@@ -66,8 +74,25 @@ class MessageController extends AbstractController
                 $message->setLight($light);
             }
 
-            $entityManager->persist($message);
-            $entityManager->flush();
+            // Crypter le contenu de message avant de le sauvegarder
+            $encryptedContent = '';
+            if (null !== $user) {
+                if (null !== $message->getContent()) {
+                    $encryptedContent = $this->encryptService->encrypt(
+                        data: $message->getContent(),
+                        privateKey: $user->getPassword()
+                    );
+                } else {
+                    throw new \RuntimeException(message: 'Le contenu du message est null.');
+                }
+            } else {
+                throw new \RuntimeException(message: 'L\'utilisateur est null.');
+            }
+
+            $message->setContent($encryptedContent);
+
+            $this->entityManager->persist($message);
+            $this->entityManager->flush();
 
             $form = $emptyForm;
 
@@ -78,6 +103,24 @@ class MessageController extends AbstractController
         }
 
         $receiver = $request->get(key: 'receiver');
+
+        // Afficher le contenu décrypté des messages
+        if (null !== $user) {
+            if (!empty($userMessages)) {
+                foreach ($userMessages as $userMessage) {
+                    $decryptedContent = $this->decryptService->decrypt(
+                        /* @phpstan-ignore-next-line */
+                        encryptedData: $userMessage->getContent(),
+                        hashedPassword: $user->getPassword()
+                    );
+
+                    $userMessage->setContent($decryptedContent);
+                    $decryptedMessages[] = $userMessage;
+                }
+            }
+        } else {
+            throw new \RuntimeException(message: 'L\'utilisateur est null.');
+        }
 
         return $this->render(view: 'message/index.html.twig', parameters: [
             'light' => $lightRepository->findOneBy(['id' => $receiver]),

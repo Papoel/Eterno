@@ -31,7 +31,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
-    private ?uuid $id = null;
+    private ?Uuid $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
     #[Assert\Email(message: 'Veuillez saisir une adresse email valide.')]
@@ -266,7 +266,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      *
      * @throws \Exception
      */
-    public function setAvatarFile(File $avatarFile = null): void
+    public function setAvatarFile(?File $avatarFile = null): void
     {
         $this->avatarFile = $avatarFile;
 

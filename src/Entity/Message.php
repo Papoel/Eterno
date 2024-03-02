@@ -20,7 +20,7 @@ class Message
     #[ORM\Column(type: 'ulid', unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: 'doctrine.ulid_generator')]
-    private ?ulid $id = null;
+    private ?Ulid $id = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: false)]
     #[Assert\NotBlank]
@@ -42,7 +42,7 @@ class Message
     #[Assert\Valid]
     private Light $light;
 
-    public function getId(): ?ulid
+    public function getId(): ?Ulid
     {
         return $this->id;
     }
