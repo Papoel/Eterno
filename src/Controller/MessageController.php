@@ -8,13 +8,13 @@ use App\Entity\User;
 use App\Form\Message\MessageType;
 use App\Repository\LightRepository;
 use App\Repository\MessageRepository;
-use App\Services\DecryptService;
-use App\Services\EncryptService;
+use App\Services\Encryptor\DecryptService;
+use App\Services\Encryptor\EncryptService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Uid\Uuid;
 
@@ -23,9 +23,9 @@ use Symfony\Component\Uid\Uuid;
 class MessageController extends AbstractController
 {
     public function __construct(
-        private EncryptService $encryptService,
-        private DecryptService $decryptService,
-        private EntityManagerInterface $entityManager,
+        private readonly EncryptService $encryptService,
+        private readonly DecryptService $decryptService,
+        private readonly EntityManagerInterface $entityManager,
     ) {
     }
 

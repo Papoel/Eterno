@@ -9,7 +9,7 @@
 Table Of Content
 =========================
 01 PRELOADER
-02 NAVBAR DROPDOWN HOVER
+02 NAVBAR DROPDOWN HOVER => DELETE
 03 TINY SLIDER
 04 TOOLTIP
 05 POPOVER
@@ -26,6 +26,7 @@ Table Of Content
 16 TOASTS
 17 PSWMETER
 18 FAKE PASSWORD
+19 MENU DROPDOWN
 ========================= */
 
 "use strict";
@@ -86,8 +87,9 @@ let e = {
 			e.flatPicker(),
 			e.avatarImg(),
 			e.customScrollbar(),
-			e.pswMeter();
-			e.fakePwd();
+			e.pswMeter(),
+			e.fakePwd(),
+			e.menuDropdown();
 	},
 	isVariableDefined: function (el) {
 		return typeof !!el && (el) != 'undefined' && el != null;
@@ -230,9 +232,8 @@ let e = {
 	// END: Preloader
 
 	// START: 02 Navbar dropdown hover
-/*	navbarDropdownHover: function () {
+	navbarDropdownHover: function () {
 		e.onAll('.dropdown-menu a.dropdown-item.dropdown-toggle', 'click', function (event) {
-			alert('clicked');
 			let element = this;
 			event.preventDefault();
 			event.stopImmediatePropagation();
@@ -253,7 +254,7 @@ let e = {
 				});
 			}
 		});
-	},*/
+	},
 	// END: Navbar dropdown hover
 
 	// START: 03 Tiny Slider
@@ -355,7 +356,6 @@ let e = {
 		}
 	},
 	// END: Tiny Slider
-
 
 	// START: 04 Tooltip
 	// Enable tooltips everywhere via data-toggle attribute
@@ -733,7 +733,42 @@ let e = {
 				togglePasswordVisibility(passwordField, togglerIcons[index]);
 			});
 		});
-	}
+	},
+	// END: Fake Password
+
+	// START: 19 Menu Dropdown
+	menuDropdown: function () {
+		document.addEventListener("DOMContentLoaded", function() {
+			// Récupérer l'élément de l'avatar
+			let profileDropdown = document.getElementById("profileDropdown");
+			// Récupérer l'élément du menu
+			let profileDropdownMenu = document.getElementById("profileDropdownMenu");
+
+			// Ajouter un écouteur d'événements pour le clic sur l'avatar
+			profileDropdown.addEventListener("click", function(event) {
+				// Empêcher la propagation de l'événement pour éviter que le clic ne se propage à d'autres éléments
+				event.stopPropagation();
+
+				// Afficher ou masquer le menu en modifiant son attribut de style
+				if (profileDropdownMenu.style.display === "block") {
+					profileDropdownMenu.style.display = "none";
+				} else {
+					profileDropdownMenu.style.display = "block";
+				}
+			});
+
+			// Ajouter un écouteur d'événements pour le clic sur le document pour masquer le menu
+			document.addEventListener("click", function() {
+				profileDropdownMenu.style.display = "none";
+			});
+
+			// Empêcher la propagation du clic depuis le menu lui-même
+			profileDropdownMenu.addEventListener("click", function(event) {
+				event.stopPropagation();
+			});
+		});
+	},
+	// END: Menu Dropdown
 };
 
 e.init();

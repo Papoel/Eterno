@@ -36,7 +36,7 @@ class Light
     private ?\DateTime $deceasedAt = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $photo = null;
+    private ?string $photo = 'default.jpg';
 
     #[Vich\UploadableField(mapping: 'light_photo', fileNameProperty: 'photo')]
     private ?File $photoFile = null;

@@ -10,13 +10,14 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/lumiere')]
-#[IsGranted('ROLE_USER')]
+#[IsGranted('IS_AUTHENTICATED_FULLY')]
 class LightController extends AbstractController
 {
     #[Route('/', name: 'app_light_index', methods: ['GET'])]
@@ -93,6 +94,9 @@ class LightController extends AbstractController
         ]);
     }
 
+    /**
+     * @throws \Exception
+     */
     #[Route('/{id}/modifier', name: 'app_light_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Light $light, EntityManagerInterface $entityManager): Response
     {
@@ -105,9 +109,11 @@ class LightController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $photo = $form->get('photo')->getData();
+            /** @var UploadedFile $uploadedFile */
+            $uploadedFile = $form->get('photoFile')->getData();
 
-            if (null === $photo) {
+            /* @phpstan-ignore-next-line */
+            if (null === $uploadedFile) {
                 $photoPath = $light->getPhoto();
                 $parameterName = 'kernel.project_dir';
 
@@ -146,9 +152,10 @@ class LightController extends AbstractController
                     $light->setPhotoFile(new File($photoAbsolutePath));
                 }
             } else {
+                $originalPhotoName = pathinfo(path: $uploadedFile->getClientOriginalName(), flags: PATHINFO_BASENAME);
                 // Nouvelle photo téléchargée, traitement normal
-                if ($photo instanceof File) {
-                    $avatarMimeType = $photo->getMimeType();
+                if ($uploadedFile instanceof File) {
+                    $avatarMimeType = $uploadedFile->getMimeType();
                     $allowedMimeTypes = ['image/jpeg', 'image/jpg', 'image/png'];
 
                     if (!in_array(needle: $avatarMimeType, haystack: $allowedMimeTypes, strict: true)) {
@@ -157,7 +164,7 @@ class LightController extends AbstractController
                         return $this->redirectToRoute(route: 'app_light_edit', parameters: ['id' => $light->getId()]);
                     }
 
-                    $light->setPhotoFile($photo);
+                    $light->setPhotoFile($uploadedFile);
                 }
             }
 

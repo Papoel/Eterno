@@ -1,4 +1,4 @@
-{% if light.photo is not same as 'default.jpg' %}
+{% if light.photo is not same as 'default.jpg' or light.photo is null  %}
     <img src="{{ asset('uploads/photos/' ~ light.photo) }}"
          alt="miniature {{ light.fullname }}"
          class="avatar-img rounded-circle"

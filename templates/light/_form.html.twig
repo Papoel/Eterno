@@ -1,10 +1,17 @@
 <section>
+    <div class="alert alert-info">
+        <p class="mb-0">
+            <strong>Information :</strong> Si vous n'avez pas de photo, laissez le champ vide, nous mettrons une photo
+            par défaut.
+        </p>
+    </div>
+
     {{ form_start(form, {'attr': {'class': 'row g-3'}}) }}
     <div class="input-group mb-3">
-            <span class="input-group-text bg-light"
-                  id="inputGroup-light-first-and-last-name">
-                Prénom et Nom de famille
-            </span>
+        <span class="input-group-text bg-light"
+              id="inputGroup-light-first-and-last-name">
+            Prénom et Nom de famille
+        </span>
         {{ form_widget(form.firstname, {'attr': {
             'aria-describedby': 'Prénom de votre lumière',
             'aria-label': 'Prénom de votre lumière',
@@ -17,20 +24,18 @@
         }}) }}
     </div>
     {% if form_errors(form.firstname) %}
-        <div class="alert alert-danger">
-            {{ form_errors(form.firstname) }}
-    {% endif %}
-    {% if form_errors(form.lastname) %}
-        </div><div class="alert alert-danger">
-            {{ form_errors(form.lastname) }}
-        </div>
+    <div class="alert alert-danger">
+        {{ form_errors(form.firstname) }}
+        {% endif %}
+        {% if form_errors(form.lastname) %}
+    </div>
+    <div class="alert alert-danger">
+        {{ form_errors(form.lastname) }}
+    </div>
     {% endif %}
 
     <div class="input-group mb-3">
-             <span class="input-group-text bg-light"
-                   id="inputGroup-light-pseudo">
-                Pseudo
-            </span>
+         <span class="input-group-text bg-light" id="inputGroup-light-pseudo">Pseudo</span>
         {{ form_widget(form.username, {'attr': {
             'class': 'form-control col-6',
             'aria-describedby': 'Pseudo de votre lumière',
@@ -40,19 +45,16 @@
     </div>
 
     <div class="input-group mb-3">
-            <span class="input-group-text bg-light"
-                  id="inputGroup-light-birthday">
-                Date de naissance
-            </span>
+                <span class="input-group-text bg-light"
+                      id="inputGroup-light-birthday">
+                    Date de naissance
+                </span>
         {{ form_widget(form.birthdayAt, {'attr': {
             'class': 'form-control col-6',
             'aria-describedby': 'Date de naissance de votre lumière',
             'aria-label': 'Date de naissance de votre lumière',
         }}) }}
-        <span class="input-group-text bg-light"
-              id="inputGroup-light-deceased">
-                Date de décès
-        </span>
+        <span class="input-group-text bg-light" id="inputGroup-light-deceased">Date de décès</span>
         {{ form_widget(form.deceasedAt, {'attr': {
             'class': 'form-control col-6',
             'aria-describedby': 'Date de décès de votre lumière',
@@ -70,20 +72,34 @@
         </div>
     {% endif %}
 
-    <div class="input-group mb-3">
-        <span class="input-group-text bg-light"
-              id="inputGroup-light-birthday">
-            Photo de votre Lumière
-        </span>
-        {{ form_widget(form.photo, {'attr': {
-            'class': 'form-control col-6',
-            'aria-describedby': 'Date de naissance de votre lumière',
-            'aria-label': 'Date de naissance de votre lumière',
-        }}) }}
-    </div>
-    {% if form_errors(form.photo) %}
+        <div class="input-group mb-n3">
+            <span class="input-group-text bg-light" id="light-photo">
+                Photo de votre Lumière
+            </span>
+            <div class="input-group-text">
+                {{ form_widget(form.photoFile, {
+                    'attr': {
+                        'class': 'form-control',
+                        'aria-describedby': 'light-photo',
+                    },
+                }) }}
+            </div>
+        </div>
+        <div class="d-flex justify-content-start">
+            {% set photoNameFromDb = light.photo %}
+            {% if photoNameFromDb is not same as 'default.jpg' %}
+                {% set photoName = photoNameFromDb|split('-')[0] ~ '.' ~ photoNameFromDb|split('.')[1] %}
+                <div class="d flex justify-content-end">
+                    <span class="bg-light text-muted" id="light-photo">
+                        Photo actuelle de votre Lumière : {{ photoName }}
+                    </span>
+                </div>
+            {% endif %}
+        </div>
+
+    {% if form_errors(form.photoFile) %}
         <div class="alert alert-danger">
-            {{ form_errors(form.photo) }}
+            {{ form_errors(form.photoFile) }}
         </div>
     {% endif %}
 
@@ -99,3 +115,18 @@
 
     {{ form_end(form) }}
 </section>
+
+<script>
+    const labelForPhotoFileDelete = document.querySelector('label[for="light_photoFile_delete"]');
+    const inputPhotoFileDelete = document.querySelector('input#light_photoFile_delete');
+    const divParent = inputPhotoFileDelete.parentElement;
+    labelForPhotoFileDelete.classList.add('form-check-label');
+    inputPhotoFileDelete.classList.add('form-check-input');
+    divParent.classList.add('form-check', 'form-switch');
+
+    // Si light.photo = default.jpg, alors on supprime la divParent
+    const photoNameFromDb = '{{ photoNameFromDb }}';
+    if (photoNameFromDb === 'default.jpg') {
+        divParent.remove();
+    }
+</script>

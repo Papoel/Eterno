@@ -874,9 +874,9 @@
 
     </main>
     <!-- **************** MAIN CONTENT END **************** -->
+
     <script>
-        // Function to calculate and update remaining time for each invitation
-        function updateRemainingTime() {
+        function invitationCountDown() {
             const remainingTimeElements = document.querySelectorAll('.remaining-time');
 
             remainingTimeElements.forEach(element => {
@@ -885,7 +885,7 @@
                 let remainingTime = expirationDate - Date.now();
 
                 if (remainingTime <= 0) {
-                    element.innerText = "En cours de suppression";
+                    element.innerText = "Expiré";
                     element.classList.add('bg-danger');
                     return; // Exit the loop for this element
                 }
@@ -899,12 +899,8 @@
             });
         }
 
-        // Update remaining time initially and then every second
-        updateRemainingTime();
-        setInterval(updateRemainingTime, 1000);
+        setInterval(invitationCountDown, 1000);
     </script>
-
-
 
     {% block javascripts %}
         <script src="{{ asset('vendor/pswmeter/pswmeter.min.js') }}"></script>
