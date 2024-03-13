@@ -1,3 +1,5 @@
+[![Code Quality Check for Symfony](https://github.com/Papoel/Eterno/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/Papoel/Eterno/actions/workflows/tests.yml)
+
 # Projet Eterno
 
 Bienvenue dans le projet Eterno ! Ce README vous fournira une vue d'ensemble du projet, des technologies utilisées et 
