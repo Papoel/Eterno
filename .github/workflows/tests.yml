@@ -28,6 +28,9 @@ jobs:
       - name: Validate composer.json and composer.lock
         run: composer validate
 
+      - name: Composer Update
+        run: composer update
+
       - name: Cache Composer packages
         uses: actions/cache@v2
         with:
