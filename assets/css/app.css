@@ -98,3 +98,16 @@
   padding: 0 5px;
   margin-bottom: 0;
 }
+
+#profileDropdownMenu {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  z-index: 1000;
+}
+
+/* Ajoutez ce CSS pour ajuster la position lorsque le menu est affiché à gauche */
+#profileDropdownMenu.show[data-bs-placement^="left"] {
+  right: auto;
+  left: 0;
+}

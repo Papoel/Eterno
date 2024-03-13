@@ -26,7 +26,7 @@ class Message
     #[Assert\NotBlank]
     #[Assert\Length(
         min: 1,
-        max: 2000,
+        max: 3000,
         minMessage: 'Votre message doit contenir au moins {{ limit }} caractères.',
         maxMessage: 'Votre message ne peut pas contenir plus de {{ limit }} caractères.'
     )]

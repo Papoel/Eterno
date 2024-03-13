@@ -13,20 +13,22 @@ use Symfony\Component\Validator\Constraints\Callback;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\NotNull;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
-use Vich\UploaderBundle\Form\Type\VichFileType;
+use Vich\UploaderBundle\Form\Type\VichImageType;
 
 class LightType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add(child: 'photo', type: VichFileType::class, options: [
+            ->add(child: 'photoFile', type: VichImageType::class, options: [
                 'label' => false,
-                'mapped' => false,
                 'required' => false,
-                'allow_delete' => false,
                 'download_uri' => false,
+                'image_uri' => false,
+                'allow_delete' => true,
+                'delete_label' => 'Cocher pour supprimer, puis sauvegarder',
             ])
+
             ->add(child: 'firstname', type: TextType::class, options: [
                 'row_attr' => [
                     'class' => 'rounded-0',
@@ -40,6 +42,7 @@ class LightType extends AbstractType
                     new NotNull(message: 'Veuillez renseigner votre prénom.'),
                 ],
             ])
+
             ->add(child: 'lastname', type: TextType::class, options: [
                 'row_attr' => [
                     'class' => '',
@@ -49,6 +52,7 @@ class LightType extends AbstractType
                     'class' => 'form-control text-capitalize rounded-0',
                 ],
             ])
+
             ->add(child: 'username', type: TextType::class, options: [
                 'row_attr' => [
                     'class' => 'col-6',
@@ -59,6 +63,7 @@ class LightType extends AbstractType
                 ],
                 'required' => false,
             ])
+
             ->add(child: 'birthdayAt', type: DateType::class, options: [
                 'row_attr' => [
                     'class' => 'col-sm-6 col-lg-4 my-3',
@@ -73,6 +78,7 @@ class LightType extends AbstractType
                 ],
                 'widget' => 'single_text',
             ])
+
             ->add(child: 'deceasedAt', type: DateType::class, options: [
                 'row_attr' => [
                     'class' => 'col-sm-6 col-lg-4 my-3',
@@ -95,14 +101,13 @@ class LightType extends AbstractType
                    }),
                 ],
             ])
+
             ->addEventSubscriber(subscriber: new PictureLightSubscriber())
         ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults([
-            'data_class' => Light::class,
-        ]);
+        $resolver->setDefaults(['data_class' => Light::class]);
     }
 }

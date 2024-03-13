@@ -5,6 +5,7 @@ namespace App\DataFixtures;
 use App\Entity\Light;
 use App\Entity\Message;
 use App\Entity\User;
+use App\Services\Encryptor\EncryptService;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory as Faker;
@@ -12,8 +13,10 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class EternoFixtures extends Fixture
 {
-    public function __construct(private readonly UserPasswordHasherInterface $passwordHasher)
-    {
+    public function __construct(
+        private readonly UserPasswordHasherInterface $passwordHasher,
+        private readonly EncryptService $encryptService,
+    ) {
     }
 
     public function load(ObjectManager $manager): void
@@ -64,7 +67,7 @@ class EternoFixtures extends Fixture
 
             // Si l'utilisateur a déjà un Light, ajoute aléatoirement un Light à un autre utilisateur.
             if (!empty($existingLights) && $faker->boolean(chanceOfGettingTrue: 50)) {
-                $usersWithoutLights = array_diff($users, [$user]);
+                $usersWithoutLights = array_diff((array) $users, [$user]);
                 $otherUser = $faker->randomElement($usersWithoutLights);
                 $light->setUserAccount($otherUser);
             } else {
@@ -89,7 +92,7 @@ class EternoFixtures extends Fixture
         }
 
         /* Générer des messages de User vers Light */
-        /*for ($i = 1; $i <= 150; ++$i) {
+        for ($i = 1; $i <= 5000; ++$i) {
             $message = new Message();
             $sender = $faker->randomElement($users);
 
@@ -99,14 +102,15 @@ class EternoFixtures extends Fixture
             // Assure-toi que le message est envoyé par un utilisateur vers un light.
             $message->setUserAccount(userAccount: $sender);
             $message->setLight(light: $recipient);
-            $message->setContent(content: $faker->text(maxNbChars: 200));
+            $content = $faker->text(maxNbChars: 1000);
+            $message->setContent($this->encryptService->encrypt(data: $content, privateKey: $sender->getPassword()));
 
             $date = $faker->dateTimeBetween(startDate: '-6 months', endDate: 'yesterday');
             $immutable = \DateTimeImmutable::createFromMutable($date);
             $message->setCreatedAt($immutable);
 
             $manager->persist($message);
-        }*/
+        }
         $manager->flush();
     }
 }

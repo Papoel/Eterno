@@ -15,8 +15,8 @@
             <thead>
                 <tr class="text-center text-danger text-uppercase">
                     <th>Photo</th>
-                    <th>Prénom</th>
                     <th>Nom</th>
+                    <th>Prénom</th>
                     <th>Pseudo</th>
                     <th>Naissance</th>
                     <th>Décès</th>
@@ -60,7 +60,14 @@
 
                     <td>{{ light.createdAt ? light.createdAt|format_datetime('relative_long', 'short', locale='fr')|capitalize }}</td>
 
-                    <td>{{ light.sentMessagesCount }}</td>
+                    <td>
+                        <div class="d-flex justify-content-around align-items-center">
+                            {{ light.sentMessagesCount }}
+                            <a href="{{ path('app_message_new', {'receiver': light.id}) }}">
+                                <i class="fas fa-envelope text-success-emphasis"></i>
+                            </a>
+                        </div>
+                    </td>
 
                     <td>
                         <div class="d-flex justify-content-center">
