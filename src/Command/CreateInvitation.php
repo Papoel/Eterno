@@ -40,6 +40,10 @@ class CreateInvitation extends Command
         /* @phpstan-ignore-next-line */
         $invitation->setFriend($user);
 
+        // TODO: Envoyer Email à l'ami
+
+        // Créer un service pour envoie de mail via command
+
         $this->em->persist($invitation);
         $this->em->flush();
 

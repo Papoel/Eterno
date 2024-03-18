@@ -20,6 +20,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`users`')]
 #[UniqueEntity(fields: ['email'], message: 'Un compte existe déjà avec cette adresse email.')]
+#[UniqueEntity(fields: ['username'], message: 'Ce nom d\'utilisateur est déjà utilisé.')]
 #[ORM\HasLifecycleCallbacks]
 #[Vich\Uploadable]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
@@ -77,7 +78,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $messages;
 
     /** @var Collection<int, Invitation> */
-    #[ORM\OneToMany(mappedBy: 'friend', targetEntity: Invitation::class)]
+    #[ORM\OneToMany(mappedBy: 'friend', targetEntity: Invitation::class, orphanRemoval: true)]
     private Collection $invitations;
 
     public function __construct()

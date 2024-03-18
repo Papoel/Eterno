@@ -116,7 +116,7 @@
                                                                       onsubmit="return confirm('Voulez-vous vraiment effacer ce message ?')">
                                                                     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ message.id) }}">
                                                                     <button class="text-danger btn" aria-label="delete-message-{{ message.id }}" type="submit">
-                                                                        <i class="bi bi-trash"></i> | {{ loop.index }}
+                                                                        <i class="bi bi-trash"></i>
                                                                     </button>
                                                                 </form>
                                                             </div>

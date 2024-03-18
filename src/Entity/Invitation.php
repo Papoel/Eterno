@@ -24,7 +24,7 @@ class Invitation
     #[ORM\Column(type: 'uuid', nullable: false)]
     private Uuid $uuid;
 
-    #[ORM\ManyToOne(inversedBy: 'invitations')]
+    #[ORM\ManyToOne(cascade: ['persist'], inversedBy: 'invitations')]
     private ?User $friend = null;
 
     #[ORM\Column]

@@ -17,7 +17,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/lumiere')]
-#[IsGranted('IS_AUTHENTICATED_FULLY')]
+#[IsGranted('IS_AUTHENTICATED')]
 class LightController extends AbstractController
 {
     #[Route('/', name: 'app_light_index', methods: ['GET'])]
@@ -41,7 +41,7 @@ class LightController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             // Récupération de l'image
-            $photo = $form->get('photo')->getData();
+            $photo = $form->get('photoFile')->getData();
 
             if ($photo instanceof File) {
                 $avatarMimeType = $photo->getMimeType();

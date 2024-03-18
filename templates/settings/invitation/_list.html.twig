@@ -1,0 +1,24 @@
+<div class="card-header border-0 pb-0">
+    <h5 class="card-title mb-0">Liste des invitations envoyées</h5>
+    <p class="mb-0">Retrouvez ici la liste de toutes les invitations que vous avez envoyées.</p>
+    <small class="text-primary">Les invitations sont valables pendant 1 mois.</small>
+</div>
+<div class="card-body">
+    <ol class="list-group list-group-numbered mb-1">
+        {% for invitation in invitations %}
+            <li class="list-group-item d-flex justify-content-between align-items-start">
+                <div class="ms-2 me-auto">
+                    <div class="fw-bold">{{ invitation.email }}</div>
+                    {{ invitation.createdAt|format_datetime('relative_long', 'short', locale='fr')|capitalize }}
+                </div>
+                {% if not invitation.accepted %}
+                    <span class="badge bg-warning rounded-pill text-center text-dark" style="position: absolute; left: 60%; top: 25%">En attente</span>
+                    <span style="position: absolute; right: .5rem; top: 25%" class="badge bg-info rounded-pill remaining-time" id="remainingTime_{{ loop.index }}"
+                          data-created-at="{{ invitation.createdAt|date("Y-m-d\TH:i:sP") }}">Calcul...</span>
+                {% else %}
+                    <span class="badge bg-success rounded-pill ms-2" style="position: absolute; right: .5rem; top: 25%">Accepté</span>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ol>
+</div>

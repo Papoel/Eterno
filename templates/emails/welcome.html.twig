@@ -1,0 +1,26 @@
+{% extends '@email/default/notification/body.html.twig' %}
+
+{% block content %}
+    <container>
+        <row>
+            <columns>
+                <h1>Bonjour {{ username }}</h1>
+            </columns>
+        </row>
+        <row>
+            <columns>
+                <callout class="primary">
+                    <p>
+                        Votre compte a bien été créé. Vous pouvez dès à présent accéder à la plateforme,
+                        en cliquant sur le bouton ci-dessous.
+                    </p>
+                </callout>
+            </columns>
+        </row>
+
+    </container>
+{% endblock %}
+
+{% block action %}
+    <button href="http://localhost:8000/login" class="alert rounded">Accéder à la plateforme</button>
+{% endblock %}

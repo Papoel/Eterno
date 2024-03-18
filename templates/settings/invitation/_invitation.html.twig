@@ -1,0 +1,17 @@
+<div class="card ">
+    <div class="card-header border-0 pb-0">
+        <h5 class="card-title mb-0">Invitations</h5>
+        <p class="mb-0">Invitez vos amis à rejoindre cette application.</p>
+    </div>
+    <div class="card-body">
+        {{ form_start(formInvitation, {'attr': {'class': 'row g-3', 'id': 'form_invitation'}}) }}
+            {{ form_row(formInvitation.email) }}
+            <div class="col-12 text-end mb-2">
+                <button type="submit" class="btn btn-primary-soft btn-sm mt-1 mt-md-0">
+                    <i class="bi bi-check2"></i>
+                    Envoyer l'invitation
+                </button>
+            </div>
+        {{ form_end(formInvitation) }}
+    </div>
+</div>
