@@ -1,0 +1,32 @@
+{% extends '@email/default/notification/body.html.twig' %}
+
+{% block content %}
+    <container>
+        <row>
+            <columns>
+                <h1>Rejoignez Eterno</h1>
+                <p>
+                    Eterno est une plateforme dédiée au deuil. Ici vous allez pouvoir envoyer à vos être les
+                    plus chers des messages en toutes simplicité mais surtout en confidentialité.
+                </p>
+                <p>
+                    Les messages que vous avez envoyés sont totalement cryptés dans notre base de données. Personne ne
+                    peut lire ce que vous écrivez
+                </p>
+            </columns>
+        </row>
+        <row>
+            <columns>
+                <callout class="primary">
+                    <p>
+                        Veuillez cliquer sur le bouton ci-dessous pour vous inscrire et rejoindre la plateforme Eterno.
+                    </p>
+                </callout>
+            </columns>
+        </row>
+    </container>
+{% endblock %}
+
+{% block action %}
+    <button href="{{ url }}" class="primary rounded">Rejoindre Eterno</button>
+{% endblock %}

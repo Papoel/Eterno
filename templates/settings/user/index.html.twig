@@ -1,0 +1,14 @@
+{{ form_start(formUserData, {'attr': {'class': 'row g-3', 'id': 'form_profile'}}) }}
+    {{ form_row(formUserData.firstname) }}
+    {{ form_row(formUserData.lastname) }}
+    {{ form_row( formUserData.birthday) }}
+    <div class="d-flex justify-content-between gap-3">
+        {{ form_row( formUserData.username) }}
+        {{ form_row( formUserData.mobile) }}
+    </div>
+    <div class="col-12 text-end">
+        <button type="submit" class="btn btn-sm btn-primary mb-0">
+            Sauvegarder les modifications
+        </button>
+    </div>
+{{ form_end(formUserData) }}

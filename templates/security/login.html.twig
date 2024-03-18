@@ -7,7 +7,6 @@
 
     <form method="post">
 
-
         {% if error %}
             <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
         {% endif %}
@@ -47,9 +46,9 @@
                                 <input id="inputEmail"
                                        class="form-control"
                                        name="email"
-                                       type="email"
+                                       type="text" {# TODO: Ajuster #}
                                        value="{{ last_username }}"
-                                       placeholder="Entrer votre email"
+                                       placeholder="Entrer votre email ou votre pseudo"
                                        autocomplete="email" required autofocus>
                             </div>
                             <!-- New password -->
@@ -99,4 +98,21 @@
         </div>
         <!-- Container END -->
     </form>
+
+    <script>
+        const passwordIcon = document.querySelector('.password-icon');
+        const passwordInput = document.querySelector('.password');
+
+        passwordIcon.addEventListener('click', () => {
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                passwordIcon.classList.remove('fa-eye-slash');
+                passwordIcon.classList.add('fa-eye');
+            } else {
+                passwordInput.type = 'password';
+                passwordIcon.classList.remove('fa-eye');
+                passwordIcon.classList.add('fa-eye-slash');
+            }
+        });
+    </script>
 {% endblock %}

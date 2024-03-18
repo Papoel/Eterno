@@ -2,11 +2,13 @@
 
 namespace App\Security;
 
+use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
 use Symfony\Component\Security\Http\Authenticator\AbstractLoginFormAuthenticator;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\CsrfTokenBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\RememberMeBadge;
@@ -22,22 +24,37 @@ class MainAuthenticator extends AbstractLoginFormAuthenticator
 
     public const LOGIN_ROUTE = 'app_login';
 
-    public function __construct(private UrlGeneratorInterface $urlGenerator)
-    {
+    public function __construct(
+        private readonly UrlGeneratorInterface $urlGenerator,
+        private readonly UserRepository $userRepository
+    ) {
     }
 
     public function authenticate(Request $request): Passport
     {
-        $email = (string) $request->request->get(key: 'email', default: '');
+        $identifier = (string) $request->request->get(key: 'email', default: '');
 
         // test pour passer PHPStan au level max
         $password = (string) $request->request->get(key: 'password', default: '');
         $csrfToken = $request->request->get(key: '_csrf_token');
 
-        $request->getSession()->set(SecurityRequestAttributes::LAST_USERNAME, $email);
+        if (str_contains(haystack: $identifier, needle: '@')) {
+            $user = $this->userRepository->findOneBy(['email' => $identifier]);
+        } else {
+            $user = $this->userRepository->findOneBy(['username' => $identifier]);
+        }
+
+        if (!$user) {
+            throw new CustomUserMessageAuthenticationException(message: 'Email or Username could not be found.');
+        }
+
+        $identifier = $user->getEmail();
+
+        $request->getSession()->set(SecurityRequestAttributes::LAST_USERNAME, $identifier);
 
         return new Passport(
-            new UserBadge($email),
+            /* @phpstan-ignore-next-line */
+            new UserBadge($identifier),
             new PasswordCredentials(password: $password),
             badges: [
                 new CsrfTokenBadge(csrfTokenId: 'authenticate', csrfToken: (string) $csrfToken),
@@ -52,7 +69,7 @@ class MainAuthenticator extends AbstractLoginFormAuthenticator
             return new RedirectResponse($targetPath);
         }
 
-        return new RedirectResponse($this->urlGenerator->generate(name: 'app_home'));
+        return new RedirectResponse($this->urlGenerator->generate(name: 'home.index'));
     }
 
     protected function getLoginUrl(Request $request): string

@@ -9,6 +9,7 @@ use App\Form\Account\ChangePasswordType;
 use App\Form\Account\InvitationType;
 use App\Form\Account\UserDataType;
 use App\Repository\InvitationRepository;
+use App\Services\MailerService;
 use App\Services\PasswordManagerService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -17,6 +18,7 @@ use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/profile/parametres/{id}', name: 'profile_settings.')]
@@ -30,12 +32,14 @@ class SettingsController extends AbstractController
 
     /**
      * @throws \Exception
+     * @throws TransportExceptionInterface
      */
     #[Route('/', name: 'index')]
     public function index(
         Request $request,
         Security $security,
-        InvitationRepository $invitationRepository
+        InvitationRepository $invitationRepository,
+        MailerService $mailerService
     ): Response {
         /** @var User $user */
         $user = $security->getUser();
@@ -155,10 +159,14 @@ class SettingsController extends AbstractController
             if (null !== $invitation) {
                 $status = $invitation->isAccepted() ? 'acceptée' : 'en attente';
 
+                // Vérifier si l'invitation a déjà été acceptée
                 if ($invitation->isAccepted()) {
                     $this->addFlash(type: 'success', message: 'Cet utilisateur a déjà reçu une invitation, son invitation est '.$status.'.');
-                } else {
-                    $this->addFlash(type: 'warning', message: 'Cet utilisateur a déjà reçu une invitation, veuillez patienter.');
+                }
+
+                // Vérifier si l'invitation a déjà été envoyée
+                if (!$invitation->isAccepted()) {
+                    $this->addFlash(type: 'warning', message: 'Cet utilisateur a déjà reçu une invitation, son invitation est '.$status.'.');
                 }
 
                 return $this->redirectToRoute(route: 'profile_settings.index', parameters: [
@@ -168,13 +176,13 @@ class SettingsController extends AbstractController
 
             if ($formInvitation->getData() instanceof Invitation) {
                 $formInvitation->getData()->setFriend(friend: $user);
+                $mailerService->sendInvitationEmail(form: $formInvitation);
+                $this->addFlash(type: 'success', message: 'Votre invitation a bien été envoyée.');
             }
 
             /* @phpstan-ignore-next-line */
             $this->em->persist($formInvitation->getData());
             $this->em->flush();
-
-            $this->addFlash(type: 'success', message: 'Votre invitation a bien été envoyée.');
 
             return $this->redirectToRoute(route: 'profile_settings.index', parameters: [
                 'id' => $user->getId(),

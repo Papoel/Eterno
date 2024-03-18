@@ -75,7 +75,7 @@ let e = {
 			e.preLoader(),
 			e.navbarDropdownHover(),
 			e.tinySlider(),
-			e.toolTipFunc(),
+			//e.toolTipFunc(),
 			e.popOverFunc(),
 			e.videoPlyr(),
 			e.lightBox(),
@@ -88,7 +88,6 @@ let e = {
 			e.avatarImg(),
 			e.customScrollbar(),
 			e.pswMeter(),
-			e.fakePwd(),
 			e.menuDropdown();
 	},
 	isVariableDefined: function (el) {
@@ -359,12 +358,12 @@ let e = {
 
 	// START: 04 Tooltip
 	// Enable tooltips everywhere via data-toggle attribute
-	toolTipFunc: function () {
+	/*toolTipFunc: function () {
 		let tooltipTriggerList = [].slice.call(e.selectAll('[data-bs-toggle="tooltip"]'))
 		let tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
 			return new bootstrap.Tooltip(tooltipTriggerEl)
 		})
-	},
+	},*/
 	// END: Tooltip
 
 	// START: 05 Popover

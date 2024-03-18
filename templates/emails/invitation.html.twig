@@ -1,0 +1,42 @@
+{% extends '@email/default/notification/body.html.twig' %}
+
+{% block content %}
+    <container>
+        <row>
+            <columns>
+                <h1>Invitation à rejoindre Eterno</h1>
+                <p>
+                    Bonjour, nous avons le plaisir de vous informer que vous venez d'être invité par {{ parrain }} à
+                    rejoindre la plateforme Eterno.
+                </p>
+            </columns>
+        </row>
+        <hr><br>
+        <row>
+            <columns>
+                <h4>Eterno, qu'est-ce que c'est ?</h4>
+                <callout class="primary rounded">
+                    <p>
+                        Eterno est une plateforme qui va vous permettre de créer vos lumières (une lumière représente
+                        une personne décédée, il vous sera possible de lui écrire).
+                    </p>
+                    <p>
+                        Nous garantissons le cryptage de vos données, vous êtes la seule personne à pouvoir lire vos
+                        messages.
+                    </p>
+                </callout>
+            </columns>
+        </row>
+        <row>
+            <columns>
+                <p>
+                    Veuillez cliquer sur le bouton ci-dessous pour vous inscrire et rejoindre la plateforme Eterno.
+                </p>
+            </columns>
+        </row>
+    </container>
+{% endblock %}
+
+{% block action %}
+    <button href="{{ url }}" class="primary rounded">Rejoindre Eterno</button>
+{% endblock %}

@@ -22,8 +22,8 @@ class InvitationController extends AbstractController
     ) {
     }
 
-    #[Route('/invitation/{uuid}', name: 'app_invitation')]
-    public function index(
+    #[Route('/invitation/{uuid}', name: 'invitation.verify')]
+    public function verify(
         Request $request,
         Invitation $invitation,
         UserAuthenticatorInterface $userAuthenticator,
