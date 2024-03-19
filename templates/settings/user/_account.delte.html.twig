@@ -2,31 +2,53 @@
 <div class="card">
     <!-- Card header START -->
     <div class="card-header border-0 pb-0">
-        <h5 class="card-title">Clôturer le compte</h5>
-        <p class="mb-0">
-            Vous pouvez supprimer votre compte à tout moment. <br>
-            <strong>Attention, cette action est irréversible.</strong>
-        </p>
+        <h5 class="card-title mb-0">Supprimer mon compte</h5>
     </div>
-    <div class="card-body" id="deleteAccount">
-        <h6>Avant de vous lancer</h6>
-        <p class="mb-0">
-            Prenez le temps de réfléchir à ce que vous allez perdre en supprimant votre
-            compte.
-            <br>
-            <strong>Aucune donnée ne sera conservée, et vous ne pourrez pas revenir en
-                arrière.</strong>
+    <div class="card-body">
+        <p class="card-text">
+            Avant de procéder à la suppression de votre compte, veuillez tenir compte des points suivants :
         </p>
-        <div class="form-check form-check-md my-4">
-            <input class="form-check-input" type="checkbox" value=""
-                   id="deleteaccountCheck">
-            <label class="form-check-label" for="deleteaccountCheck">
+        <ul class="list-group list-group-flush mb-3">
+            <li class="list-group-item"><i class="bi bi-exclamation-triangle-fill text-warning me-2"></i>Cette action est <strong>immédiate</strong> et <strong>irréversible</strong>.</li>
+            <li class="list-group-item"><i class="bi bi-exclamation-triangle-fill text-warning me-2"></i>Toutes vos données, y compris vos messages et informations personnelles, seront <strong>définitivement effacées</strong>.</li>
+            <li class="list-group-item"><i class="bi bi-exclamation-triangle-fill text-warning me-2"></i>Vous ne pourrez <strong>pas récupérer</strong> votre compte une fois qu'il sera supprimé.</li>
+        </ul>
+        <p class="card-text">
+            Pour confirmer votre compréhension des conséquences de cette action, veuillez cocher la case ci-dessous :
+        </p>
+        <div class="form-check form-switch my-2 mt-3">
+            <input class="form-check-input" type="checkbox" role="switch" id="deleteAccountCheck" onclick="enableButton()">
+            <label class="form-check-label" for="deleteAccountCheck">
                 J'ai bien compris les conséquences de cette action.
             </label>
         </div>
-        <a href="#" class="btn btn-success-soft btn-sm mb-2 mb-sm-0">Conserver mon
-            compte</a>
-        <a href="#" class="btn btn-danger btn-sm mb-0">Supprimer mon compte</a>
+        <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+            <button onclick="deleteAccount()" class="btn btn-sm btn-success me-md-2" id="deleteAccountBtn" disabled>
+                Confirmer la suppression
+            </button>
+            <a href="{{ path('profile_settings.index', {'id': app.user.id}) }}" class="btn btn-sm btn-secondary">
+                Annuler
+            </a>
+        </div>
     </div>
 </div>
 <!-- Card END -->
+
+<script>
+    function enableButton() {
+        let checkbox = document.getElementById("deleteAccountCheck");
+        let button = document.getElementById("deleteAccountBtn");
+        button.disabled = !checkbox.checked;
+    }
+    function deleteAccount() {
+        let checkbox = document.getElementById("deleteAccountCheck").checked;
+        if(checkbox) {
+            document.getElementById("deleteAccountBtn").removeAttribute('disabled');
+        }
+        // Ajoutez ici une fenêtre de confirmation pour s'assurer que l'utilisateur souhaite vraiment supprimer son compte.
+        let confirmation = confirm("Êtes-vous sûr de vouloir supprimer votre compte de manière irréversible ?");
+        if (confirmation) {
+            window.location.href = "{{ path('app_delete_account', {'id': app.user.id}) }}";
+        }
+    }
+</script>
