@@ -51,6 +51,7 @@ class MainAuthenticator extends AbstractLoginFormAuthenticator
         $identifier = $user->getEmail();
 
         $request->getSession()->set(SecurityRequestAttributes::LAST_USERNAME, $identifier);
+        $request->getSession()->set('user', $user->getFullname());
 
         return new Passport(
             /* @phpstan-ignore-next-line */
