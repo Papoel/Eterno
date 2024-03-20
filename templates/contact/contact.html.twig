@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+{% block title %}Formulaire de contact{% endblock %}
+
+{% block body %}
+    {{ include('partials/_menu.html.twig') }}
+    <section id="contact" class="container mt-5">
+        <h1>Formulaire de contact</h1>
+
+        {{ form_start(form, {'attr': {'id': 'contactForm' ,'class': 'needs-validationp', 'novalidate': 'novalidate'}}) }}
+            <div class="row">
+                <div class="col-sm">
+                    <div class="mb-3">
+                        <label for="contact_name" class="form-label">Nom et prénom</label>
+                        {{ form_widget(form.name) }}
+                        <div class="invalid-feedback">{{ form_errors(form.name) }}</div>
+                    </div>
+                </div>
+                <div class="col-sm">
+                    <div class="mb-3">
+                        <label for="contact_email" class="form-label">Email</label>
+                        {{ form_widget(form.email) }}
+                        <div class="invalid-feedback">{{ form_errors(form.email) }}</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="mb-3">
+                        <label for="contact_name" class="form-label">Sujet</label>
+                        {{ form_widget(form.subject) }}
+                        <div class="invalid-feedback">{{ form_errors(form.subject) }}</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm">
+                    <div class="mb-3">
+                        <label for="contact_name" class="form-label">Message</label>
+                        {{ form_widget(form.message) }}
+                        <div class="invalid-feedback">{{ form_errors(form.message) }}</div>
+                </div>
+            </div>
+        <div class="row">
+            <div class="col-sm">
+                <button id="btnSubmit" type="submit" class="btn btn-dark w-25">Envoyer</button>
+            </div>
+        </div>
+        {{ form_end(form) }}
+    </section>
+{% endblock %}

@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\DTO\ContactDTO;
 use App\Entity\Invitation;
 use App\Entity\User;
 use Symfony\Bridge\Twig\Mime\NotificationEmail;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Form\FormInterface;
@@ -23,6 +25,34 @@ readonly class MailerService
         private MailerInterface $mailer,
         private UrlGeneratorInterface $urlGenerator
     ) {
+    }
+
+    /**
+     * @throws TransportExceptionInterface
+     */
+    public function contact(FormInterface $form): void
+    {
+        $data = $form->getData();
+
+        $date = new \DateTimeImmutable('now', new \DateTimeZone('Europe/Paris'));
+        $formattedDate = $date->format('d/m/Y \à H:i');
+
+        if ($data instanceof ContactDTO) {
+            $email = (new TemplatedEmail())
+                ->from(from: $data->email)
+                ->to(to: $this->supportEmail)
+                ->subject(subject: $data->subject)
+                ->htmlTemplate(template: 'emails/contact.html.twig')
+                ->context(context: [
+                    'name' => $data->name,
+                    'subject' => $data->subject,
+                    'contact' => $data->email,
+                    'message' => $data->message,
+                    'date' => $formattedDate,
+                ]);
+
+            $this->mailer->send($email);
+        }
     }
 
     /**
