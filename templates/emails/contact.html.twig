@@ -1,0 +1,289 @@
+{#
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Message de contact</title>
+</head>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f3f3f3;
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        background: #fff;
+        padding: 30px;
+        max-width: 600px;
+        margin: 30px auto;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+    }
+
+    .title {
+        color: #001E00;
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+
+    .subtitle {
+        color: #333;
+        font-size: 18px;
+        margin-bottom: 10px;
+    }
+
+    .message-body {
+        background-image: linear-gradient(120deg, #a1c4fda5 0%, #c2e9fba5 100%);
+        padding: 15px;
+        border-radius: 5px;
+        margin-bottom: 15px;
+    }
+
+    .message-details {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 15px;
+    }
+
+    .detail-label {
+        font-weight: bold;
+    }
+
+    .message-info {
+        width: 100%;
+        margin-bottom: 15px;
+    }
+
+    th, td {
+        padding: 8px 0;
+    }
+
+    th {
+        text-align: left;
+        color: #666;
+        font-weight: normal;
+    }
+
+    td {
+        color: #333;
+    }
+
+    .message-body > div {
+        margin-bottom: 5px;
+    }
+
+    p.text-decoration-underline {
+        text-decoration: underline;
+    }
+
+</style>
+<body>
+    <section class="container">
+        <h2 class="title">Vous avez reçu un message</h2>
+        <div style="margin: 50px 0"></div>
+        <table class="message-info">
+            <tr>
+                <th>Date</th>
+                <td>{{ ('now') |format_datetime('long', 'short') }}</td>
+            </tr>
+            <tr>
+                <th>Nom</th>
+                <td>{{ name }}</td>
+            </tr>
+            <tr>
+                <th>Sujet</th>
+                <td>{{ subject }}</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>
+                    <a class="btn btn-sm" href="mailto:{{ contact }}">{{ contact }}</a>
+                </td>
+            </tr>
+        </table>
+        <p class="text-decoration-underline">Message</p>
+        <div class="message-body">
+            {{ message }}
+        </div>
+    </section>
+</body>
+</html>
+#}
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Message de contact</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f3f3f3;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            background: #fff;
+            padding: 30px;
+            max-width: 600px;
+            margin: 30px auto;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        .mb-2 {
+            margin-bottom: 0.5rem !important;
+        }
+
+        .title {
+            color: #001E00;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .message-info {
+            width: 100%;
+            margin-bottom: 20px;
+            border-collapse: collapse;
+        }
+
+        .message-info th,
+        .message-info td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+
+        .message-info th {
+            color: #666;
+        }
+
+        .message-info td {
+            color: #333;
+        }
+
+        .message-info tr:last-child td {
+            border-bottom: none;
+        }
+
+        .message-body {
+            background-image: linear-gradient(120deg, #a1c4fda5 0%, #c2e9fba5 100%);
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .message-body p {
+            margin: 0;
+        }
+
+        .text-decoration-underline {
+            text-decoration: underline;
+        }
+
+        .btn {
+            outline: 0;
+            appearance: none;
+            padding: 2px 12px;
+            border: 0 solid transparent;
+            border-radius: 4px;
+            text-decoration: none;
+            cursor: pointer;
+            background-color: rgb(9, 128, 76);
+            box-shadow: rgb(19 170 82 / 40%) 0px 2px 3px;
+            color: rgb(255, 255, 255);
+            font-size: 14px;
+            font-weight: 400;
+            height: 36px;
+            transition: all 150ms ease-in-out 0s;
+        }
+
+        .btn:hover {
+            color: rgb(255, 255, 255);
+            background-color: rgb(17, 97, 73);
+            box-shadow: rgb(19 170 82 / 40%) 0px 2px 3px, rgb(195 231 202) 0px 0px 0px 3px;
+        }
+
+        .link {
+            color: rgb(9, 128, 76);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 400;
+            transition: color 0.3s ease, transform 0.3s ease;
+            cursor: pointer;
+            display: inline-block;
+            position: relative;
+        }
+
+        .link::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: transparent;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .link:hover {
+            color: rgb(17, 97, 73);
+            transform: translateY(-2px);
+        }
+
+        .link:hover::before {
+            visibility: visible;
+            background-color: rgb(9, 128, 76);
+        }
+
+
+    </style>
+</head>
+<body>
+<section class="container">
+    <h2 class="title">Vous avez reçu un message</h2>
+    <table class="message-info">
+        <tr class="mb-2">
+            <th>Date</th>
+            <td>{{ date }}</td>
+        </tr>
+        <tr class="mb-2">
+            <th>Nom</th>
+            <td>{{ name }}</td>
+        </tr>
+        <tr class="mb-2">
+            <th>Sujet</th>
+            <td>{{ subject }}</td>
+        </tr>
+        <tr class="mb-2">
+            <th>Email</th>
+            <td style="border-bottom: 1px solid #ddd;">
+                <a class="btn" href="mailto:{{ contact }}?subject=RE: {{ subject | url_encode }}&body=Message envoyé le {{ date }}:%0D%0A{{ message | url_encode }}">
+                    Répondre à {{ contact }}
+                </a>
+            </td>
+        </tr>
+    </table>
+    <p class="text-decoration-underline">Message</p>
+    <div class="message-body">
+        {{ message }}
+    </div>
+    {# Footer #}
+    <footer>
+        <a href="{{ absolute_url(path('home.index')) }}" target="_blank" class="link">
+            Accéder au site
+        </a>
+    </footer>
+
+</section>
+</body>
+</html>
