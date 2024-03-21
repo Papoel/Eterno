@@ -23,19 +23,19 @@ readonly class MailerService
         #[Autowire('%support_email%')] private string $supportEmail,
         private Security $security,
         private MailerInterface $mailer,
-        private UrlGeneratorInterface $urlGenerator
+        private UrlGeneratorInterface $urlGenerator,
     ) {
     }
 
     /**
-     * @throws TransportExceptionInterface
+     * @throws \Exception|TransportExceptionInterface
      */
     public function contact(FormInterface $form): void
     {
         $data = $form->getData();
 
-        $date = new \DateTimeImmutable('now', new \DateTimeZone('Europe/Paris'));
-        $formattedDate = $date->format('d/m/Y \à H:i');
+        $date = new \DateTimeImmutable(datetime: 'now', timezone: new \DateTimeZone('Europe/Paris'));
+        $formattedDate = $date->format(format: 'd/m/Y \à H:i');
 
         if ($data instanceof ContactDTO) {
             $email = (new TemplatedEmail())
