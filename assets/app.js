@@ -14,6 +14,7 @@ import './vendor/tiny-slider/tiny-slider.css';
 
 // Import JS Folder
 import './js/functions.js';
+import './js/notyf.js';
 
 // Import Vendor JS
 import './vendor/bootstrap/dist/js/bootstrap.min.js';
@@ -24,5 +25,4 @@ import './vendor/choices/choices.index.js';
 import './vendor/colors/colors.index.js';
 import './vendor/plyr/plyr.js';
 import './vendor/tiny-slider/tiny-slider.js';
-
-console.log('This log comes from assets/app.js - welcome to AssetMapper! 🎉');
+import './vendor/notyf/notyf.index.js';

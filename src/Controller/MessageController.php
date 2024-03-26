@@ -136,6 +136,7 @@ class MessageController extends AbstractController
         if ($this->isCsrfTokenValid(id: 'delete'.$message->getId(), token: $request->request->get(key: '_token'))) {
             $entityManager->remove($message);
             $entityManager->flush();
+            $this->addFlash(type: 'warning', message: ' Votre message a bien été supprimé.');
         }
 
         $light = $message->getLight();

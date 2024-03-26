@@ -22,5 +22,5 @@
 /public/assets/
 /assets/vendor/
 /assets/uploads/avatar/*
-/assets/uploads/photos/*.*
+/assets/uploads/photos/lights/*
 ###< symfony/asset-mapper ###

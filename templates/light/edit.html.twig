@@ -7,11 +7,10 @@
     {{ include('partials/_menu.html.twig') }}
 
     <main class="container my-5">
+
         <h1 class="mb-5 text-primary text-uppercase display-6 fw-light text-decoration-underline">
             Modification de {{ light.firstname }} {{ light.lastname }}
         </h1>
-
-        {{ include('partials/_notifications.html.twig') }}
 
         {{ include('light/_form.html.twig', {'button_style': 'btn-sm btn-warning rounded-2', 'button_label': 'Mettre à jour'}) }}
 
