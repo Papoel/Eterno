@@ -47,5 +47,9 @@ return [
     ],
     'tiny-slider' => [
         'version' => '2.9.4',
-    ]
+    ],
+    'notyf' => [
+        'version' => '3.10.0',
+    ],
+    // https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css
 ];

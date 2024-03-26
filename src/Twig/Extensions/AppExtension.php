@@ -25,36 +25,61 @@ class AppExtension extends AbstractExtension
         $months = $interval->m;
         $days = $interval->d;
 
-        return match (true) {
-            0 === $years && 0 === $months && 0 === $days => 'Aujourd\'hui',
-            0 === $years && 0 === $months && 1 === $days => 'Une journée',
-            0 === $years && 0 === $months && $days > 1 => sprintf('%d jours', $days),
-            0 === $years && 1 === $months && 0 === $days => '1 mois',
-            0 === $years && 1 === $months && 1 === $days => '1 mois et 1 jour',
-            0 === $years && 1 === $months && $days > 1 => sprintf('1 mois et %d jours', $days),
-            0 === $years && $months > 1 && 0 === $days => sprintf('%d mois', $months),
-            0 === $years && $months > 1 && 1 === $days => sprintf('%d mois et 1 jour', $months),
-            0 === $years && $months > 1 && $days > 1 => sprintf('%d mois et %d jours', $months, $days),
-            1 === $years && 0 === $months && 0 === $days => '1 an',
-            1 === $years && 0 === $months && 1 === $days => '1 an et 1 jour',
-            1 === $years && 0 === $months && $days > 1 => sprintf('1 an et %d jours', $days),
-            1 === $years && 1 === $months && 0 === $days => '1 an et 1 mois',
-            1 === $years && 1 === $months && 1 === $days => '1 an, 1 mois et 1 jour',
-            1 === $years && 1 === $months && $days > 1 => sprintf('1 an, 1 mois et %d jours', $days),
-            1 === $years && $months > 1 && 0 === $days => sprintf('1 an et %d mois', $months),
-            // 1 === $years && $months > 1 && 1 === $days => sprintf('1 a, %d mois et 1 jour', $months),
-            // 1 === $years && $months > 1 && $days > 1 => sprintf('1 an, %d mois et %d jours', $months, $days),
-            $years > 1 && 0 === $months && 0 === $days => sprintf('%d ans', $years),
-            $years > 1 && 0 === $months && 1 === $days => sprintf('%d ans et 1 jour', $years),
-            $years > 1 && 0 === $months && $days > 1 => sprintf('%d ans et %d jours', $years, $days),
-            $years > 1 && 1 === $months && 0 === $days => sprintf('%d ans et 1 mois', $years),
-            $years > 1 && 1 === $months && 1 === $days => sprintf('%d ans, 1 mois et 1 jour', $years),
-            $years > 1 && 1 === $months && $days > 1 => sprintf('%d a, 1 mois et %d jours', $years, $days),
-            $years > 1 && $months > 1 && 0 === $days => sprintf('%d a et %d m', $years, $months),
-            $years > 1 && $months > 1 && 1 === $days => sprintf('%d a, %d m et 1 jour', $years, $months),
-            $years > 1 && $months > 1 && $days > 1 => sprintf('%d a, %d m et %d j', $years, $months, $days),
+        if ($years > 0) {
+            return $this->formatYearsMonthsDays($years, $months, $days);
+        }
 
-            default => sprintf('%d a, %d m, %d j', $years, $months, $days),
-        };
+        if ($months > 0) {
+            return $this->formatMonthsDays($months, $days);
+        }
+
+        if (0 === $days) {
+            return 'Aujourd\'hui';
+        }
+
+        if (1 === $days) {
+            return 'Hier';
+        }
+
+        return $this->formatDays($days);
+    }
+
+    private function formatYearsMonthsDays(int $years, int $months, int $days): string
+    {
+        $parts = [];
+
+        if ($years > 0) {
+            $parts[] = sprintf('%d an%s', $years, $years > 1 ? 's' : '');
+        }
+
+        if ($months > 0) {
+            $parts[] = sprintf('%d mois', $months);
+        }
+
+        if ($days > 0) {
+            $parts[] = sprintf('%d jour%s', $days, $days > 1 ? 's' : '');
+        }
+
+        return implode(' ', $parts);
+    }
+
+    private function formatMonthsDays(int $months, int $days): string
+    {
+        $parts = [];
+
+        if ($months > 0) {
+            $parts[] = sprintf('%d mois', $months);
+        }
+
+        if ($days > 0) {
+            $parts[] = sprintf('%d jour%s', $days, $days > 1 ? 's' : '');
+        }
+
+        return implode(' ', $parts);
+    }
+
+    private function formatDays(int $days): string
+    {
+        return sprintf('%d jour%s', $days, $days > 1 ? 's' : '');
     }
 }
