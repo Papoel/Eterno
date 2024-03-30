@@ -4,52 +4,82 @@
 {% block body %}
     {{ include('partials/_menu.html.twig') }}
     {{ include('partials/_notyf.html.twig') }}
-    <section id="contact" class="container mt-5">
-        <h1>Formulaire de contact</h1>
 
-        {{ form_start(form, {'attr': {'id': 'contactForm' ,'class': 'needs-validationp', 'novalidate': 'novalidate'}}) }}
-            <div class="row">
-                <div class="col-sm">
-                    <div class="mb-3">
-                        <label for="contact_name" class="form-label">Nom et prénom</label>
-                        {{ form_widget(form.name) }}
-                        <div class="invalid-feedback">{{ form_errors(form.name) }}</div>
-                    </div>
+    <section class="bg-light py-3 mt-5 pt-5">
+        <div class="container">
+            <div class="row justify-content-md-center">
+                <div class="col-12 col-md-10 col-lg-8 col-xl-7 col-xxl-6">
+                    <h3 class="fs-6 text-secondary mb-2 text-uppercase text-center">Contactez-nous</h3>
+                    <h2 class="display-5 mb-4 mb-md-5 text-center linear-title">
+                        Nous sommes à votre écoute
+                    </h2>
+                    <hr class="w-50 mx-auto mb-5 mb-xl-9 border-dark-subtle">
                 </div>
-                <div class="col-sm">
-                    <div class="mb-3">
-                        <label for="contact_email" class="form-label">Email</label>
-                        {{ form_widget(form.email) }}
-                        <div class="invalid-feedback">{{ form_errors(form.email) }}</div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row gy-3 gy-md-4 gy-lg-0 align-items-xl-center">
+                <div class="col-12 col-lg-6">
+                    <img class="img-fluid rounded" loading="lazy"
+                         style="object-fit: cover; object-position: center; width: 100%; max-height: 665px;"
+                         src="{{ asset('images/bg/contact-image.png') }}"
+                         alt="">
+                </div>
+                <div class="col-12 col-lg-6">
+                    <div class="row justify-content-xl-center">
+                        <div class="col-12 col-xl-11">
+                            <div class="bg-white border rounded shadow-lg overflow-hidden" style="max-height: 665px">
+
+                                {{ form_start(form, {'attr': {'class': 'bg-light'}}) }}
+                                <div class="row gy-4 gy-xl-5 p-4 p-xl-5">
+                                    <div class="col-12">
+                                        {{ form_label(form.name, 'Nom complet', {'label_attr': {'class': 'form-label'}}) }}
+                                        <span class="text-danger">*</span>
+                                        {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
+                                        {{ form_errors(form.name) }}
+                                    </div>
+                                    <div class="col-12">
+                                        {{ form_label(form.email, 'Email', {'label_attr': {'class': 'form-label'}}) }}
+                                        <div class="input-group">
+                                            <span class="input-group-text">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                                     class="bi bi-envelope" viewBox="0 0 16 16">
+                                                    <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4Zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1H2Zm13 2.383-4.708 2.825L15 11.105V5.383Zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741ZM1 11.105l4.708-2.897L1 5.383v5.722Z"/>
+                                                </svg>
+                                            </span>
+                                            <input type="email" class="form-control"
+                                                    {% if app.user is not null %}
+                                                        readonly
+                                                        value="{{ app.user.email }}"
+                                                    {% endif %}
+                                                    {{ form_widget(form.email, {'attr': {'class': 'form-control'}}) }}
+                                            {{ form_errors(form.email) }}
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12">
+                                        {{ form_label(form.subject, 'Sujet', {'label_attr': {'class': 'form-label'}}) }}
+                                        {{ form_widget(form.subject, {'attr': {'class': 'form-control'}}) }}
+                                    </div>
+                                    <div class="col-12">
+                                        {{ form_label(form.message, 'Message', {'label_attr': {'class': 'form-label'}}) }}
+                                        {{ form_widget(form.message, {'attr': {'class': 'form-control', 'rows': 3}}) }}
+                                        {{ form_errors(form.message) }}
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="d-grid">
+                                            <button class="btn btn-primary btn-lg" type="submit">Envoyer le message</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                {{ form_end(form) }}
+
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-
-            <div class="row">
-                <div class="col-sm-6">
-                    <div class="mb-3">
-                        <label for="contact_name" class="form-label">Sujet</label>
-                        {{ form_widget(form.subject) }}
-                        <div class="invalid-feedback">{{ form_errors(form.subject) }}</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-sm">
-                    <div class="mb-3">
-                        <label for="contact_name" class="form-label">Message</label>
-                        {{ form_widget(form.message) }}
-                        <div class="invalid-feedback">{{ form_errors(form.message) }}</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-sm">
-                    <button id="btnSubmit" type="submit" class="btn btn-dark w-25">Envoyer</button>
-                </div>
-            </div>
-        {{ form_end(form) }}
+        </div>
     </section>
 {% endblock %}

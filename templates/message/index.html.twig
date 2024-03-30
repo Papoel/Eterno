@@ -80,9 +80,21 @@
 
                     <div class="card card-chat rounded-start-lg-0 border-start-lg-0">
 
+                        <!-- Formulaire d'envoi -->
+                        <div class="card-header border-0">
+                            {% if form_errors(form.content) %}
+                                <div class="alert alert-danger">
+                                    {{ form_errors(form.content) }}
+                                    <span>Votre message contient <strong>{{ form.content.vars.value|length }}</strong> caractères</span>
+                                </div>
+                            {% endif %}
+                            {{ include('message/_form.html.twig') }}
+                        </div>
+                        <!-- FIN Formulaire d'envoi -->
+
                         <div class="card-body h-100">
-                            <div class="tab-content py-0 mb-0 h-100" id="chatTabsContent">
-                                <div class="chat-conversation-content custom-scrollbar mt-2 msg-body">
+                            <div class="tab-content py-0 mb-0" id="chatTabsContent">
+                                <div class="chat-conversation-content custom-scrollbar msg-body">
                                     {% if light.sentMessagesCount == 0 %}
                                         <div class="text-center">
                                             <img src="{{ asset('images/bg/wait-msg.png') }}" alt="Aucun message" class="img-fluid" style="max-height: 560px">
@@ -98,8 +110,8 @@
                                         {% for message in messages|reverse %}
                                             {% if message.light.getId().toRfc4122() == light.getId().toRfc4122() %}
                                                 <article id="message-{{ loop.index }}" class="mb-1">
-                                                    <div id="messages-{{ message.id }}" class="bg-light text-secondary p-2 px-3 rounded-2">
-                                                        <p class="m-0">{{ message.content }}</p>
+                                                    <div id="messages-{{ message.id }}" class="bg-warning-subtle text-secondary p-2 px-3 rounded-2">
+                                                        <p class="m-0">{{ message.content | nl2br }}</p>
                                                         <div class="small">
                                                             <div class="d-flex justify-content-end">
                                                                 {% set today = "now"|date("d/m") %}
@@ -130,18 +142,6 @@
                             </div>
                         </div>
                         <!-- FIN SIDEBAR de droite - CONVERSATION -->
-
-                        <!-- Formulaire d'envoi -->
-                        <div class="card-footer">
-                            {% if form_errors(form.content) %}
-                                <div class="alert alert-danger">
-                                    {{ form_errors(form.content) }}
-                                    <span>Votre message contient <strong>{{ form.content.vars.value|length }}</strong> caractères</span>
-                                </div>
-                            {% endif %}
-                            {{ include('message/_form.html.twig') }}
-                        </div>
-                        <!-- FIN Formulaire d'envoi -->
                     </div>
                 </div>
 

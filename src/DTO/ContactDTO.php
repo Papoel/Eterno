@@ -18,12 +18,6 @@ class ContactDTO
     public string $name = '';
 
     #[Assert\NotBlank]
-    #[Assert\Length(
-        min: 3,
-        max: 70,
-        minMessage: 'Le sujet doit contenir au moins {{ limit }} caractères.',
-        maxMessage: 'Le sujet ne peut pas dépasser {{ limit }} caractères.'
-    )]
     public string $subject = '';
 
     #[Assert\Email(message: 'Veuillez saisir une adresse email valide.')]

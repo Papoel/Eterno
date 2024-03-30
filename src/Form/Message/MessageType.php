@@ -17,7 +17,7 @@ class MessageType extends AbstractType
                 'label' => false,
                 'attr' => [
                     'placeholder' => 'Écrivez votre message ici...',
-                    'rows' => 1,
+                    'rows' => 3,
                     'cols' => 0,
                     'class' => 'form-control mb-0',
                 ],
