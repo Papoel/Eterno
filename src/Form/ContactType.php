@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\DTO\ContactDTO;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -20,9 +21,14 @@ class ContactType extends AbstractType
                 'label' => 'Nom et prénom',
                 'required' => true,
             ])
-            ->add(child: 'subject', type: TextType::class, options: [
-                'empty_data' => '',
-                'label' => 'Sujet',
+            ->add(child: 'subject', type: ChoiceType::class, options: [
+                'choices' => [
+                    'Création de compte' => 'creation de compte',
+                    'Signalement de bug' => 'signalement de bug',
+                    'Demande de renseignements' => 'demande de renseignements',
+                    'Demande de fonctionnalité' => 'demande de functionality',
+                    'Autre' => 'Autre',
+                ],
             ])
             ->add(child: 'email', type: EmailType::class, options: [
                 'empty_data' => '',
