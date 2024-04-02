@@ -7,7 +7,7 @@ vich_uploader:
     mappings:
         user_avatar:
             uri_prefix: '%upload_base_path%'
-            upload_destination: '%kernel.project_dir%/assets/%upload_base_path%'
+            upload_destination: '%kernel.project_dir%/public/assets/%upload_base_path%'
             namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
             inject_on_load: false
             delete_on_update: true
@@ -15,7 +15,7 @@ vich_uploader:
 
         light_photo:
             uri_prefix: '%upload_light_photo%'
-            upload_destination: '%kernel.project_dir%/assets/%upload_light_photo%'
+            upload_destination: '%kernel.project_dir%/public/assets/%upload_light_photo%'
             namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
             inject_on_load: false
             delete_on_update: true

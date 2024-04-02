@@ -29,7 +29,7 @@
                 <tr class="text-center">
                     <td>
                         {% if light.photo is not same as 'default.jpg' %}
-                            <img src="{{ asset('uploads/photos/lights/' ~ light.photo) }}" alt="miniature {{ light.fullname }}"
+                            <img src="{{ asset('/assets/uploads/photos/lights/' ~ light.photo) }}" alt="miniature {{ light.fullname }}"
                                  class="img-fluid rounded-1" width="80">
                         {% else %}
                             <img src="{{ asset('uploads/photos/default/' ~ light.photo) }}" alt="miniature {{ light.fullname }}"

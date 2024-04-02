@@ -1,5 +1,5 @@
 {% if light.photo is not same as 'default.jpg' or light.photo is null  %}
-    <img src="{{ asset('uploads/photos/lights/' ~ light.photo) }}"
+    <img src="{{ asset('/assets/uploads/photos/lights/' ~ light.photo) }}"
          alt="miniature {{ light.fullname }}"
          class="avatar-img rounded-circle"
          style="max-height: 180px; max-width: 180px; border-radius: 10px;"
