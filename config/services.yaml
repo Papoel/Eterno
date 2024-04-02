@@ -1,6 +1,6 @@
 parameters:
-    upload_base_path:   '/public/uploads/avatar'
-    upload_light_photo: '/public/uploads/photos/lights'
+    upload_base_path:   '/uploads/avatar'
+    upload_light_photo: '/uploads/photos/lights'
 
     support_email: 'eterno@papoel.fr'
 
