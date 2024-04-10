@@ -21,7 +21,7 @@ class HomeController extends AbstractController
             $lights = $user->getLights()->toArray();
         }
 
-        return $this->render(view: 'home/index.html.twig', parameters: [
+        return $this->render(view: 'home/home.html.twig', parameters: [
             'lights' => $lights,
         ]);
     }
