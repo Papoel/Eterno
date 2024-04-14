@@ -154,6 +154,10 @@
 
 /* Carte Light */
 .custom-card {
+  --random-color: #ff8a00;
+}
+
+.custom-card {
   position: relative;
   overflow: hidden;
 }
@@ -171,7 +175,10 @@
   transition: transform 0.5s ease, opacity 0.5s ease;
 }
 
-.custom-card:hover::before {
-  transform: translate(-50%, -50%) scale(1);
-  opacity: 1;
+.custom-card button {
+  pointer-events: auto;
+}
+
+.custom-card:hover {
+  box-shadow: 0 0 10px 5px var(--random-color)
 }
