@@ -1,0 +1,70 @@
+<div class="card custom-card h-100" style="border-radius: 15px;">
+    <div class="card-body text-center">
+        <div class="mt-3 mb-4">
+            {% if light.photo is not same as 'default.jpg' %}
+                <img src="{{ asset('assets/uploads/photos/lights/' ~ light.photo) }}"
+                     class="img-fluid"
+                     alt="miniature {{ light.fullname }}"
+                     style="max-height: 220px; width: 100%; border-radius: 10px; object-fit: cover;"
+                />
+            {% else %}
+                <img src="{{ asset('assets/uploads/photos/default/' ~ light.photo) }}"
+                     class="img-fluid rounded-2"
+                     alt="miniature par défaut"
+                     style="max-height: 220px;"
+                />
+            {% endif %}
+        </div>
+        <h4 class="mb-2 gradient-text h4">{{ light.firstname }} {{ light.lastname }}</h4>
+        {% if light.username %}
+            <p class="text-muted mb-4">@{{ light.username }}</p>
+        {% endif %}
+        <div class="d-flex justify-content-center mb-4 pb-2">
+            <span class="btn btn-outline-primary btn-floating me-1" style="pointer-events: none; height: 40.5px; max-width: 100px; overflow: hidden;">
+                {{ light.age }} <small>ans</small>
+            </span>
+            <span class="btn btn-outline-primary me-1" style="pointer-events: none; height: 40.5px;max-width: 100px; overflow: hidden;">
+                {% if light.sentMessagesCount == 0 %}
+                    0 <small>msg</small>
+                {% elseif light.sentMessagesCount == 1 %}
+                    1 <small>msg</small>
+                {% else %}
+                    {{ light.sentMessagesCount }} <small>msgs</small>
+                {% endif %}
+            </span>
+            <span class="me-1">
+                <a href="{{ path('app_light_edit', {'id': light.id}) }}" class="btn btn-outline-primary btn-floating z-index-99"
+                   style="height: 40.5px;max-width: 100px; overflow: hidden;">
+                    <i class="fas fa-edit"></i>
+                </a>
+            </span>
+            <form action="{{ path('app_light_delete', {'id': light.id}) }}" method="post" class="d-inline">
+                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ light.id) }}">
+                <button type="submit"
+                        class="btn btn-outline-danger btn-floating"
+                        style="height: 40.5px;max-width: 100px; overflow: hidden;"
+                        onclick="return confirm('Êtes-vous sûr de vouloir supprimer {{ light.firstname }} ? cette action est irréversible.')"
+                >
+                    <i class="fas fa-trash-alt"></i>
+                </button>
+            </form>
+        </div>
+        <a class="btn btn-primary btn-rounded rounded-5 btn-lg" href="{{ path('app_message_new', {'receiver': light.id}) }}" role="button">
+            Ecrire un message
+        </a>
+        <div class="d-flex flex-column flex-md-row justify-content-between text-center mt-5 mb-2">
+            <div class="mb-4 mb-md-0">
+                <p class="mb-2 h5 text-gray-600">Anniversaire</p>
+                <p class="text-muted mb-0">{{ light.birthdayAt | date('d/m/Y') }}</p>
+            </div>
+            <div class="mb-4 mb-md-0">
+                <p class="mb-2 h5 text-gray-600">Temps</p>
+                <p class="text-muted mb-0">{{ light.deceasedAt | ago }}</p>
+            </div>
+            <div>
+                <p class="mb-2 h5 text-gray-600">Décès</p>
+                <p class="text-muted mb-0">{{ light.deceasedAt | date('d/m/Y') }}</p>
+            </div>
+        </div>
+    </div>
+</div>

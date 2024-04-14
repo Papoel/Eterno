@@ -146,8 +146,39 @@
   overflow-y: auto;
 }
 
-.linear-title {
+.gradient-text {
   font-size: 2.5rem;
   background: linear-gradient(90deg, #ff8a00, #e52e71); -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;"
+}
+
+/* Carte Light */
+.custom-card {
+  --random-color: #ff8a00;
+}
+
+.custom-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.custom-card::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 300%;
+  height: 300%;
+  border-radius: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  opacity: 0;
+  transition: transform 0.5s ease, opacity 0.5s ease;
+}
+
+.custom-card button {
+  pointer-events: auto;
+}
+
+.custom-card:hover {
+  box-shadow: 0 0 10px 5px var(--random-color)
 }

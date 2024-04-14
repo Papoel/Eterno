@@ -27,6 +27,7 @@ Table Of Content
 17 PSWMETER
 18 FAKE PASSWORD
 19 MENU DROPDOWN
+20 CARD HOVER EFFECT
 ========================= */
 
 "use strict";
@@ -88,7 +89,8 @@ let e = {
 			e.avatarImg(),
 			e.customScrollbar(),
 			e.pswMeter(),
-			e.menuDropdown();
+			e.menuDropdown()
+			e.cardHoverEffect();
 	},
 	isVariableDefined: function (el) {
 		return typeof !!el && (el) != 'undefined' && el != null;
@@ -768,6 +770,25 @@ let e = {
 		});
 	},
 	// END: Menu Dropdown
+
+	//START: 20 Card Hover Effect
+	cardHoverEffect: function () {
+		function getRandomColor() {
+			let letters = '0123456789ABCDEF';
+			let color = '#';
+			for (let i = 0; i < 6; i++) {
+				color += letters[Math.floor(Math.random() * 16)];
+			}
+			return color;
+		}
+
+		document.querySelectorAll('.custom-card').forEach(function(card) {
+			card.addEventListener('mouseenter', function() {
+				let randomColor = getRandomColor();
+				this.style.setProperty('--random-color', randomColor);
+			});
+		});
+	},
 };
 
 e.init();

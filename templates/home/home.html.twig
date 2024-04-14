@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+{% block title %}home v2{% endblock %}
+
+{% block body %}
+    {{ include('partials/_menu.html.twig') }}
+        <main>
+            <!-- Page header START -->
+            <section class="py-5"
+                 style="background-image:url({{ asset('images/bg/header.jpg') }}); background-position: center center; background-size: cover; background-repeat: no-repeat;">
+                <div class="container">
+                    <div class="row justify-content-center py-5">
+                        <div class="col-md-6 text-center">
+                            <!-- Title -->
+                            <h1 class="text-white">ETERNO : Lumière du Souvenir</h1>
+                            <p class="mb-4 text-white">Laissez vos mots briller au-delà des frontières du temps..</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- Page header END -->
+
+            <section>
+                <div class="container h-100">
+                    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3">
+                        {% for light in lights %}
+                            <div class="col my-2">
+                                {% include 'light/_card.html.twig' %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+        </section>
+    </main>
+{% endblock %}
