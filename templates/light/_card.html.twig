@@ -40,7 +40,11 @@
             </span>
             <form action="{{ path('app_light_delete', {'id': light.id}) }}" method="post" class="d-inline">
                 <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ light.id) }}">
-                <button type="submit" class="btn btn-outline-danger btn-floating" style="height: 40.5px;max-width: 100px; overflow: hidden;">
+                <button type="submit"
+                        class="btn btn-outline-danger btn-floating"
+                        style="height: 40.5px;max-width: 100px; overflow: hidden;"
+                        onclick="return confirm('Êtes-vous sûr de vouloir supprimer {{ light.firstname }} ? cette action est irréversible.')"
+                >
                     <i class="fas fa-trash-alt"></i>
                 </button>
             </form>
