@@ -64,24 +64,3 @@
         </div>
     </div>
 </div>
-
-<script>
-    // Générer une couleur aléatoire au survol de la carte
-    document.querySelectorAll('.custom-card').forEach(function(card) {
-        card.addEventListener('mouseenter', function() {
-            let randomColor = getRandomColor();
-            this.style.setProperty('--random-color', randomColor);
-        });
-    });
-
-    // Fonction pour générer une couleur aléatoire
-    function getRandomColor() {
-        let letters = '0123456789ABCDEF';
-        let color = '#';
-        for (let i = 0; i < 6; i++) {
-            color += letters[Math.floor(Math.random() * 16)];
-        }
-        return color;
-    }
-
-</script>
