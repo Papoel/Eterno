@@ -153,36 +153,40 @@ class SettingsController extends AbstractController
 
         // Form Invitation
         if ($formInvitation->isSubmitted() && $formInvitation->isValid()) {
-            // Vérifier si l'email existe d'invitation existe déjà dans la base de données
-            $invitation = $invitationRepository->findOneBy(['email' => $formInvitation->get('email')->getData()]);
+            try {
+                // Vérifier si l'email existe d'invitation existe déjà dans la base de données
+                $invitation = $invitationRepository->findOneBy(['email' => $formInvitation->get('email')->getData()]);
 
-            if (null !== $invitation) {
-                $status = $invitation->isAccepted() ? 'acceptée' : 'en attente';
+                if (null !== $invitation) {
+                    $status = $invitation->isAccepted() ? 'acceptée' : 'en attente';
 
-                // Vérifier si l'invitation a déjà été acceptée
-                if ($invitation->isAccepted()) {
-                    $this->addFlash(type: 'success', message: 'Cet utilisateur a déjà reçu une invitation, son invitation est '.$status.'.');
+                    // Vérifier si l'invitation a déjà été acceptée
+                    if ($invitation->isAccepted()) {
+                        $this->addFlash(type: 'success', message: 'Cet utilisateur a déjà reçu une invitation, son invitation est '.$status.'.');
+                    }
+
+                    // Vérifier si l'invitation a déjà été envoyée
+                    if (!$invitation->isAccepted()) {
+                        $this->addFlash(type: 'warning', message: 'Cet utilisateur a déjà reçu une invitation, son invitation est '.$status.'.');
+                    }
+
+                    return $this->redirectToRoute(route: 'profile_settings.index', parameters: [
+                        'id' => $user->getId(),
+                    ]);
                 }
 
-                // Vérifier si l'invitation a déjà été envoyée
-                if (!$invitation->isAccepted()) {
-                    $this->addFlash(type: 'warning', message: 'Cet utilisateur a déjà reçu une invitation, son invitation est '.$status.'.');
+                if ($formInvitation->getData() instanceof Invitation) {
+                    $formInvitation->getData()->setFriend(friend: $user);
+                    $mailerService->sendInvitationEmail(form: $formInvitation);
+                    $this->addFlash(type: 'success', message: 'Votre invitation a bien été envoyée.');
                 }
 
-                return $this->redirectToRoute(route: 'profile_settings.index', parameters: [
-                    'id' => $user->getId(),
-                ]);
+                /* @phpstan-ignore-next-line */
+                $this->em->persist($formInvitation->getData());
+                $this->em->flush();
+            } catch (TransportExceptionInterface $e) {
+                $this->addFlash(type: 'warning', message: 'Une erreur est survenue lors de l\'envoi de l\'invitation. Veuillez réessayer plus tard.');
             }
-
-            if ($formInvitation->getData() instanceof Invitation) {
-                $formInvitation->getData()->setFriend(friend: $user);
-                $mailerService->sendInvitationEmail(form: $formInvitation);
-                $this->addFlash(type: 'success', message: 'Votre invitation a bien été envoyée.');
-            }
-
-            /* @phpstan-ignore-next-line */
-            $this->em->persist($formInvitation->getData());
-            $this->em->flush();
 
             return $this->redirectToRoute(route: 'profile_settings.index', parameters: [
                 'id' => $user->getId(),
