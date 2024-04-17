@@ -24,3 +24,6 @@
 /assets/uploads/avatar/*
 /assets/uploads/photos/lights/*
 ###< symfony/asset-mapper ###
+
+###> developper ###
+/src/Docs/Prod

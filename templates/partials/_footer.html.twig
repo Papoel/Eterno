@@ -2,7 +2,9 @@
     <ul class="nav justify-content-center border-bottom pb-3 mb-3">
         <li class="nav-item"><a href="{{ path('home.index') }}" class="nav-link px-2 text-body-secondary">Accueil</a></li>
         <li class="nav-item"><a href="{{ path('app_contact') }}" class="nav-link px-2 text-body-secondary">Contact</a></li>
-        <li class="nav-item"><a href="{{ path('profile_settings.index', {'id': app.user.id}) }}" class="nav-link px-2 text-body-secondary">Mon compte</a></li>
+        {% if app.user is not null %}
+            <li class="nav-item"><a href="{{ path('profile_settings.index', {'id': app.user.id}) }}" class="nav-link px-2 text-body-secondary">Mon compte</a></li>
+        {% endif %}
     </ul>
     <p class="text-center text-body-secondary">
         {% set createdAt = 2024 %}

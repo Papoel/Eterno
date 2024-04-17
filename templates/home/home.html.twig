@@ -1,5 +1,5 @@
 {% extends 'base.html.twig' %}
-{% block title %}Accueil {{ app.user.fullname }}{% endblock %}
+{% block title %}Accueil {% if app.user is not null %}{{ app.user.fullname }}{% endif %}{% endblock %}
 
 {% block body %}
     {{ include('partials/_menu.html.twig') }}
