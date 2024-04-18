@@ -45,18 +45,20 @@
     </div>
 
     <div class="input-group mb-3">
-                <span class="input-group-text bg-light"
-                      id="inputGroup-light-birthday">
-                    Date de naissance
-                </span>
+        <span class="input-group-text bg-light"
+              id="inputGroup-light-birthday">
+            Date de naissance
+        </span>
         {{ form_widget(form.birthdayAt, {'attr': {
-            'class': 'form-control col-6',
+            'class': 'flatpickr flatpickr-input',
             'aria-describedby': 'Date de naissance de votre lumière',
             'aria-label': 'Date de naissance de votre lumière',
         }}) }}
+    </div>
+    <div class="input-group mb-3">
         <span class="input-group-text bg-light" id="inputGroup-light-deceased">Date de décès</span>
         {{ form_widget(form.deceasedAt, {'attr': {
-            'class': 'form-control col-6',
+            'class': 'flatpickr',
             'aria-describedby': 'Date de décès de votre lumière',
             'aria-label': 'Date de décès de votre lumière',
         }}) }}
@@ -72,30 +74,26 @@
         </div>
     {% endif %}
 
-        <div class="input-group mb-n3">
-            <span class="input-group-text bg-light" id="light-photo">
-                Photo de votre Lumière
-            </span>
-            <div class="input-group-text">
-                {{ form_widget(form.photoFile, {
-                    'attr': {
-                        'class': 'form-control',
-                        'aria-describedby': 'light-photo',
-                    },
-                }) }}
+    <div class="input-group mb-n3">
+        {{ form_widget(form.photoFile, {
+            'attr': {
+                'class': 'form-control',
+                'aria-describedby': 'light-photo',
+            },
+        }) }}
+    </div>
+
+    <div class="d-flex justify-content-start mt-n1">
+        {% set photoNameFromDb = light.photo %}
+        {% if photoNameFromDb is not same as 'default.jpg' %}
+            {% set photoName = photoNameFromDb|split('-')[0] ~ '.' ~ photoNameFromDb|split('.')[1] %}
+            <div class="d flex justify-content-end">
+                <span class="bg-light text-muted" id="light-photo">
+                    Photo actuelle de votre Lumière : {{ photoName }}
+                </span>
             </div>
-        </div>
-        <div class="d-flex justify-content-start">
-            {% set photoNameFromDb = light.photo %}
-            {% if photoNameFromDb is not same as 'default.jpg' %}
-                {% set photoName = photoNameFromDb|split('-')[0] ~ '.' ~ photoNameFromDb|split('.')[1] %}
-                <div class="d flex justify-content-end">
-                    <span class="bg-light text-muted" id="light-photo">
-                        Photo actuelle de votre Lumière : {{ photoName }}
-                    </span>
-                </div>
-            {% endif %}
-        </div>
+        {% endif %}
+    </div>
 
     {% if form_errors(form.photoFile) %}
         <div class="alert alert-danger">
@@ -103,14 +101,13 @@
         </div>
     {% endif %}
 
-    <div class="d-flex justify-content-between align-items-center">
+    <div class="d-flex align-items-center mt-4">
         <a href="{{ path('app_light_index') }}"
-           class="btn btn-sm btn-secondary-soft mt-3 rounded-2">
+           class="btn btn-sm btn-secondary-soft rounded-2">
             <i class="fas fa-arrow-left"></i>
             Revenir à la liste
         </a>
-
-        <button type="submit" class="w-25 btn {{ button_style }}">{{ button_label|default('Enregistrer') }}</button>
+        <button type="submit" class="ms-3 btn {{ button_style }}">{{ button_label|default('Enregistrer') }}</button>
     </div>
 
     {{ form_end(form) }}
