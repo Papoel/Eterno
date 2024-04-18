@@ -28,7 +28,6 @@ class LightType extends AbstractType
                 'allow_delete' => true,
                 'delete_label' => 'Cocher pour supprimer, puis sauvegarder',
             ])
-
             ->add(child: 'firstname', type: TextType::class, options: [
                 'row_attr' => [
                     'class' => 'rounded-0',
@@ -42,7 +41,6 @@ class LightType extends AbstractType
                     new NotNull(message: 'Veuillez renseigner votre prénom.'),
                 ],
             ])
-
             ->add(child: 'lastname', type: TextType::class, options: [
                 'row_attr' => [
                     'class' => '',
@@ -52,7 +50,6 @@ class LightType extends AbstractType
                     'class' => 'form-control text-capitalize rounded-0',
                 ],
             ])
-
             ->add(child: 'username', type: TextType::class, options: [
                 'row_attr' => [
                     'class' => 'col-6',
@@ -63,32 +60,27 @@ class LightType extends AbstractType
                 ],
                 'required' => false,
             ])
-
             ->add(child: 'birthdayAt', type: DateType::class, options: [
-                'row_attr' => [
-                    'class' => 'col-sm-6 col-lg-4 my-3',
-                ],
-                'label' => 'Date de naissance',
-                'label_attr' => [
-                    'class' => 'form-label',
-                ],
-                'attr' => [
-                    'class' => 'form-control flatpickr',
-                    'id' => 'profile_birthday',
-                ],
-                'widget' => 'single_text',
-            ])
-
-            ->add(child: 'deceasedAt', type: DateType::class, options: [
-                'row_attr' => [
-                    'class' => 'col-sm-6 col-lg-4 my-3',
-                ],
+                'row_attr' => ['class' => 'col-sm-6 col-lg-4 my-3'],
                 'label' => false,
+                'label_attr' => ['class' => 'form-label'],
                 'attr' => [
                     'class' => 'form-control flatpickr',
-                    'id' => 'profile_birthday',
+                    'id' => 'light_birthday',
                 ],
                 'widget' => 'single_text',
+                'required' => false,
+            ])
+            ->add(child: 'deceasedAt', type: DateType::class, options: [
+                'row_attr' => ['class' => 'col-sm-6 col-lg-4 my-3'],
+                'label' => false,
+                'label_attr' => ['class' => 'form-label'],
+                'attr' => [
+                    'class' => 'form-control flatpickr',
+                    'id' => 'light_deceased',
+                ],
+                'widget' => 'single_text',
+                'required' => false,
                 'constraints' => [
                    new Callback(callback: function ($object, ExecutionContextInterface $context) {
                        $today = new \DateTime();
@@ -101,7 +93,6 @@ class LightType extends AbstractType
                    }),
                 ],
             ])
-
             ->addEventSubscriber(subscriber: new PictureLightSubscriber())
         ;
     }

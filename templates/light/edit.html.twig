@@ -6,9 +6,9 @@
 
     {{ include('partials/_menu.html.twig') }}
 
-    <main class="container my-5">
+    <main class="container my-2">
 
-        <h1 class="mb-5 text-primary text-uppercase display-6 fw-light text-decoration-underline">
+        <h1 class="mb-3 gradient-text h2 text-center">
             Modification de {{ light.firstname }} {{ light.lastname }}
         </h1>
 
@@ -17,5 +17,9 @@
         {{ include('light/_delete_form.html.twig') }}
 
     </main>
+
+    {% block javascripts %}
+        <script src="{{ asset('vendor/flatpickr/dist/flatpickr.min.js') }}"></script>
+    {% endblock %}
 
 {% endblock %}
