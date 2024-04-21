@@ -39,7 +39,7 @@ readonly class MailerService
 
         if ($data instanceof ContactDTO) {
             $email = (new TemplatedEmail())
-                ->from(from: $data->email)
+                ->from(from: $this->supportEmail)
                 ->to(to: $this->supportEmail)
                 ->subject(subject: $data->subject)
                 ->htmlTemplate(template: 'emails/contact.html.twig')
