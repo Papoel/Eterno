@@ -74,6 +74,17 @@ Header START -->
                                     Paramètres et confidentialité
                                 </a>
                             </li>
+                            {% if app.user.roles[0] == 'ROLE_ADMIN' %}
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li>
+                                    <a class="dropdown-item bg-primary-soft-hover" href="{{ path('admin.index') }}">
+                                        <i class="bi bi-card-list fa-fw me-2"></i>
+                                        Administration
+                                    </a>
+                                </li>
+                            {% endif %}
                             <li class="dropdown-divider"></li>
                             <li>
                                 <a class="dropdown-item bg-danger-soft-hover" href="{{ path('app_logout') }}">
@@ -81,6 +92,7 @@ Header START -->
                                     Déconnexion
                                 </a>
                             </li>
+                            {# Link to admin if user has role admin #}
                             <li>
                                 <hr class="dropdown-divider">
                             </li>

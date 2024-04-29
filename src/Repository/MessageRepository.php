@@ -50,4 +50,19 @@ class MessageRepository extends ServiceEntityRepository
 
         return $messages;
     }
+
+    public function countMessages(): int
+    {
+        $result = $this->createQueryBuilder(alias: 'm')
+            ->select(select: 'COUNT(m.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
+
+        // Vérifier si le résultat est un entier, sinon retourner 0
+        if (!is_int($result)) {
+            throw new \RuntimeException(message: 'Une erreur est survenue lors du comptage des messages.');
+        }
+
+        return $result;
+    }
 }

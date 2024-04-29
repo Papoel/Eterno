@@ -18,8 +18,6 @@ use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
  * @method User|null findOneBy(array $criteria, array $orderBy = null)
  * @method User[]    findAll()
  * @method User[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
- *
- * @phpstan-ignore-next-line
  */
 class UserRepository extends ServiceEntityRepository implements PasswordUpgraderInterface
 {
@@ -47,5 +45,20 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->getEntityManager()->persist($entity);
 
         $flush ?: $this->getEntityManager()->flush();
+    }
+
+    public function countUsers(): int
+    {
+        $result = $this->createQueryBuilder(alias: 'u')
+            ->select(select: 'COUNT(u.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
+
+        // Vérifier si le résultat est un entier, sinon retourner 0
+        if (!is_int($result)) {
+            throw new \RuntimeException(message: 'Une erreur est survenue lors du comptage des utilisateurs.');
+        }
+
+        return $result;
     }
 }

@@ -1,0 +1,116 @@
+{% extends 'base.html.twig' %}
+{% block title %}Utilisateurs du site{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/admin.js') }}"></script>
+{% endblock %}
+
+{% block body %}
+    <section class="sb-nav-fixed">
+        <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+            <a class="navbar-brand ps-3 gradient-text" href="{{ path('admin.index') }}">Eterno</a>
+        </nav>
+        <div id="layoutSidenav">
+            {{ include('admin/Layout/_layoutSidenav_nav.html.twig') }}
+
+            <div id="layoutSidenav_content">
+                <main>
+
+                    <div class="container-fluid px-4">
+                        <h1 class="mt-4">ETERNO</h1>
+                        <ol class="breadcrumb mb-4">
+                            <li class="breadcrumb-item active">Création d'un utilisateur</li>
+                        </ol>
+
+                        {# Card FORM create user #}
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <i class="fas fa-user-plus me-1"></i>
+                                Création d'un utilisateur
+                            </div>
+                            <div class="card-body">
+                                {{ form_start(form) }}
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group mb-3">
+                                                {{ form_label(form.firstname, 'Prénom', {'label_attr': {'class': 'form-label'}}) }}
+                                                {{ form_widget(form.firstname, {'attr': {'class': 'form-control'}}) }}
+                                                {{ form_errors(form.firstname) }}
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group mb-3">
+                                                {{ form_label(form.lastname, 'Nom', {'label_attr': {'class': 'form-label'}}) }}
+                                                {{ form_widget(form.lastname, {'attr': {'class': 'form-control'}}) }}
+                                                {{ form_errors(form.lastname) }}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group mb-3">
+                                                {{ form_label(form.email, 'Email', {'label_attr': {'class': 'form-label'}}) }}
+                                                {{ form_widget(form.email, {'attr': {'class': 'form-control'}}) }}
+                                                {{ form_errors(form.email) }}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group mb-3">
+                                                {{ form_label(form.password.first, 'Mot de passe', {'label_attr': {'class': 'form-label'}}) }}
+                                                <div class="input-group">
+                                                    {{ form_widget(form.password.first, {'attr': {'class': 'form-control'}}) }}
+                                                    <span class="input-group-text password-icon">
+                                                        <i class="fas fa-eye eye-icon"></i>
+                                                    </span>
+                                                    {{ form_errors(form.password.first) }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group mb-3">
+                                                {{ form_label(form.password.second, 'Confirmation du mot de passe', {'label_attr': {'class': 'form-label'}}) }}
+                                                <div class="input-group">
+                                                    {{ form_widget(form.password.second, {'attr': {'class': 'form-control'}}) }}
+                                                    <span class="input-group-text password-icon">
+                                                        <i class="fas fa-eye eye-icon"></i>
+                                                    </span>
+                                                    {{ form_errors(form.password.second) }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group mb-3">
+                                                {{ form_label(form.roles, 'Rôles', {'label_attr': {'class': 'form-label'}}) }}
+                                                {{ form_widget(form.roles, {'attr': {'class': 'form-select'}}) }}
+                                                {{ form_errors(form.roles) }}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <button type="submit" class="btn btn-primary w-100 mt-3">Créer</button>
+
+                                {{ form_end(form) }}
+                            </div>
+                        </div>
+
+                    </div>
+
+                </main>
+            </div>
+        </div>
+    </section>
+
+{% endblock %}

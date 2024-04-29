@@ -1,0 +1,193 @@
+{% extends 'base.html.twig' %}
+{% block title %}Utilisateurs du site{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
+{% endblock %}
+
+
+{% block body %}
+    <style>
+        .card {
+            border-radius: 20px;
+        }
+
+        .initials {
+            font-size: 24px;
+            font-weight: bold;
+            line-height: 50px;
+            text-align: center;
+            width: 50px;
+            height: 50px;
+            display: inline-block;
+        }
+
+
+        .icon-admin {
+            width: 50px;
+            height: 50px;
+            font-size: 24px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #FFC107, #F44336);
+        }
+
+        .icon-user {
+            width: 50px;
+            height: 50px;
+            font-size: 24px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            /* Linear background of blue nuance */
+            background: linear-gradient(135deg, #2196F3, #3F51B5);
+        }
+
+        .info {
+            margin-bottom: 20px;
+        }
+
+        .info-item {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .info-item i {
+            margin-right: 10px;
+            width: 24px;
+        }
+
+        .btn {
+            border-radius: 20px;
+        }
+
+    </style>
+
+    <section class="sb-nav-fixed">
+
+        <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+            <a class="navbar-brand ps-3 gradient-text" href="{{ path('admin.index') }}">Eterno</a>
+        </nav>
+
+        <div id="layoutSidenav">
+            {{ include('admin/Layout/_layoutSidenav_nav.html.twig') }}
+
+            <div id="layoutSidenav_content">
+                <main>
+                    <div class="container-fluid px-4">
+                        <h1 class="mt-4">ETERNO</h1>
+                        <ol class="breadcrumb mb-4">
+                            <li class="breadcrumb-item active">Liste des utilisateurs</li>
+                        </ol>
+
+                        <div class="row">
+                            {% for user in users %}
+                                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 mb-4">
+                                    <div class="card border-0 shadow-lg">
+                                        <div class="card-body">
+                                            <div class="d-flex align-items-center mb-4">
+                                                <h5 class="card-title text-capitalize mb-0 me-auto h5 gradient-text">
+                                                    {{ user.firstname }} {{ user.lastname }}
+                                                </h5>
+                                                {% if user.roles[0] == 'ROLE_ADMIN' %}
+                                                    <div class="icon-admin text-light rounded-circle ms-1">
+                                                        <span class="initials text-uppercase">
+                                                            <i class="fas fa-user-shield me-1"></i>
+                                                        </span>
+                                                    </div>
+                                                {% else %}
+                                                    <div class="icon-user text-light rounded-circle ms-1">
+                                                        <span class="fw-lighter initials text-uppercase">
+                                                            {{ user.firstname|first }}{{ user.lastname|first }}
+                                                        </span>
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+                                            <div class="info">
+                                                <div class="info-item">
+                                                    <i class="fas fa-envelope me-1"></i>
+                                                    <span>{{ user.email }}</span>
+                                                </div>
+                                                <div class="info-item">
+                                                    <i class="fas fa-comment me-1"></i>
+                                                    <span>{{ user.messages|length }}</span>
+                                                </div>
+                                                {% if user.mobile %}
+                                                    <div class="info-item">
+                                                        <i class="fas fa-phone me-1"></i>
+                                                        <span>{{ user.mobile }}</span>
+                                                    </div>
+                                                {% else %}
+                                                    <div class="info-item">
+                                                        <i class="fas fa-phone-slash me-1"></i>
+                                                        <span>Non disponible</span>
+                                                    </div>
+                                                {% endif %}
+                                                <div class="info-item">
+                                                    <i class="far fa-clock me-1"></i>
+                                                    <span>{{ user.createdAt|format_datetime('long', 'short') }}</span>
+                                                </div>
+
+                                                <div class="info-item">
+                                                    <!-- Gestion affichage des statistiques d'invitations -->
+                                                    {% set userId = user.id.toRfc4122()  %}
+                                                    {% if invitationAccepted[userId] is defined %}
+                                                        <div class="d-flex flex-column">
+                                                            <div class="mb-2">
+                                                                <i class="fas fa-envelope"></i>
+                                                                <span class="ms-2">{{ invitationAccepted[userId]['invitationsSent'] }}</span>
+                                                                <span class="ms-1">Invitations envoyées</span>
+                                                            </div>
+                                                            <div class="mb-2">
+                                                                <i class="fas fa-check-circle"></i>
+                                                                <span class="ms-2">{{ invitationAccepted[userId]['invitationsAccepted'] }}</span>
+                                                                <span class="ms-1">Invitations acceptées</span>
+                                                            </div>
+                                                            <div class="mb-2">
+                                                                <i class="fas fa-hourglass-half"></i>
+                                                                <span class="ms-2">{{ invitationAccepted[userId]['pending'] }}</span>
+                                                                <span class="ms-1">Invitations en attente</span>
+                                                            </div>
+                                                            <div>
+                                                                <i class="fas fa-percentage"></i>
+                                                                <span class="ms-2">{{ invitationAccepted[userId]['percent'] }}%</span>
+                                                                <span class="ms-1">Taux d'acceptation</span>
+                                                            </div>
+                                                        </div>
+                                                    {% else %}
+                                                        <span class="badge bg-warning text-dark rounded-5">Aucune invitation envoyée</span>
+                                                    {% endif %}
+                                                </div>
+
+                                            </div>
+
+                                            <fieldset class="mt-2">
+                                                <form method="post"
+                                                      action="{{ path('admin.user.delete', {'id': user.id}) }}"
+                                                      onsubmit="return confirm('Voulez-vous vraiment effacer {{ user.fullname }}?. Vous ne pourrez plus revenir en arrière, les messages seront également effacés.')">
+                                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
+                                                    <button class="btn btn-sm btn-outline-danger">
+                                                        <i class="fas fa-trash-alt me-1"></i>
+                                                        Supprimer {{ user.firstname | capitalize }} {{ user.lastname | capitalize }}
+                                                    </button>
+                                                </form>
+                                            </fieldset>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </main>
+            </div>
+
+        </div>
+
+    </section>
+{% endblock %}
