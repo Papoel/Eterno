@@ -1,151 +1,125 @@
-<!DOCTYPE html>
-<html lang="fr" data-bs-theme="dark">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="author" content="Papoel">
-    <meta name="description"
-          content="Un espace pour honorer et se souvenir de nos êtres chers disparus, où vous pouvez envoyer des messages à ceux qui sont partis."
-    >
+{% extends 'base.html.twig' %}
+{% block title %}Erreur {{ exception.statusCode }} {% endblock %}
 
-    <!-- Balises pour le référencement -->
-    <title>Eterno - Erreur {{ exception.statusCode }}</title>
-    <!-- Permet aux moteurs de recherche d'indexer la page -->
-    <meta name="robots" content="index, follow">
-    <!-- Favicon -->
-    <link rel="icon"
-          href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
-
-    <!-- Google Font -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
-    <!-- Plugins CSS -->
-    <link rel="stylesheet" type="text/css" href="{{ asset('vendor/bootstrap-icons/bootstrap-icons.min.css') }}">
-
-</head>
-</head>
-
-<style>
-    * {
-        -webkit-box-sizing: border-box;
-        box-sizing: border-box;
-    }
-
-    body {
-        padding: 0;
-        margin: 0;
-    }
-
-    #error {
-        position: relative;
-        height: 100vh;
-        background: #030005;
-    }
-
-    #error .error-wrapper {
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        -webkit-transform: translate(-50%, -50%);
-        -ms-transform: translate(-50%, -50%);
-        transform: translate(-50%, -50%);
-    }
-
-    .error-wrapper {
-        max-width: 767px;
-        width: 100%;
-        line-height: 1.4;
-        text-align: center;
-    }
-
-    .error-wrapper .error-key {
-        position: relative;
-        height: 180px;
-        margin-bottom: 20px;
-        z-index: -1;
-    }
-
-    .error-wrapper  .error-key h1 {
-        font-family: 'Montserrat', sans-serif;
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        -webkit-transform: translate(-50% , -50%);
-        -ms-transform: translate(-50% , -50%);
-        transform: translate(-50% , -50%);
-        font-size: 224px;
-        font-weight: 900;
-        margin-top: 0;
-        margin-bottom: 0;
-        margin-left: -12px;
-        color: #030005;
-        text-transform: uppercase;
-        text-shadow: -1px -1px 0px #8400ff, 1px 1px 0px #ff005a;
-        letter-spacing: -20px;
-    }
-
-
-    .error-wrapper  .error-key h2 {
-        font-family: 'Montserrat', sans-serif;
-        position: absolute;
-        left: 0;
-        right: 0;
-        top: 110px;
-        font-size: 14px;
-        font-weight: 400;
-        color: #fff;
-        text-transform: uppercase;
-        text-shadow: 0px 2px 0px #8400ff;
-        letter-spacing: 8px;
-        margin: 0;
-    }
-
-    .error-wrapper  a {
-        font-family: 'Montserrat', sans-serif;
-        display: inline-block;
-        text-transform: uppercase;
-        color: #ff005a;
-        text-decoration: none;
-        border: 2px solid;
-        background: transparent;
-        padding: 10px 40px;
-        font-size: 14px;
-        font-weight: 700;
-        -webkit-transition: 0.2s all;
-        transition: 0.2s all;
-    }
-
-    .error-wrapper  a:hover {
-        color: #8400ff;
-    }
-
-    @media only screen and (max-width: 767px) {
-        .error-wrapper  .error-key h2 {
-            font-size: 24px;
+{% block body %}
+    <style>
+        * {
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
         }
-    }
 
-    @media only screen and (max-width: 480px) {
+        body {
+            padding: 0;
+            margin: 0;
+        }
+
+        #error {
+            position: relative;
+            height: 100vh;
+            background: #030005;
+        }
+
+        #error .error-wrapper {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            -webkit-transform: translate(-50%, -50%);
+            -ms-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+        }
+
+        .error-wrapper {
+            max-width: 767px;
+            width: 100%;
+            line-height: 1.4;
+            text-align: center;
+        }
+
+        .error-wrapper .error-key {
+            position: relative;
+            height: 180px;
+            margin-bottom: 20px;
+            z-index: -1;
+        }
+
         .error-wrapper  .error-key h1 {
-            font-size: 182px;
+            font-family: 'Montserrat', sans-serif;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            -webkit-transform: translate(-50% , -50%);
+            -ms-transform: translate(-50% , -50%);
+            transform: translate(-50% , -50%);
+            font-size: 224px;
+            font-weight: 900;
+            margin-top: 0;
+            margin-bottom: 0;
+            margin-left: -12px;
+            color: #030005;
+            text-transform: uppercase;
+            text-shadow: -1px -1px 0px #8400ff, 1px 1px 0px #ff005a;
+            letter-spacing: -20px;
         }
-    }
 
-</style>
 
-<body>
+        .error-wrapper  .error-key h2 {
+            font-family: 'Montserrat', sans-serif;
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 110px;
+            font-size: 14px;
+            font-weight: 400;
+            color: #fff;
+            text-transform: uppercase;
+            text-shadow: 0px 2px 0px #8400ff;
+            letter-spacing: 8px;
+            margin: 0;
+        }
 
-<div id="error">
-    <div class="error-wrapper ">
-        <div class="error-key">
-            <h1>{{ exception.statusCode }}</h1>
-            <h2 class="h6">{{ exception.statusText|trans }}</h2>
+        .error-wrapper  a {
+            font-family: 'Montserrat', sans-serif;
+            display: inline-block;
+            text-transform: uppercase;
+            color: #ff005a;
+            text-decoration: none;
+            border: 2px solid;
+            background: transparent;
+            padding: 10px 40px;
+            font-size: 14px;
+            font-weight: 700;
+            -webkit-transition: 0.2s all;
+            transition: 0.2s all;
+        }
+
+        .error-wrapper  a:hover {
+            color: #8400ff;
+        }
+
+        @media only screen and (max-width: 767px) {
+            .error-wrapper  .error-key h2 {
+                font-size: 24px;
+            }
+        }
+
+        @media only screen and (max-width: 480px) {
+            .error-wrapper  .error-key h1 {
+                font-size: 182px;
+            }
+        }
+
+    </style>
+
+    <div id="error">
+        <div class="error-wrapper ">
+            <div class="error-key">
+                <h1>{{ exception.statusCode }}</h1>
+                <h2 class="h6">{{ exception.statusText|trans }}</h2>
+            </div>
+            <a href="{{ path( app.user ? 'home.user_connected' : 'home.index') }}">Retour à l'accueil</a>
         </div>
-        <a href="{{ path( app.user ? 'home.user_connected' : 'home.index') }}">Retour à l'accueil</a>
     </div>
-</div>
-
-</body><!-- This templates was made by Colorlib (https://colorlib.com) -->
-
-</html>
+{% endblock %}
+{% block footer %}
+    {# Ne rien mettre ici pour exclure le footer #}
+{% endblock %}
