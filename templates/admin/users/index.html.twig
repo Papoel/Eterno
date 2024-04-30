@@ -114,6 +114,16 @@
                                                     <span>{{ user.email }}</span>
                                                 </div>
                                                 <div class="info-item">
+                                                    <i class="fas fa-lightbulb me-1"></i>
+                                                    {% if user.lights|length == 0 %}
+                                                        <span>Aucune Lumière créée</span>
+                                                    {% elseif user.lights|length == 1 %}
+                                                        <span>{{ user.lights|length }} Lumière créée</span>
+                                                    {% else %}
+                                                        <span>{{ user.lights|length }} Lumières créées</span>
+                                                    {% endif %}
+                                                </div>
+                                                <div class="info-item">
                                                     <i class="fas fa-comment me-1"></i>
                                                     <span>{{ user.messages|length }}</span>
                                                 </div>
