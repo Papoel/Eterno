@@ -70,7 +70,7 @@ class MainAuthenticator extends AbstractLoginFormAuthenticator
             return new RedirectResponse($targetPath);
         }
 
-        return new RedirectResponse($this->urlGenerator->generate(name: 'home.index'));
+        return new RedirectResponse($this->urlGenerator->generate(name: 'home.user_connected'));
     }
 
     protected function getLoginUrl(Request $request): string

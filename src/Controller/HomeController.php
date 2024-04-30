@@ -12,6 +12,12 @@ class HomeController extends AbstractController
     #[Route('/', name: 'home.index', methods: ['GET'])]
     public function index(): Response
     {
+        return $this->render(view: 'home/index.html.twig');
+    }
+
+    #[Route('/accueil', name: 'home.user_connected', methods: ['GET'])]
+    public function welcome(): Response
+    {
         /** @var User|null $user */
         $user = $this->getUser();
         $lights = [];

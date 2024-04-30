@@ -6,7 +6,7 @@ Header START -->
     <nav class="navbar navbar-expand-lg">
         <div class="container-fluid px-lg-5">
             <!-- Logo START -->
-            <a id="logo" class="navbar-brand" href="{{ path('home.index') }}">
+            <a id="logo" class="navbar-brand" href="{{ path( app.user ? 'home.user_connected' : 'home.index') }}">
                 <img class="light-mode-item navbar-brand-item" src="{{ asset('images/logo.svg') }}" alt="logo">
                 <img class="dark-mode-item navbar-brand-item" src="{{ asset('images/logo.svg') }}" alt="logo">
             </a>
