@@ -123,9 +123,19 @@
                                                         <span>{{ user.lights|length }} Lumières créées</span>
                                                     {% endif %}
                                                 </div>
-                                                <div class="info-item">
-                                                    <i class="fas fa-comment me-1"></i>
-                                                    <span>{{ user.messages|length }}</span>
+                                                <div class="info-item d-flex justify-content-between">
+                                                    <span>
+                                                        <i class="fas fa-comment me-1"></i>
+                                                        {{ user.messages|length }}
+                                                    </span>
+                                                    {% if user.messages|length > 0 %}
+                                                        <small class="ms-5">
+                                                            <i class="far fa-calendar-alt me-1"></i>
+                                                            <span>
+                                                                {{ user.messages|last.createdAt|format_datetime('short', 'short') }}
+                                                            </span>
+                                                        </small>
+                                                    {% endif %}
                                                 </div>
                                                 {% if user.mobile %}
                                                     <div class="info-item">
