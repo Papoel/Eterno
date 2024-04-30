@@ -11,7 +11,7 @@
 {% block body %}
     <section class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
-            <a class="navbar-brand ps-3 gradient-text" href="{{ path('home.index') }}">Eterno</a>
+            <a class="navbar-brand ps-3 gradient-text" href="{{ path( app.user ? 'home.user_connected' : 'home.index') }}">Eterno</a>
         </nav>
 
         <div id="layoutSidenav">
