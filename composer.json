@@ -17,6 +17,7 @@
     "ext-gd": "*",
     "ext-iconv": "*",
     "ext-openssl": "*",
+    "ext-pdo": "*",
     "doctrine/doctrine-bundle": "^2.10",
     "doctrine/doctrine-migrations-bundle": "^3.2",
     "doctrine/orm": "^2.16",
@@ -51,8 +52,7 @@
     "twig/inky-extra": "^3.8",
     "twig/intl-extra": "^3.8",
     "twig/twig": "^3.7",
-    "vich/uploader-bundle": "^2.3",
-    "ext-pdo": "*"
+    "vich/uploader-bundle": "^2.3"
   },
   "require-dev": {
     "dbrekelmans/bdi": "^1.1",

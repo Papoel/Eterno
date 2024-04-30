@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+    <file source-language="fr" target-language="fr" datatype="plaintext" original="file.ext">
+        <header>
+            <tool tool-id="symfony" tool-name="Symfony"/>
+        </header>
+        <body>
+            <!-- 4xx - Erreur du client HTTP -->
+            <trans-unit id="400" resname="Bad Request">
+                <source>Bad Request</source>
+                <target>Requête invalide.</target>
+            </trans-unit>
+            <trans-unit id="401" resname="Unauthorized">
+                <source>Unauthorized</source>
+                <target>Authentification requise.</target>
+            </trans-unit>
+            <trans-unit id="402" resname="Payment Required">
+                <source>Payment Required</source>
+                <target>Paiement requis pour accéder à la ressource.</target>
+            </trans-unit>
+            <trans-unit id="403" resname="Forbidden">
+                <source>Forbidden</source>
+                <target>Accès interdit.</target>
+            </trans-unit>
+            <trans-unit id="404" resname="Not Found">
+                <source>Not Found</source>
+                <target>Ressource non trouvée.</target>
+            </trans-unit>
+            <trans-unit id="405" resname="Method Not Allowed">
+                <source>Method Not Allowed</source>
+                <target>Méthode de requête non autorisée.</target>
+            </trans-unit>
+            <trans-unit id="406" resname="Not Acceptable">
+                <source>Not Acceptable</source>
+                <target>La ressource demandée n'est pas disponible dans un format qui respecterait les en-têtes « Accept
+                    » de la requête.
+                </target>
+            </trans-unit>
+            <trans-unit id="407" resname="Proxy Authentication Required">
+                <source>Proxy Authentication Required</source>
+                <target>Accès à la ressource autorisé par identification avec le proxy.</target>
+            </trans-unit>
+            <trans-unit id="408" resname="Request Time-out">
+                <source>Request Time-out</source>
+                <target>Temps d’attente d’une requête du client, écoulé côté serveur.</target>
+            </trans-unit>
+            <trans-unit id="409" resname="Conflict">
+                <source>Conflict</source>
+                <target>La requête ne peut être traitée à la suite d'un conflit avec l'état actuel du serveur.</target>
+            </trans-unit>
+            <trans-unit id="410" resname="Gone">
+                <source>Gone</source>
+                <target>La ressource n'est plus disponible et aucune adresse de redirection n’est connue.</target>
+            </trans-unit>
+            <trans-unit id="411" resname="Length Required">
+                <source>Length Required</source>
+                <target>La longueur de la requête n’a pas été précisée.</target>
+            </trans-unit>
+            <trans-unit id="412" resname="Precondition Failed">
+                <source>Precondition Failed</source>
+                <target>Préconditions envoyées par la requête non vérifiées.</target>
+            </trans-unit>
+            <trans-unit id="413" resname="Request Entity Too Large">
+                <source>Request Entity Too Large</source>
+                <target>Traitement abandonné dû à une requête trop importante.</target>
+            </trans-unit>
+            <trans-unit id="414" resname="Request-URI Too Long">
+                <source>Request-URI Too Long</source>
+                <target>URI trop longue.</target>
+            </trans-unit>
+            <trans-unit id="415" resname="Unsupported Media Type">
+                <source>Unsupported Media Type</source>
+                <target>Format de requête non supporté pour une méthode et une ressource données.</target>
+            </trans-unit>
+            <trans-unit id="416" resname="Requested range unsatisfiable">
+                <source>Requested range unsatisfiable</source>
+                <target>Champs d’en-tête de requête « range » incorrect.</target>
+            </trans-unit>
+            <trans-unit id="417" resname="Expectation failed">
+                <source>Expectation failed</source>
+                <target>Comportement attendu et défini dans l’en-tête de la requête insatisfaisante.</target>
+            </trans-unit>
+            <trans-unit id="418" resname="I’m a teapot">
+                <source>I’m a teapot</source>
+                <target>« Je suis une théière » : Ce code est défini dans la RFC 2324 datée du 1er avril 1998, Hyper
+                    Text Coffee Pot Control Protocol.
+                </target>
+            </trans-unit>
+            <trans-unit id="419" resname="Page expired">
+                <source>Page expired</source>
+                <target>Ressource expirée.</target>
+            </trans-unit>
+            <trans-unit id="421" resname="Bad mapping / Misdirected Request">
+                <source>Bad mapping / Misdirected Request</source>
+                <target>La requête a été envoyée à un serveur qui n'est pas capable de produire une réponse.</target>
+            </trans-unit>
+            <trans-unit id="422" resname="Unprocessable Content">
+                <source>Unprocessable Content</source>
+                <target>La requête est bien formée mais a été incapable d'être suivie en raison d'erreurs sémantiques.</target>
+            </trans-unit>
+            <trans-unit id="423" resname="Locked">
+                <source>Locked</source>
+                <target>L’opération ne peut avoir lieu car la ressource est verrouillée.</target>
+            </trans-unit>
+            <trans-unit id="424" resname="Method failure">
+                <source>Method failure</source>
+                <target>Une méthode de la transaction a échoué.</target>
+            </trans-unit>
+            <trans-unit id="425" resname="Too Early">
+                <source>Too Early</source>
+                <target>Le serveur ne peut traiter la demande car elle risque d'être rejouée.</target>
+            </trans-unit>
+            <trans-unit id="426" resname="Upgrade Required">
+                <source>Upgrade Required</source>
+                <target>Le client devrait changer de protocole, par exemple au profit de TLS/1.0.</target>
+            </trans-unit>
+            <trans-unit id="427" resname="Invalid digital signature">
+                <source>Invalid digital signature</source>
+                <target>La signature numérique du document est non-valide.</target>
+            </trans-unit>
+            <trans-unit id="428" resname="Precondition Required">
+                <source>Precondition Required</source>
+                <target>La requête doit être conditionnelle.</target>
+            </trans-unit>
+            <trans-unit id="429" resname="Too Many Requests">
+                <source>Too Many Requests</source>
+                <target>Le client a émis trop de requêtes dans un délai donné.</target>
+            </trans-unit>
+            <trans-unit id="431" resname="Request Header Fields Too Large">
+                <source>Request Header Fields Too Large</source>
+                <target>Les entêtes HTTP émises dépassent la taille maximale admise par le serveur.</target>
+            </trans-unit>
+            <trans-unit id="444" resname="No Response">
+                <source>No Response</source>
+                <target>Indique que le serveur n'a retourné aucune information vers le client et a fermé la connexion.
+                </target>
+            </trans-unit>
+            <trans-unit id="449" resname="Retry With">
+                <source>Retry With</source>
+                <target>La requête devrait être renvoyée après avoir effectué une action.</target>
+            </trans-unit>
+            <trans-unit id="450" resname="Blocked by Windows Parental Controls">
+                <source>Blocked by Windows Parental Controls</source>
+                <target>Cette erreur est produite lorsque les outils de contrôle parental de Microsoft Windows sont
+                    activés et bloquent l’accès à la page.
+                </target>
+            </trans-unit>
+            <trans-unit id="451" resname="Unavailable For Legal Reasons">
+                <source>Unavailable For Legal Reasons</source>
+                <target>La ressource demandée est inaccessible pour des raisons d'ordre légal.</target>
+            </trans-unit>
+            <trans-unit id="456" resname="Unrecoverable Error">
+                <source>Unrecoverable Error</source>
+                <target>Erreur irrécupérable.</target>
+            </trans-unit>
+            <trans-unit id="495" resname="SSL Certificate Error">
+                <source>SSL Certificate Error</source>
+                <target>Une extension de l'erreur 400 Bad Request, utilisée lorsque le client a fourni un certificat
+                    invalide.
+                </target>
+            </trans-unit>
+            <trans-unit id="496" resname="SSL Certificate Required">
+                <source>SSL Certificate Required</source>
+                <target>Une extension de l'erreur 400 Bad Request, utilisée lorsqu'un certificat client requis n'est pas
+                    fourni.
+                </target>
+            </trans-unit>
+            <trans-unit id="497" resname="HTTP Request Sent to HTTPS Port">
+                <source>HTTP Request Sent to HTTPS Port</source>
+                <target>Une extension de l'erreur 400 Bad Request, utilisée lorsque le client envoie une requête HTTP
+                    vers le port 443 normalement destiné aux requêtes HTTPS.
+                </target>
+            </trans-unit>
+            <trans-unit id="498" resname="Token expired/invalid">
+                <source>Token expired/invalid</source>
+                <target>Le jeton a expiré ou est invalide.</target>
+            </trans-unit>
+            <trans-unit id="499" resname="Client Closed Request">
+                <source>Client Closed Request</source>
+                <target>Le client a fermé la connexion avant de recevoir la réponse.</target>
+            </trans-unit>
+            <!-- 5xx - Erreur du serveur HTTP -->
+            <trans-unit id="500" resname="Internal Server Error">
+                <source>Internal Server Error</source>
+                <target>Erreur interne du serveur.</target>
+            </trans-unit>
+            <trans-unit id="501" resname="Not Implemented">
+                <source>Not Implemented</source>
+                <target>Fonctionnalité réclamée non supportée par le serveur.</target>
+            </trans-unit>
+            <trans-unit id="502" resname="Bad Gateway ou Proxy Error">
+                <source>Bad Gateway ou Proxy Error</source>
+                <target>En agissant en tant que serveur proxy ou passerelle, le serveur a reçu une réponse invalide
+                    depuis le serveur distant.
+                </target>
+            </trans-unit>
+            <trans-unit id="503" resname="Service Unavailable">
+                <source>Service Unavailable</source>
+                <target>Service temporairement indisponible ou en maintenance.</target>
+            </trans-unit>
+            <trans-unit id="504" resname="Gateway Time-out">
+                <source>Gateway Time-out</source>
+                <target>Temps d’attente d’une réponse d’un serveur à un serveur intermédiaire écoulé.</target>
+            </trans-unit>
+            <trans-unit id="505" resname="HTTP Version not supported">
+                <source>HTTP Version not supported</source>
+                <target>Version HTTP non gérée par le serveur.</target>
+            </trans-unit>
+            <trans-unit id="506" resname="Variant Also Negotiates">
+                <source>Variant Also Negotiates</source>
+                <target>Erreur de négociation. Transparent content negociation.</target>
+            </trans-unit>
+            <trans-unit id="507" resname="Insufficient storage">
+                <source>Insufficient storage</source>
+                <target>Espace insuffisant pour modifier les propriétés ou construire la collection.</target>
+            </trans-unit>
+            <trans-unit id="508" resname="Loop detected">
+                <source>Loop detected</source>
+                <target>Boucle dans une mise en relation de ressources.</target>
+            </trans-unit>
+            <trans-unit id="509" resname="Bandwidth Limit Exceeded">
+                <source>Bandwidth Limit Exceeded</source>
+                <target>Utilisé par de nombreux serveurs pour indiquer un dépassement de quota.</target>
+            </trans-unit>
+            <trans-unit id="510" resname="Not extended">
+                <source>Not extended</source>
+                <target>La requête ne respecte pas la politique d'accès aux ressources HTTP étendues.</target>
+            </trans-unit>
+            <trans-unit id="511" resname="Network Authentication Required">
+                <source>Network Authentication Required</source>
+                <target>Le client doit s'authentifier pour accéder au réseau.</target>
+            </trans-unit>
+            <!-- Cloudflare -->
+            <trans-unit id="520" resname="Unknown Error">
+                <source>Unknown Error</source>
+                <target>Réponse générique lorsque le serveur d'origine retourne un résultat imprévu.</target>
+            </trans-unit>
+            <trans-unit id="521" resname="Web Server Is Down">
+                <source>Web Server Is Down</source>
+                <target>Le serveur a refusé la connexion depuis Cloudflare.</target>
+            </trans-unit>
+            <trans-unit id="522" resname="Connection Timed Out">
+                <source>Connection Timed Out</source>
+                <target>Cloudflare n'a pas eu de retour avec le serveur d'origine dans les temps.</target>
+            </trans-unit>
+            <trans-unit id="523" resname="Origin Is Unreachable">
+                <source>Origin Is Unreachable</source>
+                <target>Cloudflare n'a pas réussi à joindre le serveur d'origine.</target>
+            </trans-unit>
+            <trans-unit id="524" resname="A Timeout Occurred">
+                <source>A Timeout Occurred</source>
+                <target>Cloudflare a établi une connexion TCP avec le serveur d'origine mais n'a pas reçu de réponse
+                    HTTP avant l'expiration du délai de connexion.
+                </target>
+            </trans-unit>
+            <trans-unit id="525" resname="SSL Handshake Failed">
+                <source>SSL Handshake Failed</source>
+                <target>Cloudflare n'a pas pu négocier un SSL/TLS handshake avec le serveur d'origine.</target>
+            </trans-unit>
+            <trans-unit id="526" resname="Invalid SSL Certificate">
+                <source>Invalid SSL Certificate</source>
+                <target>Cloudflare n'a pas pu valider le certificat SSL présenté par le serveur d'origine.</target>
+            </trans-unit>
+            <trans-unit id="527" resname="Railgun Error">
+                <source>Railgun Error</source>
+                <target>La requête a dépassé le délai de connexion ou a échoué après que la connexion WAN a été
+                    établie.
+                </target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>
