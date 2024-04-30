@@ -30,6 +30,7 @@
     </listeners>
 
     <extensions>
+        <extension class="Symfony\Component\Panther\ServerExtension" />
         <extension class="Symfony\Component\Panther\ServerExtension"/>
     </extensions>
 </phpunit>
