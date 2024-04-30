@@ -41,12 +41,12 @@ class EternoFixtures extends Fixture
             $user = new User();
             $user->setFirstname($faker->firstName());
             $user->setLastname($faker->lastName());
-            $user->setUsername(ucfirst($user->getFirstname()) . '-' . ucfirst($user->getLastname()));
-            $user->setEmail('email' . $i . '@eterno.fr');
-            $hash = $this->passwordHasher->hashPassword($user, 'password' . $i);
+            $user->setUsername(ucfirst($user->getFirstname()).'-'.ucfirst($user->getLastname()));
+            $user->setEmail('email'.$i.'@eterno.fr');
+            $hash = $this->passwordHasher->hashPassword($user, 'password'.$i);
             $user->setPassword($hash);
             $user->setBirthday($faker->dateTimeBetween('-65 years', '-18 years'));
-            $user->setMobile('0' . $faker->numberBetween(6, 7) . $faker->randomNumber(8, true));
+            $user->setMobile('0'.$faker->numberBetween(6, 7).$faker->randomNumber(8, true));
 
             $manager->persist($user);
             $users[] = $user;
@@ -60,11 +60,11 @@ class EternoFixtures extends Fixture
             $light->setUserAccount($user);
             $light->setFirstname($faker->firstName());
             $light->setLastname($faker->lastName());
-            $light->setUsername(ucfirst($light->getFirstname()) . '-' . ucfirst($light->getLastname()));
+            $light->setUsername(ucfirst($light->getFirstname()).'-'.ucfirst($light->getLastname()));
             $age = $faker->numberBetween(18, 65);
             $currentYear = date('Y');
             $yearOfBirth = $currentYear - $age;
-            $date = $faker->dateTimeBetween($yearOfBirth . '-01-01', $yearOfBirth . '-12-31');
+            $date = $faker->dateTimeBetween($yearOfBirth.'-01-01', $yearOfBirth.'-12-31');
             $light->setBirthdayAt($date);
             $date = $faker->dateTimeBetween($light->getBirthdayAt()->format('Y-m-d'), 'now');
             $light->setDeceasedAt($date);
@@ -90,7 +90,6 @@ class EternoFixtures extends Fixture
 
             $manager->persist($message);
         }
-
 
         $manager->flush();
     }

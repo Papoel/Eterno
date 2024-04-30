@@ -6,7 +6,6 @@ use App\Repository\InvitationRepository;
 use App\Repository\LightRepository;
 use App\Repository\MessageRepository;
 use App\Repository\UserRepository;
-use DateTime;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -47,11 +46,10 @@ class AdminController extends AbstractController
         // Récupérer les données des messages par mois
         $messagesByMonth = $this->messageRepository->countMessagesByMonth();
 
-
         // Traduire les noms des mois en français
         $monthNamesFrench = [
             'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',
-            'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'
+            'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre',
         ];
 
         // Utiliser array_combine pour associer les données des messages avec les noms des mois en français
@@ -61,10 +59,10 @@ class AdminController extends AbstractController
         $data = [];
 
         // Obtenir le numéro du mois actuel (1 pour janvier, 2 pour février, etc.)
-        $currentMonth = (int)date(format: 'n');
+        $currentMonth = (int) date(format: 'n');
 
         // Parcourir les quatre derniers mois, y compris le mois actuel
-        for ($i = 0; $i < 4; $i++) {
+        for ($i = 0; $i < 4; ++$i) {
             // Calculer le mois en soustrayant $i de la valeur du mois actuel
             $month = $currentMonth - $i;
 

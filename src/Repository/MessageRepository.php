@@ -4,9 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Message;
 use App\Entity\User;
-use DateTimeInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\Query\Expr\Func;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Uid\Uuid;
 use Vtiful\Kernel\Format;
@@ -84,14 +82,14 @@ class MessageRepository extends ServiceEntityRepository
 
         // Initialiser le tableau avec tous les mois de l'année en cours et un nombre de messages de zéro
         $mois_de_l_annee = [];
-        for ($mois = 1; $mois <= 12; $mois++) {
+        for ($mois = 1; $mois <= 12; ++$mois) {
             $mois_de_l_annee[$mois] = 0;
         }
 
         // Remplir le tableau avec les résultats de la requête
         foreach ($results as $result) {
             $mois = \DateTime::createFromFormat(format: '!m', datetime: $result['mois'])->format(format: 'F');
-            $mois_de_l_annee[(int)$result['mois']] = $result['nombre_messages'];
+            $mois_de_l_annee[(int) $result['mois']] = $result['nombre_messages'];
         }
 
         // Formater les noms des mois en français
@@ -102,7 +100,6 @@ class MessageRepository extends ServiceEntityRepository
 
         return $message_mensuel;
     }
-
 
     /*public function countMessagesPerMonth(int $month): int
     {
@@ -125,7 +122,4 @@ class MessageRepository extends ServiceEntityRepository
 
         return $count;
     }*/
-
-
-
 }
