@@ -22,95 +22,76 @@ class EternoFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
         $faker = Faker::create(locale: 'fr_FR');
-
-        /** @var User $users */
-        $users = [];
+        // Génération de l'administrateur
         $admin = new User();
-        $admin->setFirstname(firstname: 'pascal');
-        $admin->setLastname(lastname: 'briffard');
-        $admin->setUsername(username: 'papoel');
-        $admin->setBirthday(birthday: new \DateTime(datetime: '1985-02-20'));
-        $admin->setMobile(mobile: '0766345110');
+        $admin->setFirstname(firstname: 'Pascal');
+        $admin->setUsername(username: 'Papoel');
         $admin->setEmail(email: 'admin@eterno.fr');
-        $hash = $this->passwordHasher->hashPassword(user: $admin, plainPassword: 'admin');
+        $hash = $this->passwordHasher->hashPassword($admin, 'admin');
         $admin->setPassword(password: $hash);
         $admin->setRoles(roles: ['ROLE_ADMIN']);
+        $admin->setBirthday(birthday: date_create('1985-02-20'));
+        $admin->setMobile(mobile: '0605040302');
 
         $manager->persist($admin);
-        $users[] = $admin;
 
-        /* Génération de 5 utilisateurs */
+        // Génération des utilisateurs
+        $users = [];
         for ($i = 1; $i <= 5; ++$i) {
             $user = new User();
-            $user->setFirstname(firstname: $faker->firstName());
-            $user->setLastname(lastname: $faker->lastName());
-            $user->setUsername(username: ucfirst($user->getFirstname()).'-'.ucfirst($user->getLastname()));
-            $user->setEmail(email: 'email'.$i.'@eterno.fr');
-            $hash = $this->passwordHasher->hashPassword(user: $user, plainPassword: 'password'.$i);
-            $user->setPassword(password: $hash);
-            $user->setBirthday(birthday: $faker->dateTimeBetween(startDate: '-65 years', endDate: '-18 years'));
-            // Fake phone number format (FR) starting with 06 or 07
-            $user->setMobile(mobile: '0'.$faker->numberBetween(int1: 6, int2: 7).$faker->randomNumber(nbDigits: 8, strict: true));
+            $user->setFirstname($faker->firstName());
+            $user->setLastname($faker->lastName());
+            $user->setUsername(ucfirst($user->getFirstname()) . '-' . ucfirst($user->getLastname()));
+            $user->setEmail('email' . $i . '@eterno.fr');
+            $hash = $this->passwordHasher->hashPassword($user, 'password' . $i);
+            $user->setPassword($hash);
+            $user->setBirthday($faker->dateTimeBetween('-65 years', '-18 years'));
+            $user->setMobile('0' . $faker->numberBetween(6, 7) . $faker->randomNumber(8, true));
 
             $manager->persist($user);
             $users[] = $user;
         }
 
-        /** Génération de 10 Lights */
+        // Génération des lumières
         $lights = [];
         for ($i = 1; $i <= 10; ++$i) {
             $light = new Light();
             $user = $faker->randomElement($users);
-
-            // Vérifie si l'utilisateur a déjà des Lights.
-            $existingLights = $user->getLights();
-
-            // Si l'utilisateur a déjà un Light, ajoute aléatoirement un Light à un autre utilisateur.
-            if (!empty($existingLights) && $faker->boolean(chanceOfGettingTrue: 50)) {
-                $usersWithoutLights = array_diff((array) $users, [$user]);
-                $otherUser = $faker->randomElement($usersWithoutLights);
-                $light->setUserAccount($otherUser);
-            } else {
-                $light->setUserAccount($user);
-            }
-
+            $light->setUserAccount($user);
             $light->setFirstname($faker->firstName());
             $light->setLastname($faker->lastName());
-            $light->setUsername(username: ucfirst($light->getFirstname()).'-'.ucfirst($light->getLastname()));
-
-            $age = $faker->numberBetween(int1: 18, int2: 65);
-            $currentYear = date(format: 'Y');
+            $light->setUsername(ucfirst($light->getFirstname()) . '-' . ucfirst($light->getLastname()));
+            $age = $faker->numberBetween(18, 65);
+            $currentYear = date('Y');
             $yearOfBirth = $currentYear - $age;
-            $date = $faker->dateTimeBetween(startDate: $yearOfBirth.'-01-01', endDate: $yearOfBirth.'-12-31');
+            $date = $faker->dateTimeBetween($yearOfBirth . '-01-01', $yearOfBirth . '-12-31');
             $light->setBirthdayAt($date);
-
-            $date = $faker->dateTimeBetween($light->getBirthdayAt()->format(format: 'Y-m-d'), endDate: 'now');
+            $date = $faker->dateTimeBetween($light->getBirthdayAt()->format('Y-m-d'), 'now');
             $light->setDeceasedAt($date);
 
             $manager->persist($light);
             $lights[] = $light;
         }
 
-        /* Générer des messages de User vers Light */
+        // Génération des messages
         for ($i = 1; $i <= 5000; ++$i) {
             $message = new Message();
             $sender = $faker->randomElement($users);
-
-            // Sélectionne aléatoirement un destinataire (Light) à chaque itération.
             $recipient = $faker->randomElement($lights);
+            $message->setUserAccount($sender);
+            $message->setLight($recipient);
+            $content = $faker->text(1000);
+            $message->setContent($this->encryptService->encrypt($content, $sender->getPassword()));
 
-            // Assure-toi que le message est envoyé par un utilisateur vers un light.
-            $message->setUserAccount(userAccount: $sender);
-            $message->setLight(light: $recipient);
-            $content = $faker->text(maxNbChars: 1000);
-            $message->setContent($this->encryptService->encrypt(data: $content, privateKey: $sender->getPassword()));
-
-            $date = $faker->dateTimeBetween(startDate: '-6 months', endDate: 'yesterday');
-            $immutable = \DateTimeImmutable::createFromMutable($date);
-            $message->setCreatedAt($immutable);
+            // Utiliser DateTimeImmutable pour la date de création
+            $date = $faker->dateTimeBetween(startDate: '-1 year', endDate: 'now');
+            $immutableDate = \DateTimeImmutable::createFromMutable($date);
+            $message->setCreatedAt($immutableDate);
 
             $manager->persist($message);
         }
+
+
         $manager->flush();
     }
 }

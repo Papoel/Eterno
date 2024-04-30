@@ -1,3 +1,4 @@
+import './bootstrap.js';
 // Import CSS Folder
 import './css/app.css';
 import './css/color.css';
@@ -26,3 +27,15 @@ import './vendor/colors/colors.index.js';
 import './vendor/plyr/plyr.js';
 import './vendor/tiny-slider/tiny-slider.js';
 import './vendor/notyf/notyf.index.js';
+import './vendor/chart.js/auto.js';
+import './vendor/chart.js/helpers.js';
+import './vendor/chartjs-plugin-zoom/chartjs-plugin-zoom.index.js';
+
+// assets/app.js
+import zoomPlugin from 'chartjs-plugin-zoom';
+
+// register globally for all charts
+document.addEventListener('chartjs:init', function (event) {
+    const Chart = event.detail.Chart;
+    Chart.register(zoomPlugin);
+});

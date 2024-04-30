@@ -51,5 +51,25 @@ return [
     'notyf' => [
         'version' => '3.10.0',
     ],
-    // https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css
+    '@hotwired/stimulus' => [
+        'version' => '3.2.2',
+    ],
+    '@symfony/stimulus-bundle' => [
+        'path' => './vendor/symfony/stimulus-bundle/assets/dist/loader.js',
+    ],
+    'chart.js/auto' => [
+        'version' => '3.9.1',
+    ],
+    'chartjs-plugin-zoom' => [
+        'version' => '2.0.1',
+    ],
+    'hammerjs' => [
+        'version' => '2.0.8',
+    ],
+    'chart.js/helpers' => [
+        'version' => '4.4.1',
+    ],
+    '@kurkle/color' => [
+        'version' => '0.3.2',
+    ],
 ];
