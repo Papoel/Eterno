@@ -20,4 +20,19 @@ class LightRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Light::class);
     }
+
+    /* Count Lights */
+    public function countLights(): int
+    {
+        $result = $this->createQueryBuilder(alias: 'l')
+            ->select(select: 'COUNT(l.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
+
+        if (!is_int($result)) {
+            throw new \RuntimeException(message: 'Une erreur est survenue lors du comptage des lumières.');
+        }
+
+        return $result;
+    }
 }
