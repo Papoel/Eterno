@@ -100,6 +100,6 @@
     <body {% block body_attributes %}{% endblock %}>
         {{ include('partials/_notyf.html.twig') }}
         {% block body %}{% endblock %}
-        {{ include('partials/_footer.html.twig') }}
+        {% block footer %}{{ include('partials/_footer.html.twig') }}{% endblock %}
     </body>
 </html>
