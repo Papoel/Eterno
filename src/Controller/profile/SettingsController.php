@@ -39,7 +39,7 @@ class SettingsController extends AbstractController
         Request $request,
         Security $security,
         InvitationRepository $invitationRepository,
-        MailerService $mailerService
+        MailerService $mailerService,
     ): Response {
         /** @var User $user */
         $user = $security->getUser();

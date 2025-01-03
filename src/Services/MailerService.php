@@ -81,7 +81,7 @@ readonly class MailerService
      * @throws TransportExceptionInterface
      */
     public function sendInvitationEmail(
-        FormInterface $form
+        FormInterface $form,
     ): void {
         $data = $form->getData();
         /** @phpstan-ignore-next-line */

@@ -82,15 +82,15 @@ class LightType extends AbstractType
                 'widget' => 'single_text',
                 'required' => false,
                 'constraints' => [
-                   new Callback(callback: function ($object, ExecutionContextInterface $context) {
-                       $today = new \DateTime();
+                    new Callback(callback: function ($object, ExecutionContextInterface $context) {
+                        $today = new \DateTime();
 
-                       if ($object > $today) {
-                           $context->buildViolation(message: 'La date de décès ne peut pas être supérieure à la date du jour.')
-                                ->atPath(path: 'deceasedAt')
-                                ->addViolation();
-                       }
-                   }),
+                        if ($object > $today) {
+                            $context->buildViolation(message: 'La date de décès ne peut pas être supérieure à la date du jour.')
+                                 ->atPath(path: 'deceasedAt')
+                                 ->addViolation();
+                        }
+                    }),
                 ],
             ])
             ->addEventSubscriber(subscriber: new PictureLightSubscriber())

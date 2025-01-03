@@ -72,7 +72,7 @@ class UserController extends AbstractController
         EntityManagerInterface $entityManager,
         UserRepository $userRepository,
         InvitationRepository $invitationRepository,
-        Request $request
+        Request $request,
     ): Response {
         $user = $userRepository->find($request->attributes->get(key: 'id'));
         $invitations = $invitationRepository->findBy(['friend' => $user]);
