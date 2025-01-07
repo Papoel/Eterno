@@ -30,6 +30,25 @@
                     </div>
                 </div>
 
+                {% if lights is empty %}
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-md-6 text-center">
+                                <h2 class="text-muted my-5">Aucune lumière n'a encore été allumée.</h2>
+                            </div>
+                        </div>
+                    </div>
+                    {# CTA: Create light #}
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-md-6 text-center">
+                                <a href="{{ path('app_light_new') }}" class="btn btn-primary">Allumer votre première lumière</a>
+                            </div>
+                        </div>
+                    </div>
+
+                {% endif %}
+
         </section>
     </main>
 {% endblock %}
