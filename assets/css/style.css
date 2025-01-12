@@ -17291,10 +17291,9 @@ a.badge:hover {
 
 .iphone-x.iphone-x-half {
     height: 300px;
-    background-image: url(../images/mockup/app-placeholder3.jpg);
 }
 
-@media (max-width: 575.98px) {
+@media (max-width: 576px) {
     .iphone-x, .iphone-x.iphone-x-small {
         width: 260px;
         height: 540px;
@@ -17955,5 +17954,27 @@ a.badge:hover {
     display: none !important;
 }
 
-/*User CSS*/
-/*# sourceMappingURL=style.css.map */
+/* Toggle Password */
+.password-toggle-icon svg {
+    width: 1.25rem;
+    height: 1.25rem;
+    transition: color 0.3s ease;
+}
+.password-toggle-icon.input-group-text {
+    background: transparent;
+    border-left: none;
+    padding: 0.5rem;
+    cursor: pointer;
+}
+/* Couleur quand le mot de passe est masqué */
+.password-toggle-icon svg {
+    color: #262626; 
+}
+/* Couleur quand le mot de passe est visible */
+.password-toggle-icon.password-visible svg {
+    color: var(--bs-danger);
+}
+/* Effet hover */
+.password-toggle-icon:hover svg {
+    color: var(--bs-danger);
+}

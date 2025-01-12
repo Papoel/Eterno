@@ -16,6 +16,7 @@ import './vendor/tiny-slider/tiny-slider.css';
 // Import JS Folder
 import './js/functions.js';
 import './js/notyf.js';
+import './js/password-toggle.js';
 
 // Import Vendor JS
 import './vendor/bootstrap/dist/js/bootstrap.min.js';

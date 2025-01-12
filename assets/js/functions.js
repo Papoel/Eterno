@@ -72,7 +72,7 @@ Table Of Content
 let e = {
 	init: function () {
 			e.toasts(),
-			e.fakePwd(),
+			//e.fakePwd(),
 			e.preLoader(),
 			e.navbarDropdownHover(),
 			e.tinySlider(),
@@ -710,7 +710,7 @@ let e = {
 	// END: pswMeter
 
 	// START: 18 Fake Password
-	fakePwd: function() {
+	/*fakePwd: function() {
 		document.addEventListener('DOMContentLoaded', function() {
 			const passwordFields = document.querySelectorAll('.password');
 			const togglerIcons = document.querySelectorAll('.password-icon');
@@ -734,7 +734,7 @@ let e = {
 				togglePasswordVisibility(passwordField, togglerIcons[index]);
 			});
 		});
-	},
+	},*/
 	// END: Fake Password
 
 	// START: 19 Menu Dropdown
@@ -745,28 +745,32 @@ let e = {
 			// Récupérer l'élément du menu
 			let profileDropdownMenu = document.getElementById("profileDropdownMenu");
 
-			// Ajouter un écouteur d'événements pour le clic sur l'avatar
-			profileDropdown.addEventListener("click", function(event) {
-				// Empêcher la propagation de l'événement pour éviter que le clic ne se propage à d'autres éléments
-				event.stopPropagation();
+			// Vérifier si les éléments existent avant d'ajouter les listeners
+			if (profileDropdown && profileDropdownMenu) {
 
-				// Afficher ou masquer le menu en modifiant son attribut de style
-				if (profileDropdownMenu.style.display === "block") {
+				// Ajouter un écouteur d'événements pour le clic sur l'avatar
+				profileDropdown.addEventListener("click", function (event) {
+					// Empêcher la propagation de l'événement pour éviter que le clic ne se propage à d'autres éléments
+					event.stopPropagation();
+
+					// Afficher ou masquer le menu en modifiant son attribut de style
+					if (profileDropdownMenu.style.display === "block") {
+						profileDropdownMenu.style.display = "none";
+					} else {
+						profileDropdownMenu.style.display = "block";
+					}
+				});
+
+				// Ajouter un écouteur d'événements pour le clic sur le document pour masquer le menu
+				document.addEventListener("click", function () {
 					profileDropdownMenu.style.display = "none";
-				} else {
-					profileDropdownMenu.style.display = "block";
-				}
-			});
+				});
 
-			// Ajouter un écouteur d'événements pour le clic sur le document pour masquer le menu
-			document.addEventListener("click", function() {
-				profileDropdownMenu.style.display = "none";
-			});
-
-			// Empêcher la propagation du clic depuis le menu lui-même
-			profileDropdownMenu.addEventListener("click", function(event) {
-				event.stopPropagation();
-			});
+				// Empêcher la propagation du clic depuis le menu lui-même
+				profileDropdownMenu.addEventListener("click", function (event) {
+					event.stopPropagation();
+				});
+			}
 		});
 	},
 	// END: Menu Dropdown

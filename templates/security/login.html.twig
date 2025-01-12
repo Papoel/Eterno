@@ -2,117 +2,105 @@
 
 {% block title %}Connexion{% endblock %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/password-toggle.css') }}">
+{% endblock %}
+
 {% block body %}
     <!-- **************** MAIN CONTENT START **************** -->
-
-    <form method="post">
-
-        {% if error %}
-            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-        {% endif %}
-
-        {% if app.user %}
-            <div class="mb-3 alert alert-danger">
-                Vous êtes déjà connecté en tant que <strong> {{ app.user.userIdentifier }} </strong>.
-                <a href="{{ path('app_logout') }}">cliquez ici pour vous déconnecter</a>.
-            </div>
-        {% endif %}
-
-        <!-- Container START -->
-        <div class="container">
-
-            <div class="row justify-content-center align-items-center vh-100 py-5">
-                <!-- Main content START -->
-                <div class="col-sm-10 col-md-8 col-lg-7 col-xl-6 col-xxl-5">
-                    {{ include('partials/_notifications.html.twig') }}
-                    <!-- Sign in START -->
-                    <div class="card card-body text-center p-4 p-sm-5 shadow-lg">
-                        <!-- Title -->
-                        <h1 class="mb-2"
+    <!-- Container START -->
+    <div class="container">
+        <div class="row justify-content-center align-items-center vh-100 py-5">
+            <!-- Main content START -->
+            <div class="col-sm-10 col-md-8 col-lg-7 col-xl-6 col-xxl-5">
+                {{ include('partials/_notifications.html.twig') }}
+                <!-- Sign in START -->
+                <div class="card card-body p-4 p-sm-5 shadow-lg">
+                    <!-- Title -->
+                    <h1 class="mb-2"
                         style="font-size: 2.5rem;
-                        background: linear-gradient(90deg, #ff8a00, #e52e71); -webkit-background-clip: text;
-                        -webkit-text-fill-color: transparent;">
-                            Connexion
-                        </h1>
-                        <p class="mb-2">Connectez-vous à votre compte pour continuer.</p>
-                        <p class="bg-warning-subtle p-2 mb-4 text-start text-dark-emphasis rounded-1">
-                            Vous pourrez inviter vos amis à rejoindre notre plateforme, une fois connecté.
+                    background: linear-gradient(90deg, #ff8a00, #e52e71); -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;">
+                        Connexion
+                    </h1>
+                    <p class="mb-2">Connectez-vous à votre compte pour continuer.</p>
+                    <p class="bg-warning-subtle p-2 mb-4 text-start text-dark-emphasis rounded-1">
+                        Vous pourrez inviter vos amis à rejoindre notre plateforme, une fois connecté.
+                    </p>
+
+                    {% if error %}
+                        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                    {% endif %}
+
+                    {% if app.user %}
+                        <div class="mb-3 alert alert-danger">
+                            Vous êtes déjà connecté en tant que <strong> {{ app.user.userIdentifier }} </strong>.
+                            <a href="{{ path('app_logout') }}">cliquez ici pour vous déconnecter</a>.
+                        </div>
+                    {% endif %}
+                    <!-- Form START -->
+                    <form class="mt-sm-4" method="post">
+                        <!-- Email -->
+                        <div class="mb-3 input-group">
+                            <label for="inputEmail"></label>
+                            <input id="inputEmail"
+                                   class="form-control"
+                                   name="email"
+                                   type="text"
+                                   value="{{ last_username }}"
+                                   placeholder="Entrer votre email ou votre pseudo"
+                                   autocomplete="email" required autofocus>
+                        </div>
+                        <!-- Password -->
+                        <div class="mb-3 position-relative">
+                            <div class="input-group">
+                                <label for="inputPassword"></label>
+                                <input id="inputPassword"
+                                       class="form-control password"
+                                       type="password"
+                                       name="password"
+                                       placeholder="Entrer votre mot de passe"
+                                       autocomplete="current-password"
+                                       required>
+                                <span class="input-group-text password-toggle-icon">
+                                    <svg id="show-hide" 
+                                         class="password-icon" 
+                                         viewBox="0 0 16 16"
+                                         width="16"
+                                         height="16"
+                                         role="button"
+                                         aria-label="Toggle password visibility">
+                                    </svg>
+                                </span>
+                            </div>
+                        </div>
+                        <!-- Reset password link -->
+                        <div class="mb-3 text-end">
+                            <a href="#" class="btn btn-sm btn-link text-info-emphasis">
+                                Mot de passe oublié ?
+                            </a>
+                        </div>
+
+                        <!-- Token -->
+                        <input type="hidden" name="_csrf_token"
+                               value="{{ csrf_token('authenticate') }}">
+                        <!-- Button -->
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-lg btn-primary-soft">Connexion</button>
+                        </div>
+                        <!-- Copyright -->
+                        <p class="mb-0 mt-3"> {{ 'now' | date('Y') }}
+                            <a target="_blank" href="https://www.github.com/Papoel">
+                                Papoel &middot;
+                            </a> Tous droits réservés.
                         </p>
-                        <!-- Form START -->
-                        <form class="mt-sm-4">
-                            <!-- Email -->
-                            <div class="mb-3 input-group">
-                                <label for="inputEmail"></label>
-                                <input id="inputEmail"
-                                       class="form-control"
-                                       name="email"
-                                       type="text" {# TODO: Ajuster #}
-                                       value="{{ last_username }}"
-                                       placeholder="Entrer votre email ou votre pseudo"
-                                       autocomplete="email" required autofocus>
-                            </div>
-                            <!-- New password -->
-                            <div class="mb-3 position-relative">
-                                <!-- Password -->
-                                <div class="input-group">
-                                    <label for="inputPassword"></label>
-                                    <input id="inputPassword"
-                                           class="form-control password"
-                                           type="password"
-                                           name="password"
-                                           placeholder="Entrer votre mot de passe"
-                                           autocomplete="current-password" required>
-                                    <span class="input-group-text p-0">
-                                        <i class="password-icon mt-2 fa-solid fa-eye-slash cursor-pointer p-2 w-40px align-middle"></i>
-                                    </span>
-                                </div>
-                            </div>
-                            <!-- Simple link for reset password -->
-                            <div class="mb-3 text-end">
-                                <a href="#" class="btn btn-sm btn-link text-info-emphasis">
-                                    Mot de passe oublié ?
-                                </a>
-                            </div>
-
-
-                            <!-- Token -->
-                            <input type="hidden" name="_csrf_token"
-                                   value="{{ csrf_token('authenticate') }}"
-                            >
-                            <!-- Button -->
-                            <div class="d-grid">
-                                <button type="submit" class="btn btn-lg btn-primary-soft">Connexion</button>
-                            </div>
-                            <!-- Copyright -->
-                            <p class="mb-0 mt-3">©{{ 'now' | date('Y') }}
-                                <a target="_blank" href="https://www.github.com/Papoel">
-                                    Papoel &middot;
-                                </a> Tous droits réservés.
-                            </p>
-                        </form>
-                        <!-- Form END -->
-                    </div>
-                    <!-- Sign in START -->
+                    </form>
+                    <!-- Form END -->
                 </div>
-            </div> <!-- Row END -->
-        </div>
-        <!-- Container END -->
-    </form>
+                <!-- Sign in END -->
+            </div>
+        </div> <!-- Row END -->
+    </div> <!-- Container END -->
 
-    <script>
-        const passwordIcon = document.querySelector('.password-icon');
-        const passwordInput = document.querySelector('.password');
-
-        passwordIcon.addEventListener('click', () => {
-            if (passwordInput.type === 'password') {
-                passwordInput.type = 'text';
-                passwordIcon.classList.remove('fa-eye-slash');
-                passwordIcon.classList.add('fa-eye');
-            } else {
-                passwordInput.type = 'password';
-                passwordIcon.classList.remove('fa-eye');
-                passwordIcon.classList.add('fa-eye-slash');
-            }
-        });
-    </script>
 {% endblock %}
