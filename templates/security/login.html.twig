@@ -2,11 +2,6 @@
 
 {% block title %}Connexion{% endblock %}
 
-{% block stylesheets %}
-    {{ parent() }}
-    <link rel="stylesheet" href="{{ asset('css/password-toggle.css') }}">
-{% endblock %}
-
 {% block body %}
     <!-- **************** MAIN CONTENT START **************** -->
     <!-- Container START -->
@@ -64,8 +59,8 @@
                                        autocomplete="current-password"
                                        required>
                                 <span class="input-group-text password-toggle-icon">
-                                    <svg id="show-hide" 
-                                         class="password-icon" 
+                                    <svg id="show-hide"
+                                         class="password-icon"
                                          viewBox="0 0 16 16"
                                          width="16"
                                          height="16"
