@@ -115,6 +115,9 @@ server-restart: ## Redémarrer le serveur | stop + start
 certificat: ## Installer le certificat | symfony server:ca:install
 	$(SYMFONY_BIN) server:ca:install
 
+compile: ## Compiler les assets | php bin/console asset-map:compile
+	$(SYMFONY) asset-map:compile
+
 # --------------------
 # Commandes de debug
 # --------------------
