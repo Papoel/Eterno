@@ -117,6 +117,7 @@ certificat: ## Installer le certificat | symfony server:ca:install
 
 compile: ## Compiler les assets | php bin/console asset-map:compile
 	$(SYMFONY) asset-map:compile
+	$(SYMFONY) app:rename_file
 
 # --------------------
 # Commandes de debug
