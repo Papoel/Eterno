@@ -4,6 +4,7 @@
         <meta charset="UTF-8">
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="color-scheme" content="dark">
         <meta name="author" content="Papoel">
         <meta name="description"
               content="Un espace pour honorer et se souvenir de nos êtres chers disparus, où vous pouvez envoyer des messages à ceux qui sont partis."
@@ -101,5 +102,9 @@
         {{ include('partials/_notyf.html.twig') }}
         {% block body %}{% endblock %}
         {% block footer %}{{ include('partials/_footer.html.twig') }}{% endblock %}
+        <script>
+            document.documentElement.setAttribute('data-bs-theme', 'dark');
+            localStorage.setItem('theme', 'dark');
+        </script>
     </body>
 </html>
