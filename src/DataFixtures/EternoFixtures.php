@@ -24,13 +24,14 @@ class EternoFixtures extends Fixture
         $faker = Faker::create(locale: 'fr_FR');
         // Génération de l'administrateur
         $admin = new User();
-        $admin->setFirstname(firstname: 'Pascal');
-        $admin->setUsername(username: 'Papoel');
-        $admin->setEmail(email: 'admin@eterno.fr');
-        $hash = $this->passwordHasher->hashPassword($admin, 'admin');
+        $admin->setFirstname(firstname: 'Bruce');
+        $admin->setLastname(lastname: 'Wayne');
+        $admin->setUsername(username: 'Batman');
+        $admin->setEmail(email: 'bruce.wayne@gotham.city');
+        $hash = $this->passwordHasher->hashPassword(user: $admin, plainPassword: 'admin');
         $admin->setPassword(password: $hash);
         $admin->setRoles(roles: ['ROLE_ADMIN']);
-        $admin->setBirthday(birthday: date_create('1985-02-20'));
+        $admin->setBirthday(birthday: date_create(datetime: '1985-02-20'));
         $admin->setMobile(mobile: '0605040302');
 
         $manager->persist($admin);
@@ -39,14 +40,14 @@ class EternoFixtures extends Fixture
         $users = [];
         for ($i = 1; $i <= 5; ++$i) {
             $user = new User();
-            $user->setFirstname($faker->firstName());
-            $user->setLastname($faker->lastName());
-            $user->setUsername(ucfirst($user->getFirstname()).'-'.ucfirst($user->getLastname()));
-            $user->setEmail('email'.$i.'@eterno.fr');
-            $hash = $this->passwordHasher->hashPassword($user, 'password'.$i);
-            $user->setPassword($hash);
-            $user->setBirthday($faker->dateTimeBetween('-65 years', '-18 years'));
-            $user->setMobile('0'.$faker->numberBetween(6, 7).$faker->randomNumber(8, true));
+            $user->setFirstname(firstname: $faker->firstName());
+            $user->setLastname(lastname: $faker->lastName());
+            $user->setUsername(username: ucfirst($user->getFirstname()).'-'.ucfirst($user->getLastname()));
+            $user->setEmail(email: 'email'.$i.'@eterno.fr');
+            $hash = $this->passwordHasher->hashPassword(user: $user, plainPassword: 'password'.$i);
+            $user->setPassword(password: $hash);
+            $user->setBirthday(birthday: $faker->dateTimeBetween(startDate: '-65 years', endDate: '-18 years'));
+            $user->setMobile(mobile: '0'.$faker->numberBetween(int1: 6, int2: 7).$faker->randomNumber(nbDigits: 8, strict: true));
 
             $manager->persist($user);
             $users[] = $user;
@@ -57,17 +58,17 @@ class EternoFixtures extends Fixture
         for ($i = 1; $i <= 10; ++$i) {
             $light = new Light();
             $user = $faker->randomElement($users);
-            $light->setUserAccount($user);
-            $light->setFirstname($faker->firstName());
-            $light->setLastname($faker->lastName());
-            $light->setUsername(ucfirst($light->getFirstname()).'-'.ucfirst($light->getLastname()));
-            $age = $faker->numberBetween(18, 65);
-            $currentYear = date('Y');
+            $light->setUserAccount(userAccount: $user);
+            $light->setFirstname(firstname: $faker->firstName());
+            $light->setLastname(lastname: $faker->lastName());
+            $light->setUsername(username: ucfirst(string: $light->getFirstname()).'-'.ucfirst($light->getLastname()));
+            $age = $faker->numberBetween(int1: 18, int2: 65);
+            $currentYear = date(format: 'Y');
             $yearOfBirth = $currentYear - $age;
-            $date = $faker->dateTimeBetween($yearOfBirth.'-01-01', $yearOfBirth.'-12-31');
-            $light->setBirthdayAt($date);
-            $date = $faker->dateTimeBetween($light->getBirthdayAt()->format('Y-m-d'), 'now');
-            $light->setDeceasedAt($date);
+            $date = $faker->dateTimeBetween(startDate: $yearOfBirth.'-01-01', endDate: $yearOfBirth.'-12-31');
+            $light->setBirthdayAt(birthdayAt: $date);
+            $date = $faker->dateTimeBetween($light->getBirthdayAt()->format(format: 'Y-m-d'));
+            $light->setDeceasedAt(deceasedAt: $date);
 
             $manager->persist($light);
             $lights[] = $light;
@@ -78,15 +79,15 @@ class EternoFixtures extends Fixture
             $message = new Message();
             $sender = $faker->randomElement($users);
             $recipient = $faker->randomElement($lights);
-            $message->setUserAccount($sender);
-            $message->setLight($recipient);
-            $content = $faker->text(1000);
-            $message->setContent($this->encryptService->encrypt($content, $sender->getPassword()));
+            $message->setUserAccount(userAccount: $sender);
+            $message->setLight(light: $recipient);
+            $content = $faker->text(maxNbChars: 1000);
+            $message->setContent(content: $this->encryptService->encrypt(data: $content, privateKey: $sender->getPassword()));
 
             // Utiliser DateTimeImmutable pour la date de création
-            $date = $faker->dateTimeBetween(startDate: '-1 year', endDate: 'now');
+            $date = $faker->dateTimeBetween(startDate: '-1 year');
             $immutableDate = \DateTimeImmutable::createFromMutable($date);
-            $message->setCreatedAt($immutableDate);
+            $message->setCreatedAt(createdAt: $immutableDate);
 
             $manager->persist($message);
         }
