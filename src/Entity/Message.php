@@ -6,7 +6,7 @@ use App\Entity\Traits\CreatedAtTrait;
 use App\Repository\MessageRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Uid\Ulid;
+use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: MessageRepository::class)]
@@ -17,10 +17,10 @@ class Message
     use CreatedAtTrait;
 
     #[ORM\Id]
-    #[ORM\Column(type: 'ulid', unique: true)]
+    #[ORM\Column(type: 'uuid', unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
-    #[ORM\CustomIdGenerator(class: 'doctrine.ulid_generator')]
-    private ?Ulid $id = null;
+    #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
+    private ?Uuid $id = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: false)]
     #[Assert\NotBlank]
@@ -42,7 +42,7 @@ class Message
     #[Assert\Valid]
     private Light $light;
 
-    public function getId(): ?Ulid
+    public function getId(): ?Uuid
     {
         return $this->id;
     }
