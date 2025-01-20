@@ -323,6 +323,19 @@ migrate: ## Exécuter les migrations | symfony console doctrine:migrations:migra
 fixtures: ## Créer des fixtures | symfony console make:fixtures
 	$(SYMFONY) make:fixtures
 
+truncate: ## Effacer le contenu d'une table | symfony console dbal:run-sql "TRUNCATE $table_name"
+	@read -p "Nom de la table à effacer : " table_name; \
+	read -p "Forcer la suppression ? (y/n): " answer; \
+	if [ "$$answer" = "y" ]; then \
+		$(SYMFONY) dbal:run-sql "SET FOREIGN_KEY_CHECKS = 0"; \
+		$(SYMFONY) dbal:run-sql "ALTER TABLE messages DROP FOREIGN KEY FK_DB021E963DA64B2C"; \
+		$(SYMFONY) dbal:run-sql "TRUNCATE $$table_name"; \
+		$(SYMFONY) dbal:run-sql "ALTER TABLE messages ADD CONSTRAINT FK_DB021E963DA64B2C FOREIGN KEY (light_id) REFERENCES lights (id) ON DELETE CASCADE"; \
+		$(SYMFONY) dbal:run-sql "SET FOREIGN_KEY_CHECKS = 1"; \
+	else \
+		echo "Suppression annulée"; \
+	fi
+
 init-db:
 	$(MAKE) cc
 	$(MAKE) db-drop
