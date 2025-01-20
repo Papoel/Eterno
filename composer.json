@@ -58,6 +58,7 @@
     "dbrekelmans/bdi": "^1.1",
     "doctrine/doctrine-fixtures-bundle": "^3.4",
     "fakerphp/faker": "^1.23",
+    "mockery/mockery": "^1.6",
     "pestphp/pest": "^v2.8.3",
     "phpro/grumphp": "^2.1",
     "roave/security-advisories": "dev-latest",
