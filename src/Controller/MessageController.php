@@ -2,149 +2,122 @@
 
 namespace App\Controller;
 
-use App\Entity\Light;
+use App\DTO\MessageDTO;
 use App\Entity\Message;
 use App\Entity\User;
 use App\Form\Message\MessageType;
-use App\Repository\LightRepository;
-use App\Repository\MessageRepository;
-use App\Services\Encryptor\DecryptService;
-use App\Services\Encryptor\EncryptService;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Services\Message\MessageManagerService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
-use Symfony\Component\Uid\Uuid;
 
 #[Route('/communication')]
 #[IsGranted('ROLE_USER')]
 class MessageController extends AbstractController
 {
     public function __construct(
-        private readonly EncryptService $encryptService,
-        private readonly DecryptService $decryptService,
-        private readonly EntityManagerInterface $entityManager,
+        private readonly MessageManagerService $messageManager,
+        protected CsrfTokenManagerInterface $csrfTokenManager,
     ) {
     }
 
     #[Route('/new/{receiver}', name: 'app_message_new', methods: ['GET', 'POST'])]
-    public function new(
-        Request $request,
-        MessageRepository $messageRepository,
-        LightRepository $lightRepository,
-    ): Response {
-        /** @var User|null $user */
+    public function new(Request $request, string $receiver): Response
+    {
+        // https://localhost:8000/communication/new/01948542-4439-702f-8ce6-a089ac557787
+        // Vérifier si $receiver existe
+        $light = $this->messageManager->getLight(id: $receiver);
+
+        // 1. Utilisateur, Light inexistante
+        // 2. Aucun utilisateur connecté
+        switch (true) {
+            case !$light && $this->getUser():
+                $this->addFlash(type: 'danger', message: 'Une erreur est survenue, veuillez réessayer.');
+
+                return $this->redirectToRoute(route: 'home.user_connected');
+            case !$this->getUser():
+                throw $this->createAccessDeniedException('Vous devez être connecté pour accéder à cette page.');
+        }
+
         $user = $this->getUser();
-        $lights = [];
-        // $userMessages = [];
 
-        // 1. Je récupère tous les objets Light de l'utilisateur connecté
-        if (null !== $user) {
-            $lights = $user->getLights();
-            $lightsIds = [];
-            foreach ($lights as $light) {
-                $lightId = $light->getId();
-
-                if ($lightId instanceof Uuid) {
-                    $lightsIds[] = $lightId->toRfc4122();
-                }
-            }
+        if (!$user || !($user instanceof User)) {
+            throw $this->createAccessDeniedException('Vous devez être connecté pour accéder à cette page.');
         }
 
-        // 2. Je récupère tous les messages envoyés par l'utilisateur connecté
-        if ($user instanceof User) {
-            /** @phpstan-ignore-next-line */
-            $userMessages = $messageRepository->findMessagesByUserAndLights($user, $lightsIds);
-        }
-
-        $message = new Message();
-        $form = $this->createForm(type: MessageType::class, data: $message);
-        $emptyForm = clone $form;
+        $messageDTO = new MessageDTO();
+        $form = $this->createForm(type: MessageType::class, data: $messageDTO);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            if ($user instanceof User) {
-                $message->setUserAccount($user);
+            try {
+                $this->messageManager->createMessage(
+                    dto: $messageDTO,
+                    user: $user,
+                    receiverId: $receiver
+                );
+
+                return $this->redirectToRoute(route: 'app_message_new', parameters: [
+                    'receiver' => $receiver,
+                ]);
+            } catch (\InvalidArgumentException $e) {
+                $form->get('content')->addError(new FormError($e->getMessage()));
+
+                return new Response(
+                    $this->renderView(view: 'message/index.html.twig', parameters: [
+                        'light' => $this->messageManager->getLight(id: $receiver),
+                        'messages' => $this->messageManager->getUserMessages(user: $user, receiverId: $receiver),
+                        'form' => $form,
+                    ]),
+                    status: Response::HTTP_UNPROCESSABLE_ENTITY
+                );
             }
-
-            $light = $lightRepository->findOneBy(['id' => $request->get(key: 'receiver')]);
-            if ($light instanceof Light) {
-                $message->setLight($light);
-            }
-
-            // Crypter le contenu de message avant de le sauvegarder
-            $encryptedContent = '';
-            if (null !== $user) {
-                if (null !== $message->getContent()) {
-                    $encryptedContent = $this->encryptService->encrypt(
-                        data: $message->getContent(),
-                        privateKey: $user->getPassword()
-                    );
-                } else {
-                    throw new \RuntimeException(message: 'Le contenu du message est null.');
-                }
-            } else {
-                throw new \RuntimeException(message: 'L\'utilisateur est null.');
-            }
-
-            $message->setContent($encryptedContent);
-
-            $this->entityManager->persist($message);
-            $this->entityManager->flush();
-
-            $form = $emptyForm;
-
-            // Redirection vers la même page pour éviter de renvoyer le formulaire
-            return $this->redirectToRoute(route: 'app_message_new', parameters: [
-                'receiver' => $request->get(key: 'receiver'),
-            ]);
         }
 
-        $receiver = $request->get(key: 'receiver');
-
-        // Afficher le contenu décrypté des messages
-        if (null !== $user) {
-            if (!empty($userMessages)) {
-                foreach ($userMessages as $userMessage) {
-                    $decryptedContent = $this->decryptService->decrypt(
-                        /* @phpstan-ignore-next-line */
-                        encryptedData: $userMessage->getContent(),
-                        hashedPassword: $user->getPassword()
-                    );
-
-                    $userMessage->setContent($decryptedContent);
-                    $decryptedMessages[] = $userMessage;
-                }
-            }
-        } else {
-            throw new \RuntimeException(message: 'L\'utilisateur est null.');
+        if ($form->isSubmitted() && !$form->isValid()) {
+            return new Response(
+                content: $this->renderView(view: 'message/index.html.twig', parameters: [
+                    'light' => $this->messageManager->getLight(id: $receiver),
+                    'messages' => $this->messageManager->getUserMessages(user: $user, receiverId: $receiver),
+                    'form' => $form,
+                ]),
+                status: Response::HTTP_UNPROCESSABLE_ENTITY
+            );
         }
 
         return $this->render(view: 'message/index.html.twig', parameters: [
-            'light' => $lightRepository->findOneBy(['id' => $receiver]),
-            'messages' => $userMessages,
+            'light' => $this->messageManager->getLight(id: $receiver),
+            'messages' => $this->messageManager->getUserMessages(user: $user, receiverId: $receiver),
             'form' => $form,
         ]);
     }
 
+    #[IsGranted('ROLE_USER')]
     #[Route('/{id}', name: 'app_message_delete', methods: ['POST'])]
-    public function delete(Request $request, Message $message, EntityManagerInterface $entityManager): Response
+    public function delete(Request $request, Message $message): Response
     {
-        /* @phpstan-ignore-next-line */
-        if ($this->isCsrfTokenValid(id: 'delete'.$message->getId(), token: $request->request->get(key: '_token'))) {
-            $entityManager->remove($message);
-            $entityManager->flush();
-            $this->addFlash(type: 'danger', message: ' Votre message a bien été supprimé.');
+        $token = $request->request->getString(key: '_token');
+        $messageId = $message->getId();
+
+        if (null === $messageId) {
+            throw new \RuntimeException(message: 'Message ID cannot be null');
         }
 
-        $light = $message->getLight();
-        $receiver = $light?->getId();
+        if (!$this->isCsrfTokenValid(id: 'delete'.$messageId->toRfc4122(), token: $token)) {
+            throw $this->createAccessDeniedException(message: 'Token CSRF invalide');
+        }
 
-        // return to app_message_new
+        $this->messageManager->deleteMessage(
+            messageId: $messageId->toRfc4122(),
+            token: $token
+        );
+
         return $this->redirectToRoute(route: 'app_message_new', parameters: [
-            'receiver' => $receiver,
+            'receiver' => $request->get(key: 'receiver'),
         ]);
     }
 }
