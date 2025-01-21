@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Light;
 use App\Entity\Message;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -24,32 +25,35 @@ class MessageRepository extends ServiceEntityRepository
         parent::__construct($registry, Message::class);
     }
 
-    /**
-     * SELECT * FROM messages WHERE user_account_id = $user
-     * AND light_id IN ($lightsIds).
-     *
-     * @param Uuid[] $lightsIds
-     *
-     * @return Message[]
-     */
-    public function findMessagesByUserAndLights(User $user, array $lightsIds): array
+    public function findMessagesByUserAndLight(User $user, string $lightId): array
     {
-        // 1. Get all messages from user (select * from messages where user_account_id = $user)
-        $messages = $user->getMessages()->toArray();
+        $light = $this->getEntityManager()->getRepository(Light::class)->find($lightId);
+        if (!$light) {
+            return [];
+        }
 
-        // from $messages, keep only messages where light_id is in $lightsIds
-        $messages = array_filter($messages, callback: static function (Message $message) use ($lightsIds) {
-            $lightId = $message->getLight()?->getId();
+        $userIdBinary = $user->getId()->toBinary();
+        $lightIdBinary = Uuid::fromString(uuid: $lightId)->toBinary();
 
-            if (null === $lightId) {
-                return false;
-            }
+        $qb = $this->createQueryBuilder(alias: 'm')
+            ->select(select: 'm')
+            ->where(predicates: 'm.userAccount = :userId')
+            ->andWhere('m.light = :lightId')
+            ->setParameter(key: 'userId', value: $userIdBinary)
+            ->setParameter(key: 'lightId', value: $lightIdBinary)
+            ->orderBy(sort: 'm.createdAt', order: 'ASC');
 
-            /* @phpstan-ignore-next-line */
-            return in_array($lightId->toRfc4122(), $lightsIds, strict: true);
-        });
+        $result = $qb->getQuery()->getResult();
 
-        return $messages;
+        // Transformation des résultats en tableau simple
+        return array_map(callback: static function ($message) {
+            return [
+                'id' => $message->getId(),
+                'content' => $message->getContent(),
+                'createdAt' => $message->getCreatedAt()->format('Y-m-d H:i:s'),
+                'light_id' => $message->getLight()->getId(),
+            ];
+        }, array: $result);
     }
 
     public function countMessages(): int

@@ -108,34 +108,33 @@
                                         </div>
                                     {% else %}
                                         {% for message in messages|reverse %}
-                                            {% if message.light.getId().toRfc4122() == light.getId().toRfc4122() %}
-                                                <article id="message-{{ loop.index }}" class="mb-1">
-                                                    <div id="messages-{{ message.id }}" class="bg-warning-subtle text-secondary p-2 px-3 rounded-2">
-                                                        <p class="m-0">{{ message.content | nl2br }}</p>
-                                                        <div class="small">
-                                                            <div class="d-flex justify-content-end">
-                                                                {% set today = "now"|date("d/m") %}
-                                                                {% if message.createdAt|date('d/m') is same as (today) %}
-                                                                    <small class="mt-2 text-muted">
-                                                                        Aujourd'hui à {{ message.createdAt|date('H:i') }}
-                                                                    </small>
-                                                                {% else %}
-                                                                    <small class="mt-2 text-muted">
-                                                                        {{ message.createdAt|date('d/m/Y à H:i') }}
-                                                                    </small>
-                                                                {% endif %}
-                                                                <form method="post" action="{{ path('app_message_delete', {'id': message.id}) }}"
-                                                                      onsubmit="return confirm('Voulez-vous vraiment effacer ce message ?')">
-                                                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ message.id) }}">
-                                                                    <button class="text-danger btn" aria-label="delete-message-{{ message.id }}" type="submit">
-                                                                        <i class="bi bi-trash"></i>
-                                                                    </button>
-                                                                </form>
-                                                            </div>
+                                            <article id="message-{{ loop.index }}" class="mb-1">
+                                                <div id="messages-{{ message.id }}" class="bg-warning-subtle text-secondary p-2 px-3 rounded-2">
+                                                    <p class="m-0">{{ message.content | nl2br }}</p>
+                                                    <div class="small">
+                                                        <div class="d-flex justify-content-end">
+                                                            {% set today = "now"|date("d/m") %}
+                                                            {% if message.createdAt|date('d/m') is same as (today) %}
+                                                                <small class="mt-2 text-muted">
+                                                                    Aujourd'hui à {{ message.createdAt|date('H:i') }}
+                                                                </small>
+                                                            {% else %}
+                                                                <small class="mt-2 text-muted">
+                                                                    {{ message.createdAt|date('d/m/Y à H:i') }}
+                                                                </small>
+                                                            {% endif %}
+                                                            <form method="post" action="{{ path('app_message_delete', {'id': message.id}) }}"
+                                                                  onsubmit="return confirm('Voulez-vous vraiment effacer ce message ?')">
+                                                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ message.id) }}">
+                                                                <input type="hidden" name="receiver" value="{{ message.light_id }}">
+                                                                <button class="text-danger btn" aria-label="delete-message-{{ message.id }}" type="submit">
+                                                                    <i class="bi bi-trash"></i>
+                                                                </button>
+                                                            </form>
                                                         </div>
                                                     </div>
-                                                </article>
-                                            {% endif %}
+                                                </div>
+                                            </article>
                                         {% endfor %}
                                     {% endif %}
                                 </div>
