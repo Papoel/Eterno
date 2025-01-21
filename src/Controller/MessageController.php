@@ -28,12 +28,9 @@ class MessageController extends AbstractController
     #[Route('/new/{receiver}', name: 'app_message_new', methods: ['GET', 'POST'])]
     public function new(Request $request, string $receiver): Response
     {
-        // https://localhost:8000/communication/new/01948542-4439-702f-8ce6-a089ac557787
         // Vérifier si $receiver existe
         $light = $this->messageManager->getLight(id: $receiver);
 
-        // 1. Utilisateur, Light inexistante
-        // 2. Aucun utilisateur connecté
         switch (true) {
             case !$light && $this->getUser():
                 $this->addFlash(type: 'danger', message: 'Une erreur est survenue, veuillez réessayer.');
@@ -45,11 +42,12 @@ class MessageController extends AbstractController
 
         $user = $this->getUser();
 
-        if (!$user || !($user instanceof User)) {
+        if (!($user instanceof User)) {
             throw $this->createAccessDeniedException('Vous devez être connecté pour accéder à cette page.');
         }
 
         $messageDTO = new MessageDTO();
+
         $form = $this->createForm(type: MessageType::class, data: $messageDTO);
         $form->handleRequest($request);
 

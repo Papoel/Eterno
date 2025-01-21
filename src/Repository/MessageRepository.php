@@ -33,27 +33,27 @@ class MessageRepository extends ServiceEntityRepository
         }
 
         $userIdBinary = $user->getId()->toBinary();
-        $lightIdBinary = Uuid::fromString($lightId)->toBinary();
+        $lightIdBinary = Uuid::fromString(uuid: $lightId)->toBinary();
 
-        $qb = $this->createQueryBuilder('m')
-            ->select('m')
-            ->where('m.userAccount = :userId')
+        $qb = $this->createQueryBuilder(alias: 'm')
+            ->select(select: 'm')
+            ->where(predicates: 'm.userAccount = :userId')
             ->andWhere('m.light = :lightId')
-            ->setParameter('userId', $userIdBinary)
-            ->setParameter('lightId', $lightIdBinary)
-            ->orderBy('m.createdAt', 'DESC');
+            ->setParameter(key: 'userId', value: $userIdBinary)
+            ->setParameter(key: 'lightId', value: $lightIdBinary)
+            ->orderBy(sort: 'm.createdAt', order: 'ASC');
 
         $result = $qb->getQuery()->getResult();
 
         // Transformation des résultats en tableau simple
-        return array_map(static function ($message) {
+        return array_map(callback: static function ($message) {
             return [
                 'id' => $message->getId(),
                 'content' => $message->getContent(),
                 'createdAt' => $message->getCreatedAt()->format('Y-m-d H:i:s'),
                 'light_id' => $message->getLight()->getId(),
             ];
-        }, $result);
+        }, array: $result);
     }
 
     public function countMessages(): int
