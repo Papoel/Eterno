@@ -56,7 +56,7 @@ class ContactController extends AbstractController
                 );
             }
 
-            return $this->redirectToRoute(route: 'home.index');
+            return $this->redirectToRoute(route: 'home.user_connected');
         }
 
         return $this->render(view: 'contact/contact.html.twig', parameters: [
