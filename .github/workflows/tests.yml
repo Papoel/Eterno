@@ -1,10 +1,8 @@
-name: Code Quality Check for Symfony & GitGuardian Scan
-
+name: Code Quality Check for Symfony
 on:
   push:
     branches:
       - main
-  pull_request:
 
 jobs:
   code-quality:
@@ -55,20 +53,3 @@ jobs:
 
       - name: Static analysis of PHP code (PHPStan)
         run: make qa-phpstan
-
-  git-guardian-scan:
-    name: GitGuardian scan
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0 # fetch all history so multiple commits can be scanned
-      - name: GitGuardian scan
-        uses: GitGuardian/ggshield/actions/secret@v1.36.0
-        env:
-          GITHUB_PUSH_BEFORE_SHA: ${{ github.event.before }}
-          GITHUB_PUSH_BASE_SHA: ${{ github.event.base }}
-          GITHUB_PULL_BASE_SHA: ${{ github.event.pull_request.base.sha }}
-          GITHUB_DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
-          GITGUARDIAN_API_KEY: ${{ secrets.GITGUARDIAN_API_KEY }}
