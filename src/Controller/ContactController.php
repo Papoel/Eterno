@@ -26,11 +26,11 @@ class ContactController extends AbstractController
         if ($user instanceof User) {
             // Utiliser getEmail() uniquement si $user est une instance de User et que son email n'est pas null
             $email = $user->getEmail();
-            if (null !== $email) {
+            if ('' !== $email && null !== $email) {
                 $data->email = $email;
             }
             $name = $user->getFullName();
-            if (null !== $name) {
+            if ('' !== $name) {
                 $data->name = $name;
             }
         }
@@ -40,8 +40,10 @@ class ContactController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             try {
                 if ($user instanceof User) {
-                    /* @phpstan-ignore-next-line */
-                    $data->email = $this->getUser()->getEmail();
+                    $email = $user->getEmail();
+                    if (null !== $email) {
+                        $data->email = $email;
+                    }
                 }
                 $mailerService->contact($form);
 

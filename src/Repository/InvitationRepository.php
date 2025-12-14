@@ -71,6 +71,9 @@ class InvitationRepository extends ServiceEntityRepository
         return $result;
     }
 
+    /**
+     * @return array<int, array{invitationsSent: int|string, invitationsAccepted: int|string, userId: string}>
+     */
     public function getUserInvitationStats(): array
     {
         return $this->createQueryBuilder(alias: 'i')

@@ -27,6 +27,7 @@ class Light
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
+    /** @phpstan-ignore property.unusedType */
     private ?Uuid $id = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
@@ -144,9 +145,6 @@ class Light
         return $this->photoFile;
     }
 
-    /**
-     * @throws \Exception
-     */
     public function setPhotoFile(?File $photoFile = null): void
     {
         $this->photoFile = $photoFile;

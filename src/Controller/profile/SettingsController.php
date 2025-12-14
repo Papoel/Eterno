@@ -41,7 +41,6 @@ class SettingsController extends AbstractController
         InvitationRepository $invitationRepository,
         MailerService $mailerService,
     ): Response {
-        /** @var User $user */
         $user = $security->getUser();
 
         if (!$user instanceof User) {
@@ -79,8 +78,8 @@ class SettingsController extends AbstractController
             $this->addFlash(
                 type: 'danger',
                 message: 'Une erreur\'est produite lors de la mise à jour de vos informations. Veuillez réessayer.'
-                .PHP_EOL.
-                implode(separator: PHP_EOL, array: $errorMessages)
+                    .PHP_EOL.
+                    implode(separator: PHP_EOL, array: $errorMessages)
             );
         }
 
@@ -112,8 +111,8 @@ class SettingsController extends AbstractController
             $this->addFlash(
                 type: 'warning',
                 message: 'Une erreur\'est produite lors de la mise à jour de votre mot de passe. Veuillez réessayer.'
-                .PHP_EOL.
-                implode(separator: PHP_EOL, array: $errorMessages)
+                    .PHP_EOL.
+                    implode(separator: PHP_EOL, array: $errorMessages)
             );
         }
 
@@ -218,8 +217,11 @@ class SettingsController extends AbstractController
             return $this->redirectToRoute(route: 'app_login');
         }
 
-        /** @phpstan-ignore-next-line */
-        $directory = $this->getParameter(name: 'kernel.project_dir').'/assets/uploads/avatar';
+        $projectDir = $this->getParameter(name: 'kernel.project_dir');
+        if (!is_string($projectDir)) {
+            throw new \RuntimeException('Project directory parameter must be a string');
+        }
+        $directory = $projectDir.'/assets/uploads/avatar';
 
         // Utiliser Finder pour lister les fichiers dans le dossier
         $finder = new Finder();

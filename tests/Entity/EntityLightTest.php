@@ -10,7 +10,7 @@ test(description: 'Vérifier que l\'entité Light existe', closure: function ():
     $this->assertTrue(condition: class_exists(class: Light::class));
 });
 
-test(description: 'vérifie que la classe Light comporte les propriétés requises', closure: function () {
+test(description: 'vérifie que la classe Light comporte les propriétés requises', closure: function (): void {
     $light = new Light();
 
     expect(value: property_exists(object_or_class: $light, property: 'id'))->toBeTrue()
@@ -24,7 +24,7 @@ test(description: 'vérifie que la classe Light comporte les propriétés requis
         ->and(value: property_exists(object_or_class: $light, property: 'messages'))->toBeTrue();
 });
 
-test(description: 'vérifie que la classe Light comporte les getters et les setters', closure: function () {
+test(description: 'vérifie que la classe Light comporte les getters et les setters', closure: function (): void {
     $userReflection = new \ReflectionClass(objectOrClass: Light::class);
     $userProperties = $userReflection->getProperties();
 
@@ -46,7 +46,7 @@ test(description: 'vérifie que la classe Light comporte les getters et les sett
     }
 });
 
-test(description: 'Vérifie que la méthode addMessage existe', closure: function () {
+test(description: 'Vérifie que la méthode addMessage existe', closure: function (): void {
     $userReflection = new ReflectionClass(objectOrClass: Light::class);
     try {
         $addLightMethod = $userReflection->getMethod(name: 'addMessage');
@@ -57,7 +57,7 @@ test(description: 'Vérifie que la méthode addMessage existe', closure: functio
     expect($addLightMethod)->toBeInstanceOf(class: ReflectionMethod::class);
 });
 
-test(description: 'Vérifie que la méthode removeMessage existe', closure: function () {
+test(description: 'Vérifie que la méthode removeMessage existe', closure: function (): void {
     $userReflection = new ReflectionClass(objectOrClass: Light::class);
     try {
         $removeLightMethod = $userReflection->getMethod(name: 'removeMessage');
@@ -68,13 +68,13 @@ test(description: 'Vérifie que la méthode removeMessage existe', closure: func
     expect($removeLightMethod)->toBeInstanceOf(class: ReflectionMethod::class);
 });
 
-test(description: 'Doit retourner null quand j\'appel getId sur une Light non persisté', closure: function () {
+test(description: 'Doit retourner null quand j\'appel getId sur une Light non persisté', closure: function (): void {
     $light = new Light();
 
     expect($light->getId())->toBeNull();
 });
 
-test(description: 'Doit retourner le firstname par défaut', closure: function () {
+test(description: 'Doit retourner le firstname par défaut', closure: function (): void {
     $light = new Light();
     $light->setFirstname(firstname: 'kevin');
 
@@ -82,7 +82,7 @@ test(description: 'Doit retourner le firstname par défaut', closure: function (
 
 });
 
-test(description: 'Un message peut être ajouté à une Light', closure: function () {
+test(description: 'Un message peut être ajouté à une Light', closure: function (): void {
     $light = new Light();
     $message = new Message();
 
@@ -92,7 +92,7 @@ test(description: 'Un message peut être ajouté à une Light', closure: functio
         ->and($message->getLight())->toBe($light);
 });
 
-test(description: 'Un message peut être retiré d\'une Light', closure: function () {
+test(description: 'Un message peut être retiré d\'une Light', closure: function (): void {
     $light = new Light();
     $message = new Message();
 
@@ -102,7 +102,7 @@ test(description: 'Un message peut être retiré d\'une Light', closure: functio
     expect($light->getMessages())->not->toContain($message);
 });
 
-test(description: 'Un utilisateur peut être associé à une Light', closure: function () {
+test(description: 'Un utilisateur peut être associé à une Light', closure: function (): void {
     $light = new Light();
     $user = new User();
 
@@ -111,7 +111,7 @@ test(description: 'Un utilisateur peut être associé à une Light', closure: fu
     expect($light->getUserAccount())->toBe($user);
 });
 
-test(description: 'La date de naissance d\'une Light peut être définie', closure: function () {
+test(description: 'La date de naissance d\'une Light peut être définie', closure: function (): void {
     $light = new Light();
     $birthday = new \DateTime(datetime: '1982-09-21');
 
@@ -120,7 +120,7 @@ test(description: 'La date de naissance d\'une Light peut être définie', closu
     expect($light->getBirthdayAt())->toBe($birthday);
 });
 
-test(description: 'La date de décès d\'une Light peut être définie', closure: function () {
+test(description: 'La date de décès d\'une Light peut être définie', closure: function (): void {
     $light = new Light();
     $deceased = new \DateTime(datetime: '2023-09-06');
 

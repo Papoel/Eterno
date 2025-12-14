@@ -153,7 +153,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getUserIdentifier(): string
     {
-        return (string) $this->email;
+        if (null === $this->email || '' === $this->email) {
+            throw new \RuntimeException('User email cannot be empty');
+        }
+
+        return $this->email;
     }
 
     public function eraseCredentials(): void
@@ -264,8 +268,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * bundle's configuration parameter 'inject_on_load' is set to 'true' this setter
      * must be able to accept an instance of 'File' as the bundle will inject one here
      * during Doctrine hydration.
-     *
-     * @throws \Exception
      */
     public function setAvatarFile(?File $avatarFile = null): void
     {
@@ -296,22 +298,24 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @phpstan-ignore-next-line
+     * @param array<string, mixed> $data
      */
     public function __unserialize(array $data): void
     {
-        $this->id = $data['id'];
-        $this->email = $data['email'];
-        $this->password = $data['password'];
-        $this->roles = $data['roles'];
-        $this->birthday = $data['birthday'];
-        $this->mobile = $data['mobile'];
-        $this->avatar = $data['avatar'];
-        $this->firstname = $data['firstname'];
-        $this->lastname = $data['lastname'];
-        $this->username = $data['username'];
-        $this->createdAt = $data['createdAt'];
-        $this->updatedAt = $data['updatedAt'];
+        $this->id = $data['id'] instanceof Uuid ? $data['id'] : null;
+        $this->email = is_string($data['email']) ? $data['email'] : null;
+        $this->password = is_string($data['password']) ? $data['password'] : '';
+        /** @var array<string> $roles */
+        $roles = is_array($data['roles']) ? $data['roles'] : [];
+        $this->roles = $roles;
+        $this->birthday = $data['birthday'] instanceof \DateTime ? $data['birthday'] : null;
+        $this->mobile = is_string($data['mobile']) ? $data['mobile'] : null;
+        $this->avatar = is_string($data['avatar']) ? $data['avatar'] : null;
+        $this->firstname = is_string($data['firstname']) ? $data['firstname'] : '';
+        $this->lastname = is_string($data['lastname']) ? $data['lastname'] : null;
+        $this->username = is_string($data['username']) ? $data['username'] : null;
+        $this->createdAt = $data['createdAt'] instanceof \DateTimeImmutable ? $data['createdAt'] : new \DateTimeImmutable();
+        $this->updatedAt = $data['updatedAt'] instanceof \DateTimeImmutable ? $data['updatedAt'] : null;
     }
 
     /**

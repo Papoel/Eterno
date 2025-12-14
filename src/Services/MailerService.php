@@ -84,31 +84,28 @@ readonly class MailerService
         FormInterface $form,
     ): void {
         $data = $form->getData();
-        /** @phpstan-ignore-next-line */
-        $uuid = $form->getData()->getUuid();
 
         if ($data instanceof Invitation) {
+            $uuid = $data->getUuid();
             // The token is the uuid of the invitation
-            if (null !== $uuid) {
-                $token = $uuid->toRfc4122();
-                $email = (new NotificationEmail())
-                    ->from($this->supportEmail)
-                    ->subject(subject: 'Invitation à rejoindre Eterno')
-                    ->htmlTemplate(template: 'emails/invitation.html.twig')
-                    /* @phpstan-ignore-next-line */
-                    ->to($form->getData()->getEmail())
-                    ->context(context: [
-                        'parrain' => $this->getFullnameUserConnected(),
-                        'token' => $token,
-                        'url' => $this->urlGenerator->generate(
-                            name: 'invitation.verify',
-                            parameters: ['uuid' => $token],
-                            referenceType: UrlGeneratorInterface::ABSOLUTE_URL
-                        ),
-                    ]);
+            $token = $uuid->toRfc4122();
+            $email = (new NotificationEmail())
+                ->from($this->supportEmail)
+                ->subject(subject: 'Invitation à rejoindre Eterno')
+                ->htmlTemplate(template: 'emails/invitation.html.twig')
+                /* @phpstan-ignore-next-line */
+                ->to($form->getData()->getEmail())
+                ->context(context: [
+                    'parrain' => $this->getFullnameUserConnected(),
+                    'token' => $token,
+                    'url' => $this->urlGenerator->generate(
+                        name: 'invitation.verify',
+                        parameters: ['uuid' => $token],
+                        referenceType: UrlGeneratorInterface::ABSOLUTE_URL
+                    ),
+                ]);
 
-                $this->mailer->send($email);
-            }
+            $this->mailer->send($email);
         }
     }
 

@@ -49,7 +49,7 @@ MAKE = make
 # --------------------
 # PHPQA
 # --------------------
-PHPQA = jakzal/phpqa:php8.2
+PHPQA = jakzal/phpqa:php8.4
 PHPQA_RUN = $(DOCKER_RUN) --init --rm -v $(PWD):/project -w /project $(PHPQA)
 # --------------------
 

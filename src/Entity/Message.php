@@ -20,6 +20,7 @@ class Message
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
+    /** @phpstan-ignore property.unusedType */
     private ?Uuid $id = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: false)]

@@ -28,3 +28,11 @@
 
 ###> developper ###
 /src/Docs/Prod
+
+###> phpstan/phpstan ###
+phpstan.neon
+###< phpstan/phpstan ###
+
+###> rector/rector ###
+rector.php
+###< rector/rector ###

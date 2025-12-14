@@ -82,7 +82,7 @@ class LightType extends AbstractType
                 'widget' => 'single_text',
                 'required' => false,
                 'constraints' => [
-                    new Callback(callback: function ($object, ExecutionContextInterface $context) {
+                    new Callback(callback: function ($object, ExecutionContextInterface $context): void {
                         $today = new \DateTime();
 
                         if ($object > $today) {

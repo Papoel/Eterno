@@ -13,9 +13,11 @@ use Symfony\Component\Uid\Uuid;
 class Invitation
 {
     use CreatedAtTrait;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    /** @phpstan-ignore property.unusedType */
     private ?int $id = null;
 
     #[ORM\Column(type: Types::STRING, length: 255)]
@@ -28,7 +30,7 @@ class Invitation
     private ?User $friend = null;
 
     #[ORM\Column]
-    private ?bool $accepted = false;
+    private bool $accepted = false;
 
     // Create UUID when a new invitation is created
 
@@ -84,7 +86,7 @@ class Invitation
         return $this;
     }
 
-    public function isAccepted(): ?bool
+    public function isAccepted(): bool
     {
         return $this->accepted;
     }

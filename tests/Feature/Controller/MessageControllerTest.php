@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 uses(WebTestCase::class);
 
-beforeEach(function () {
+beforeEach(function (): void {
     $this->client = static::createClient();
     $this->entityManager = static::getContainer()->get('doctrine')->getManager();
     $this->userRepository = static::getContainer()->get('doctrine')->getRepository(User::class);
@@ -25,7 +25,7 @@ beforeEach(function () {
     $this->entityManager->createQuery('DELETE FROM App\Entity\User')->execute();
 });
 
-test(description: 'la page de nouveau message nécessite une authentification', closure: function () {
+test(description: 'la page de nouveau message nécessite une authentification', closure: function (): void {
     $this->client->request('GET', '/communication/new/some-uuid');
 
     expect(value: $this->client
@@ -35,7 +35,7 @@ test(description: 'la page de nouveau message nécessite une authentification', 
         ->and(value: $this->client->getResponse()->headers->get('Location'))->toContain('/login');
 });
 
-test(description: 'un utilisateur authentifié peut accéder à la page de nouveau message', closure: function () {
+test(description: 'un utilisateur authentifié peut accéder à la page de nouveau message', closure: function (): void {
     $testUser = new User();
     $testUser->setEmail(email: 'test1@example.com');
     $testUser->setPassword(password: 'password');
@@ -56,7 +56,7 @@ test(description: 'un utilisateur authentifié peut accéder à la page de nouve
     expect($this->client->getResponse()->getStatusCode())->toBe(expected: Response::HTTP_OK);
 });
 
-test(description: 'un message ne peut pas être envoyé avec un contenu vide', closure: function () {
+test(description: 'un message ne peut pas être envoyé avec un contenu vide', closure: function (): void {
     $testUser = new User();
     $testUser->setEmail(email: 'test2@example.com');
     $testUser->setPassword(password: 'password');
@@ -85,7 +85,7 @@ test(description: 'un message ne peut pas être envoyé avec un contenu vide', c
         ->toContain('Le message ne peut pas être vide');
 });
 
-test(description: 'un message valide est correctement enregistré et chiffré', closure: function () {
+test(description: 'un message valide est correctement enregistré et chiffré', closure: function (): void {
     $testUser = new User();
     $testUser->setEmail(email: 'test3@example.com');
     $testUser->setPassword(password: 'password');
