@@ -8,7 +8,7 @@ test(description: 'Vérifier que l\'entité Message existe', closure: function (
     $this->assertTrue(condition: class_exists(class: Message::class));
 });
 
-test(description: 'vérifie que la classe Message comporte les propriétés requises', closure: function () {
+test(description: 'vérifie que la classe Message comporte les propriétés requises', closure: function (): void {
     $message = new Message();
 
     expect(value: property_exists(object_or_class: $message, property: 'id'))->toBeTrue()
@@ -18,7 +18,7 @@ test(description: 'vérifie que la classe Message comporte les propriétés requ
         ->and(value: property_exists(object_or_class: $message, property: 'light'))->toBeTrue();
 });
 
-test(description: 'vérifie que la classe User comporte les getters et les setters', closure: function () {
+test(description: 'vérifie que la classe User comporte les getters et les setters', closure: function (): void {
     $userReflection = new \ReflectionClass(objectOrClass: Message::class);
     $userProperties = $userReflection->getProperties();
 
@@ -40,13 +40,13 @@ test(description: 'vérifie que la classe User comporte les getters et les sette
     }
 });
 
-test(description: 'Doit retourner null quand j\'appel getId sur une Light non persisté', closure: function () {
+test(description: 'Doit retourner null quand j\'appel getId sur une Light non persisté', closure: function (): void {
     $message = new Message();
 
     expect($message->getId())->toBeNull();
 });
 
-test(description: 'Un message peut être ajouté', closure: function () {
+test(description: 'Un message peut être ajouté', closure: function (): void {
     $message = new Message();
 
     $message->setContent('Mon message');

@@ -10,7 +10,7 @@ use App\Services\Message\MessageManagerService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
-beforeEach(closure: function () {
+beforeEach(closure: function (): void {
     $this->entityManager = Mockery::mock(EntityManagerInterface::class);
     $this->messageRepository = Mockery::mock(MessageRepository::class);
     $this->lightRepository = Mockery::mock(LightRepository::class);
@@ -26,7 +26,7 @@ beforeEach(closure: function () {
     );
 });
 
-test(description: 'create message persists encrypted message', closure: function () {
+test(description: 'create message persists encrypted message', closure: function (): void {
     $dto = new MessageDTO();
     $dto->setContent('Hello');
 

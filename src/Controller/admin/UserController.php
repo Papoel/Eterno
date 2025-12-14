@@ -26,11 +26,15 @@ class UserController extends AbstractController
         // Construire le tableau des invitations acceptées avec des clés sous forme de chaînes de caractères
         $invitationAccepted = [];
         foreach ($userInvitationStats as $stats) {
-            $invitationAccepted[(string) $stats['userId']] = [
-                'invitationsSent' => $stats['invitationsSent'],
-                'invitationsAccepted' => (int) $stats['invitationsAccepted'],
-                'pending' => $stats['invitationsSent'] - (int) $stats['invitationsAccepted'],
-                'percent' => (int) (($stats['invitationsAccepted'] / $stats['invitationsSent']) * 100),
+            $userId = (string) $stats['userId'];
+            $invitationsSent = (int) $stats['invitationsSent'];
+            $invitationsAccepted = (int) $stats['invitationsAccepted'];
+
+            $invitationAccepted[$userId] = [
+                'invitationsSent' => $invitationsSent,
+                'invitationsAccepted' => $invitationsAccepted,
+                'pending' => $invitationsSent - $invitationsAccepted,
+                'percent' => $invitationsSent > 0 ? (int) (($invitationsAccepted / $invitationsSent) * 100) : 0,
                 'userId' => $stats['userId'],
             ];
         }

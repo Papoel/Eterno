@@ -3,7 +3,7 @@
 use App\Tests\Class\CustomWebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
-test(description: 'l\'url doit retourner un code 200', closure: function (string $url) {
+test(description: 'l\'url doit retourner un code 200', closure: function (string $url): void {
     $client = CustomWebTestCase::createAuthenticatedClient();
     $client->request(method: 'GET', uri: $url);
 
@@ -14,7 +14,7 @@ test(description: 'l\'url doit retourner un code 200', closure: function (string
     yield ['/login'];
 });
 
-test(description: 'l\'url doit retourner un code 302', closure: function (string $url) {
+test(description: 'l\'url doit retourner un code 302', closure: function (string $url): void {
     $client = static::createClient();
     $client->request('GET', $url);
 

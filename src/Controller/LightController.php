@@ -154,18 +154,16 @@ class LightController extends AbstractController
             } else {
                 $originalPhotoName = pathinfo(path: $uploadedFile->getClientOriginalName(), flags: PATHINFO_BASENAME);
                 // Nouvelle photo téléchargée, traitement normal
-                if ($uploadedFile instanceof File) {
-                    $avatarMimeType = $uploadedFile->getMimeType();
-                    $allowedMimeTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+                $avatarMimeType = $uploadedFile->getMimeType();
+                $allowedMimeTypes = ['image/jpeg', 'image/jpg', 'image/png'];
 
-                    if (!in_array(needle: $avatarMimeType, haystack: $allowedMimeTypes, strict: true)) {
-                        $this->addFlash(type: 'danger', message: 'Le type de fichier n\'est pas autorisé.');
+                if (!in_array(needle: $avatarMimeType, haystack: $allowedMimeTypes, strict: true)) {
+                    $this->addFlash(type: 'danger', message: 'Le type de fichier n\'est pas autorisé.');
 
-                        return $this->redirectToRoute(route: 'app_light_edit', parameters: ['id' => $light->getId()]);
-                    }
-
-                    $light->setPhotoFile($uploadedFile);
+                    return $this->redirectToRoute(route: 'app_light_edit', parameters: ['id' => $light->getId()]);
                 }
+
+                $light->setPhotoFile($uploadedFile);
             }
 
             // Ajouter l'utilisateur connecté

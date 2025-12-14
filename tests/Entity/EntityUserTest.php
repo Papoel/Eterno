@@ -18,7 +18,7 @@ test(description: 'Création d\'une instance de la classe User', closure: functi
     expect($user)->toBeInstanceOf(class: User::class);
 });
 
-test(description: 'vérifie que la classe User comporte les propriétés requises', closure: function () {
+test(description: 'vérifie que la classe User comporte les propriétés requises', closure: function (): void {
     $user = new User();
 
     expect(value: property_exists(object_or_class: $user, property: 'id'))->toBeTrue()
@@ -39,7 +39,7 @@ test(description: 'vérifie que la classe User comporte les propriétés requise
         ->and(value: property_exists(object_or_class: $user, property: 'invitations'))->toBeTrue();
 });
 
-test(description: 'vérifie que la classe User comporte les getters et les setters', closure: function () {
+test(description: 'vérifie que la classe User comporte les getters et les setters', closure: function (): void {
     $userReflection = new \ReflectionClass(objectOrClass: User::class);
     $userProperties = $userReflection->getProperties();
 
@@ -62,7 +62,7 @@ test(description: 'vérifie que la classe User comporte les getters et les sette
     }
 });
 
-test(description: 'Vérifie que la méthode addLight existe', closure: function () {
+test(description: 'Vérifie que la méthode addLight existe', closure: function (): void {
     $userReflection = new ReflectionClass(objectOrClass: User::class);
     try {
         $addLightMethod = $userReflection->getMethod(name: 'addLight');
@@ -73,7 +73,7 @@ test(description: 'Vérifie que la méthode addLight existe', closure: function 
     expect($addLightMethod)->toBeInstanceOf(class: ReflectionMethod::class);
 });
 
-test(description: 'Vérifie que la méthode removeLight existe', closure: function () {
+test(description: 'Vérifie que la méthode removeLight existe', closure: function (): void {
     $userReflection = new ReflectionClass(objectOrClass: User::class);
     try {
         $removeLightMethod = $userReflection->getMethod(name: 'removeLight');
@@ -84,7 +84,7 @@ test(description: 'Vérifie que la méthode removeLight existe', closure: functi
     expect($removeLightMethod)->toBeInstanceOf(class: ReflectionMethod::class);
 });
 
-test(description: 'Vérifie que les méthodes addLight et removeLight fonctionnent', closure: function () {
+test(description: 'Vérifie que les méthodes addLight et removeLight fonctionnent', closure: function (): void {
     $user = new User();
     $light = new Light();
 
@@ -95,7 +95,7 @@ test(description: 'Vérifie que les méthodes addLight et removeLight fonctionne
     expect($user->getLights())->not->toContain($light);
 });
 
-test(description: 'Vérifie que la méthode addMessage existe', closure: function () {
+test(description: 'Vérifie que la méthode addMessage existe', closure: function (): void {
     $userReflection = new ReflectionClass(objectOrClass: User::class);
     try {
         $addLightMethod = $userReflection->getMethod(name: 'addMessage');
@@ -106,7 +106,7 @@ test(description: 'Vérifie que la méthode addMessage existe', closure: functio
     expect($addLightMethod)->toBeInstanceOf(class: ReflectionMethod::class);
 });
 
-test(description: 'Vérifie que la méthode removeMessage existe', closure: function () {
+test(description: 'Vérifie que la méthode removeMessage existe', closure: function (): void {
     $userReflection = new ReflectionClass(objectOrClass: User::class);
     try {
         $removeLightMethod = $userReflection->getMethod(name: 'removeMessage');
@@ -117,7 +117,7 @@ test(description: 'Vérifie que la méthode removeMessage existe', closure: func
     expect($removeLightMethod)->toBeInstanceOf(class: ReflectionMethod::class);
 });
 
-test(description: 'Un utilisateur envoie un message à une Light', closure: function () {
+test(description: 'Un utilisateur envoie un message à une Light', closure: function (): void {
     $user = new User();
     $light = new Light();
     $message = new Message();
@@ -129,7 +129,7 @@ test(description: 'Un utilisateur envoie un message à une Light', closure: func
         ->and($light->getMessages())->toContain($message);
 });
 
-test(description: 'Un utilisateur peut supprimer un message', closure: function () {
+test(description: 'Un utilisateur peut supprimer un message', closure: function (): void {
     $user = new User();
     $message = new Message();
 
@@ -139,7 +139,7 @@ test(description: 'Un utilisateur peut supprimer un message', closure: function 
     expect($user->getMessages())->not->toContain($message);
 });
 
-test(description: 'Doit retourner le nom complet de l\'utilisateur - (email)', closure: function () {
+test(description: 'Doit retourner le nom complet de l\'utilisateur - (email)', closure: function (): void {
     $user = new User();
     $user->setEmail(email: 'test@example.com');
     $user->setFirstname(firstname: 'john');
@@ -150,7 +150,7 @@ test(description: 'Doit retourner le nom complet de l\'utilisateur - (email)', c
         ->and($user->getLastname())->toBe(expected: 'doe');
 });
 
-test(description: 'Doit retourner le mail de l\'utilisateur si lastname est vide', closure: function () {
+test(description: 'Doit retourner le mail de l\'utilisateur si lastname est vide', closure: function (): void {
     $user = new User();
     $user->setFirstname(firstname: 'john');
     $user->setEmail(email: 'test@example.com');
@@ -158,67 +158,67 @@ test(description: 'Doit retourner le mail de l\'utilisateur si lastname est vide
     expect($user->__toString())->toBe(expected: 'John  - (test@example.com)');
 });
 
-test(description: 'Doit retourner le username si il est définis', closure: function () {
+test(description: 'Doit retourner le username si il est définis', closure: function (): void {
     $user = new User();
     $user->setUsername(username: 'killdag59');
 
     expect($user->getUsername())->toBe(expected: 'killdag59');
 });
 
-test(description: 'Doit retourner null quand j\'appel getId sur un utilisateur non persisté', closure: function () {
+test(description: 'Doit retourner null quand j\'appel getId sur un utilisateur non persisté', closure: function (): void {
     $user = new User();
 
     expect($user->getId())->toBeNull();
 });
 
-test(description: 'Doit retourner l\'email de l\'utilisateur', closure: function () {
+test(description: 'Doit retourner l\'email de l\'utilisateur', closure: function (): void {
     $user = new User();
     $user->setEmail(email: 'test@example.com');
 
     expect($user->getEmail())->toBe(expected: 'test@example.com');
 });
 
-test(description: 'Doit enregistrer le mot de passe de l\'utilisateur', closure: function () {
+test(description: 'Doit enregistrer le mot de passe de l\'utilisateur', closure: function (): void {
     $user = new User();
     $user->setPassword(password: 'password');
 
     expect($user->getPassword())->toBe(expected: 'password');
 });
 
-test(description: 'Le ROLE_USER doit être ajouté par défaut', closure: function () {
+test(description: 'Le ROLE_USER doit être ajouté par défaut', closure: function (): void {
     $user = new User();
     expect($user->getRoles())->toContain('ROLE_USER');
 });
 
-test(description: 'Lorsqu\'un utilisateur est créé, il doit avoir le rôle ROLE_USER en plus des rôles qu\'on lui donne', closure: function () {
+test(description: 'Lorsqu\'un utilisateur est créé, il doit avoir le rôle ROLE_USER en plus des rôles qu\'on lui donne', closure: function (): void {
     $user = new User();
     $user->setRoles(roles: ['ROLE_ADMIN']);
 
     expect($user->getRoles())->toContain('ROLE_USER');
 });
 
-test(description: 'Doit renvoyer l\'email de l\'utilisateur attendu lors de l\'appel à getUserIdentifier()', closure: function () {
+test(description: 'Doit renvoyer l\'email de l\'utilisateur attendu lors de l\'appel à getUserIdentifier()', closure: function (): void {
     $user = new User();
     $user->setEmail(email: 'test@example.com');
 
     expect($user->getUserIdentifier())->toBe(expected: 'test@example.com');
 });
 
-test(description: 'Ne doit pas avoir d\'implémentation spécifique pour eraseCredentials()', closure: function () {
+test(description: 'Ne doit pas avoir d\'implémentation spécifique pour eraseCredentials()', closure: function (): void {
     $user = new User();
     $user->eraseCredentials();
 
     expect(value: null)->toBeNull();
 });
 
-test(description: 'Doit retourner au moins le rôle ROLE_USER', closure: function () {
+test(description: 'Doit retourner au moins le rôle ROLE_USER', closure: function (): void {
     $user = new User();
     $user->setRoles(roles: ['ROLE_ADMIN']);
 
     expect($user->getRoles())->toContain(needles: 'ROLE_USER');
 });
 
-test(description: 'Doit retourner le nom complet de l\'utilisateur', closure: function () {
+test(description: 'Doit retourner le nom complet de l\'utilisateur', closure: function (): void {
     $user = new User();
     $user->setFirstname(firstname: 'john');
     $user->setLastname(lastname: 'doe');
@@ -226,14 +226,14 @@ test(description: 'Doit retourner le nom complet de l\'utilisateur', closure: fu
     expect($user->getFullname())->toBe(expected: 'John Doe');
 });
 
-test(description: 'Doit retourner la date d\'anniversaire de l\'utilisateur', closure: function () {
+test(description: 'Doit retourner la date d\'anniversaire de l\'utilisateur', closure: function (): void {
     $user = new User();
     $user->setBirthday(birthday: new DateTime());
 
     expect($user->getBirthday())->toBeInstanceOf(class: DateTime::class);
 });
 
-test(description: 'Doit retourner le numéro de téléphone de l\'utilisateur', closure: function () {
+test(description: 'Doit retourner le numéro de téléphone de l\'utilisateur', closure: function (): void {
     $user = new User();
     $user->setMobile(mobile: '0606060606');
 

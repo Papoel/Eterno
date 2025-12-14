@@ -4,7 +4,7 @@ use App\Services\Encryption\MessageEncryptionService;
 use App\Services\Encryptor\DecryptorInterface;
 use App\Services\Encryptor\EncryptorInterface;
 
-beforeEach(function () {
+beforeEach(function (): void {
     $this->encryptService = Mockery::mock(EncryptorInterface::class);
     $this->decryptService = Mockery::mock(DecryptorInterface::class);
     $this->service = new MessageEncryptionService(
@@ -13,11 +13,11 @@ beforeEach(function () {
     );
 });
 
-test(description: 'Une exception est levée si le contenu est null', closure: function () {
+test(description: 'Une exception est levée si le contenu est null', closure: function (): void {
     $this->service->encrypt(content: null, key: 'key');
 })->throws(exception: \InvalidArgumentException::class);
 
-test(description: 'Encrypt delegue pour crypter le service', closure: function () {
+test(description: 'Encrypt delegue pour crypter le service', closure: function (): void {
     $this->encryptService
         ->expects(something: 'encrypt')
         ->with('content', 'key')
@@ -28,7 +28,7 @@ test(description: 'Encrypt delegue pour crypter le service', closure: function (
         ->toBe(expected: 'encrypted');
 });
 
-test(description: 'Decrypt delegue pour decrypter le service', closure: function () {
+test(description: 'Decrypt delegue pour decrypter le service', closure: function (): void {
     $this->decryptService
         ->expects(something: 'decrypt')
         ->with('encrypted', 'key')
@@ -39,7 +39,7 @@ test(description: 'Decrypt delegue pour decrypter le service', closure: function
         ->toBe(expected: 'decrypted');
 });
 
-test('le service de chiffrement lève une exception si le contenu est null', function () {
+test('le service de chiffrement lève une exception si le contenu est null', function (): void {
     $encryptor = mock(EncryptorInterface::class);
     $decryptor = mock(DecryptorInterface::class);
 
@@ -49,7 +49,7 @@ test('le service de chiffrement lève une exception si le contenu est null', fun
         ->toThrow(InvalidArgumentException::class, 'Content cannot be null');
 });
 
-test('le service de chiffrement chiffre correctement un message non vide', function () {
+test('le service de chiffrement chiffre correctement un message non vide', function (): void {
     $content = 'Message test';
     $key = 'test_key';
     $encrypted = 'encrypted_content';
@@ -68,7 +68,7 @@ test('le service de chiffrement chiffre correctement un message non vide', funct
     expect($result)->toBe($encrypted);
 });
 
-test('le service de déchiffrement déchiffre correctement un message', function () {
+test('le service de déchiffrement déchiffre correctement un message', function (): void {
     $encrypted = 'encrypted_content';
     $key = 'test_key';
     $decrypted = 'Message test';
