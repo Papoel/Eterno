@@ -207,7 +207,7 @@ jobs:
           APP_ENV: test
           DATABASE_URL: mysql://root:root@127.0.0.1:3306/test_db?serverVersion=11.0.2-MariaDB&charset=utf8mb4
 
-      - name: Compile assets for tests
+      - name: Compile assets for tests # TODO: If any file in assets/controllers add .gitkeep file
         run: |
           echo "📦 Compiling assets..."
           php bin/console asset-map:compile --env=test
