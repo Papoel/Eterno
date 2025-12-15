@@ -199,6 +199,14 @@ jobs:
         env:
           DATABASE_URL: mysql://root:root@127.0.0.1:3306/test_db?serverVersion=11.0.2-MariaDB&charset=utf8mb4
 
+      - name: Compile assets for tests
+        run: |
+          echo "📦 Compiling assets..."
+          php bin/console asset-map:compile --env=test
+        env:
+          APP_ENV: test
+          DATABASE_URL: mysql://root:root@127.0.0.1:3306/test_db?serverVersion=11.0.2-MariaDB&charset=utf8mb4
+
       - name: Verify Symfony test environment
         run: |
           echo "🔍 Verifying Symfony test environment..."
@@ -225,10 +233,10 @@ jobs:
         run: |
           if [ -x "vendor/bin/pest" ]; then
             echo "✅ Pest detected - Running tests with Pest..."
-            vendor/bin/pest --colors=always
+            vendor/bin/pest --colors=always --display-errors --display-warnings
           elif [ -x "vendor/bin/phpunit" ]; then
             echo "✅ PHPUnit detected - Running tests with PHPUnit..."
-            vendor/bin/phpunit --testdox --colors=always
+            vendor/bin/phpunit --testdox --colors=always --display-errors --display-warnings
           else
             echo "❌ No test framework found in vendor/bin!"
             echo "Available binaries in vendor/bin:"
@@ -238,6 +246,23 @@ jobs:
         env:
           APP_ENV: test
           DATABASE_URL: mysql://root:root@127.0.0.1:3306/test_db?serverVersion=11.0.2-MariaDB&charset=utf8mb4
+          
+      - name: Display Symfony logs on test failure
+        if: failure()
+        run: |
+          echo "📋 Displaying Symfony test logs..."
+          if [ -f var/log/test.log ]; then
+            echo "=== var/log/test.log ==="
+            tail -100 var/log/test.log
+          else
+            echo "⚠️  No test.log found"
+          fi
+          
+          if [ -d var/log ]; then
+            echo ""
+            echo "=== Available log files ==="
+            ls -la var/log/
+          fi
 
   metrics:
     name: Code Metrics - PHP 8.3
