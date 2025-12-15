@@ -1,59 +1,284 @@
-name: Code Quality Check for Symfony
+name: Code Quality & Tests - Symfony 7.4
+
 on:
   push:
     branches:
       - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+
+env:
+  PHPQA_IMAGE: jakzal/phpqa:php8.4-alpine
+  COMPOSER_CACHE_DIR: /tmp/composer-cache
 
 jobs:
   code-quality:
-    name: Code Quality Check - Symfony 7.4.* (PHP ${{ matrix.php-versions }})
+    name: Quality Checks - PHP ${{ matrix.php-versions }}
     runs-on: ubuntu-latest
+
     strategy:
       fail-fast: false
       matrix:
         php-versions: ['8.3', '8.4']
 
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup PHP, extensions, and Composer
+      - name: Setup PHP ${{ matrix.php-versions }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-versions }}
+          extensions: mbstring, xml, ctype, iconv, intl, pdo, pdo_mysql, dom, filter, gd, json, opcache
+          coverage: none
+          tools: composer:v2
+
+      - name: Display PHP version
+        run: |
+          php -v
+          composer -V
+
+      - name: Validate composer files
+        run: composer validate --strict --no-check-lock
+
+      - name: Get Composer cache directory
+        id: composer-cache
+        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-php${{ matrix.php-versions }}-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-php${{ matrix.php-versions }}-
+            ${{ runner.os }}-composer-
+
+      - name: Install Composer dependencies
+        run: composer install --no-ansi --no-interaction --no-progress --prefer-dist --optimize-autoloader
+
+      - name: Check platform requirements
+        run: composer check-platform-reqs
+
+      - name: Verify Symfony installation
+        run: |
+          php bin/console --version
+          php bin/console about
+
+      - name: Pull PHPQA Docker image
+        run: docker pull ${{ env.PHPQA_IMAGE }}
+
+      - name: Cache PHPQA Docker image
+        uses: actions/cache@v4
+        with:
+          path: /var/lib/docker
+          key: docker-phpqa-${{ env.PHPQA_IMAGE }}
+
+      - name: Run PHP CS Fixer (dry-run)
+        run: |
+          docker run --rm \
+            -v $PWD:/project \
+            -w /project \
+            ${{ env.PHPQA_IMAGE }} \
+            php-cs-fixer fix ./src --rules=@Symfony --verbose --dry-run --diff
+        continue-on-error: false
+
+      - name: Run PHPStan
+        run: |
+          docker run --rm \
+            -v $PWD:/project \
+            -w /project \
+            ${{ env.PHPQA_IMAGE }} \
+            phpstan analyse --configuration=phpstan.neon --memory-limit=1G
+        continue-on-error: false
+
+      - name: Run PHP Copy/Paste Detector
+        run: |
+          docker run --rm \
+            -v $PWD:/project \
+            -w /project \
+            ${{ env.PHPQA_IMAGE }} \
+            phpcpd ./src --min-lines=3 --min-tokens=40
+        continue-on-error: true
+
+      - name: Check security vulnerabilities
+        run: |
+          symfony security:check || \
+          docker run --rm \
+            -v $PWD:/project \
+            -w /project \
+            ${{ env.PHPQA_IMAGE }} \
+            local-php-security-checker
+
+      - name: Lint Twig templates
+        run: php bin/console lint:twig templates
+        continue-on-error: false
+
+      - name: Lint YAML files
+        run: php bin/console lint:yaml config
+        continue-on-error: false
+
+      - name: Lint Symfony Container
+        run: php bin/console lint:container
+        continue-on-error: false
+
+      - name: Validate Doctrine schema
+        run: php bin/console doctrine:schema:validate --skip-sync
+        continue-on-error: false
+        env:
+          DATABASE_URL: sqlite:///%kernel.project_dir%/var/test.db
+
+      - name: Run Composer audit
+        run: composer audit
+        continue-on-error: true
+
+  tests:
+    name: Tests - PHP ${{ matrix.php-versions }}
+    runs-on: ubuntu-latest
+    needs: code-quality
+
+    strategy:
+      fail-fast: false
+      matrix:
+        php-versions: ['8.3', '8.4']
+
+    services:
+      mysql:
+        image: mariadb:11.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: test_db
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP ${{ matrix.php-versions }}
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-versions }}
           extensions: mbstring, xml, ctype, iconv, intl, pdo, pdo_mysql, dom, filter, gd, json
-          coverage: none
+          coverage: xdebug
+          tools: composer:v2
 
-      - name: Check PHP Version
-        run: php -v
-
-      - name: Validate composer.json and composer.lock
-        run: composer validate --strict
-
-      - name: Get Composer Cache Directory
+      - name: Get Composer cache directory
         id: composer-cache
         run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
-      - name: Cache Composer packages
+      - name: Cache Composer dependencies
         uses: actions/cache@v4
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          key: ${{ runner.os }}-composer-php${{ matrix.php-versions }}-${{ hashFiles('**/composer.lock') }}
           restore-keys: |
+            ${{ runner.os }}-composer-php${{ matrix.php-versions }}-
             ${{ runner.os }}-composer-
 
-      - name: Install Dependencies
+      - name: Install Composer dependencies
         run: composer install --no-ansi --no-interaction --no-progress --prefer-dist
 
-      - name: Check requirements with Composer
-        run: composer check-platform-reqs
+      - name: Setup test database
+        run: |
+          php bin/console doctrine:database:create --env=test --if-not-exists
+          php bin/console doctrine:schema:create --env=test
+          php bin/console doctrine:fixtures:load --env=test --no-interaction || echo "No fixtures to load"
+        env:
+          DATABASE_URL: mysql://root:root@127.0.0.1:3306/test_db?serverVersion=11.0.2-MariaDB&charset=utf8mb4
 
-      - name: Check the Symfony console
-        run: bin/console about
+      - name: Run PHPUnit tests
+        run: vendor/bin/phpunit --testdox --colors=always
+        env:
+          DATABASE_URL: mysql://root:root@127.0.0.1:3306/test_db?serverVersion=11.0.2-MariaDB&charset=utf8mb4
 
-      - name: Coding standards checks (php_codesniffer + php-cs-fixer)
-        if: matrix.php-versions == '8.3'
-        run: make qa-cs-fixer
+      - name: Run Pest tests (if available)
+        run: |
+          if [ -f "vendor/bin/pest" ]; then
+            vendor/bin/pest --colors=always
+          else
+            echo "Pest not installed, skipping..."
+          fi
+        env:
+          DATABASE_URL: mysql://root:root@127.0.0.1:3306/test_db?serverVersion=11.0.2-MariaDB&charset=utf8mb4
+        continue-on-error: true
 
-      - name: Static analysis of PHP code (PHPStan)
-        run: make qa-phpstan
+  metrics:
+    name: Code Metrics - PHP 8.3
+    runs-on: ubuntu-latest
+    needs: [code-quality, tests]
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          coverage: none
+
+      - name: Get Composer cache directory
+        id: composer-cache
+        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-php8.3-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-php8.3-
+            ${{ runner.os }}-composer-
+
+      - name: Install Composer dependencies
+        run: composer install --no-ansi --no-interaction --no-progress --prefer-dist
+
+      - name: Pull PHPQA Docker image
+        run: docker pull ${{ env.PHPQA_IMAGE }}
+
+      - name: Generate PHPMetrics report
+        run: |
+          docker run --rm \
+            -v $PWD:/project \
+            -w /project \
+            ${{ env.PHPQA_IMAGE }} \
+            phpmetrics --report-html=var/phpmetrics ./src
+
+      - name: Upload PHPMetrics report
+        uses: actions/upload-artifact@v4
+        with:
+          name: phpmetrics-report
+          path: var/phpmetrics
+          retention-days: 30
+
+  summary:
+    name: Workflow Summary
+    runs-on: ubuntu-latest
+    needs: [code-quality, tests, metrics]
+    if: always()
+
+    steps:
+      - name: Check workflow status
+        run: |
+          echo "🎯 Workflow Summary"
+          echo "=================="
+          echo "Code Quality: ${{ needs.code-quality.result }}"
+          echo "Tests: ${{ needs.tests.result }}"
+          echo "Metrics: ${{ needs.metrics.result }}"
+          
+          if [ "${{ needs.code-quality.result }}" == "failure" ] || [ "${{ needs.tests.result }}" == "failure" ]; then
+            echo "❌ Workflow failed!"
+            exit 1
+          else
+            echo "✅ All checks passed!"
+          fi

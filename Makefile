@@ -176,10 +176,6 @@ prompt-cc: ## Effacer le cache avec une invite de commande
 
 cc: prompt-cc
 
-
-
-
-
 cc-prod: ## Vider le cache de production | symfony console cache:clear --env=prod
 	$(SYMFONY) cache:clear --env=prod
 
