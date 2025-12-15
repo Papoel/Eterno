@@ -95,15 +95,6 @@ jobs:
             phpstan analyse --configuration=.github/workflows/phpstan.ci.neon --memory-limit=1G
         continue-on-error: false
 
-      - name: Run PHP Copy/Paste Detector
-        run: |
-          docker run --rm \
-            -v $PWD:/project \
-            -w /project \
-            ${{ env.PHPQA_IMAGE }} \
-            phpcpd ./src --min-lines=3 --min-tokens=40
-        continue-on-error: true
-
       - name: Check security vulnerabilities
         run: |
           symfony security:check || \
