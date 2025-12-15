@@ -199,27 +199,27 @@ jobs:
         env:
           DATABASE_URL: mysql://root:root@127.0.0.1:3306/test_db?serverVersion=11.0.2-MariaDB&charset=utf8mb4
 
-      - name: Verify test framework availability
+      - name: Verify Symfony test environment
         run: |
-          echo "🔍 Checking available test frameworks..."
-          echo "Contents of vendor/bin:"
-          ls -la vendor/bin/ | grep -E "phpunit|pest" || echo "No test framework binaries found"
-          
-          if [ -x "vendor/bin/phpunit" ]; then
-            echo "✅ PHPUnit found and executable"
-            vendor/bin/phpunit --version
-          fi
-          
+          echo "🔍 Verifying Symfony test environment..."
+          php bin/console about --env=test
+          echo ""
+          echo "📋 Environment variables:"
+          echo "APP_ENV: $APP_ENV"
+          echo "DATABASE_URL: $DATABASE_URL"
+          echo ""
+          echo "🧪 Checking test framework availability..."
           if [ -x "vendor/bin/pest" ]; then
-            echo "✅ Pest found and executable"
-            vendor/bin/pest --version
-          fi
-          
-          # Vérifier qu'au moins un framework est installé via composer
-          if ! composer show | grep -E "pestphp/pest|phpunit/phpunit"; then
-            echo "❌ No test framework found in composer packages!"
+            echo "✅ Pest found: $(vendor/bin/pest --version)"
+          elif [ -x "vendor/bin/phpunit" ]; then
+            echo "✅ PHPUnit found: $(vendor/bin/phpunit --version)"
+          else
+            echo "❌ No test framework found!"
             exit 1
           fi
+        env:
+          APP_ENV: test
+          DATABASE_URL: mysql://root:root@127.0.0.1:3306/test_db?serverVersion=11.0.2-MariaDB&charset=utf8mb4
 
       - name: Run tests with auto-detected framework
         run: |
@@ -236,6 +236,7 @@ jobs:
             exit 1
           fi
         env:
+          APP_ENV: test
           DATABASE_URL: mysql://root:root@127.0.0.1:3306/test_db?serverVersion=11.0.2-MariaDB&charset=utf8mb4
 
   metrics:
