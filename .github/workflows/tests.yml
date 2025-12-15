@@ -138,17 +138,19 @@ jobs:
 
     services:
       mysql:
-        image: mariadb:11.0
+        image: mariadb:11.0.2
         env:
           MYSQL_ROOT_PASSWORD: root
           MYSQL_DATABASE: test_db
+          MYSQL_ALLOW_EMPTY_PASSWORD: 'no'
         ports:
           - 3306:3306
         options: >-
-          --health-cmd="mysqladmin ping"
+          --health-cmd="healthcheck.sh --connect --innodb_initialized"
           --health-interval=10s
           --health-timeout=5s
-          --health-retries=3
+          --health-retries=5
+          --health-start-period=30s
 
     steps:
       - name: Checkout code
@@ -160,7 +162,7 @@ jobs:
           php-version: ${{ matrix.php-versions }}
           extensions: mbstring, xml, ctype, iconv, intl, pdo, pdo_mysql, dom, filter, gd, json
           coverage: xdebug
-          tools: composer:v2
+          tools: composer:v2, mysqladmin
 
       - name: Get Composer cache directory
         id: composer-cache
@@ -177,6 +179,17 @@ jobs:
 
       - name: Install Composer dependencies
         run: composer install --no-ansi --no-interaction --no-progress --prefer-dist
+
+      - name: Wait for MySQL to be ready
+        run: |
+          for i in {1..30}; do
+            if mysqladmin ping -h"127.0.0.1" -P3306 -uroot -proot --silent; then
+              echo "MySQL is ready!"
+              break
+            fi
+            echo "Waiting for MySQL... ($i/30)"
+            sleep 2
+          done
 
       - name: Setup test database
         run: |
