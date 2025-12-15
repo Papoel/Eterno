@@ -86,13 +86,13 @@ jobs:
             php-cs-fixer fix ./src --rules=@Symfony --verbose --dry-run --diff
         continue-on-error: false
 
-      - name: Run PHPStan
+      - name: Run PHPStan with CI configuration
         run: |
           docker run --rm \
             -v $PWD:/project \
             -w /project \
             ${{ env.PHPQA_IMAGE }} \
-            phpstan analyse --configuration=phpstan.neon --memory-limit=1G
+            phpstan analyse --configuration=.github/workflows/phpstan.ci.neon --memory-limit=1G
         continue-on-error: false
 
       - name: Run PHP Copy/Paste Detector

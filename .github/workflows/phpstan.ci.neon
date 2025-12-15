@@ -1,0 +1,11 @@
+parameters:
+  level: 7
+  treatPhpDocTypesAsCertain: false
+  paths:
+    - src
+  excludePaths:
+    - src/DataFixtures
+    - src/Repository
+  reportUnmatchedIgnoredErrors: false
+  editorUrl: 'phpstorm://open?file=%%file%%&line=%%line%%'
+  editorUrlTitle: '%%relFile%%:%%line%%'
