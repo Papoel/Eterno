@@ -202,40 +202,49 @@ jobs:
       - name: Verify test framework availability
         run: |
           echo "🔍 Checking available test frameworks..."
-          if [ -f "vendor/bin/phpunit" ]; then
-            echo "✅ PHPUnit found: $(vendor/bin/phpunit --version)"
+          echo "Contents of vendor/bin:"
+          ls -la vendor/bin/ | grep -E "phpunit|pest" || echo "No test framework binaries found"
+          
+          if [ -x "vendor/bin/phpunit" ]; then
+            echo "✅ PHPUnit found and executable"
+            vendor/bin/phpunit --version
           fi
-          if [ -f "vendor/bin/pest" ]; then
-            echo "✅ Pest found: $(vendor/bin/pest --version)"
+          
+          if [ -x "vendor/bin/pest" ]; then
+            echo "✅ Pest found and executable"
+            vendor/bin/pest --version
           fi
-          if [ ! -f "vendor/bin/phpunit" ] && [ ! -f "vendor/bin/pest" ]; then
-            echo "❌ No test framework found!"
+          
+          # Vérifier qu'au moins un framework est installé via composer
+          if ! composer show | grep -E "pestphp/pest|phpunit/phpunit"; then
+            echo "❌ No test framework found in composer packages!"
             exit 1
           fi
 
       - name: Run PHPUnit tests (if available)
         run: |
-          if [ -f "vendor/bin/phpunit" ]; then
+          if [ -x "vendor/bin/phpunit" ]; then
             echo "✅ Running PHPUnit tests..."
             vendor/bin/phpunit --testdox --colors=always
           else
-            echo "⚠️  PHPUnit not found, skipping..."
+            echo "⚠️  PHPUnit not found or not executable, skipping..."
           fi
         env:
           DATABASE_URL: mysql://root:root@127.0.0.1:3306/test_db?serverVersion=11.0.2-MariaDB&charset=utf8mb4
-        continue-on-error: false
 
       - name: Run Pest tests (if available)
         run: |
-          if [ -f "vendor/bin/pest" ]; then
+          if [ -x "vendor/bin/pest" ]; then
             echo "✅ Running Pest tests..."
             vendor/bin/pest --colors=always
+          elif composer show pestphp/pest >/dev/null 2>&1; then
+            echo "✅ Pest is installed, running via PHP..."
+            php vendor/pestphp/pest/bin/pest --colors=always
           else
             echo "⚠️  Pest not found, skipping..."
           fi
         env:
           DATABASE_URL: mysql://root:root@127.0.0.1:3306/test_db?serverVersion=11.0.2-MariaDB&charset=utf8mb4
-        continue-on-error: false
 
   metrics:
     name: Code Metrics - PHP 8.3
