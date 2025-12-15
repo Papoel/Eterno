@@ -199,6 +199,14 @@ jobs:
         env:
           DATABASE_URL: mysql://root:root@127.0.0.1:3306/test_db?serverVersion=11.0.2-MariaDB&charset=utf8mb4
 
+      - name: Install importmap packages
+        run: |
+          echo "📥 Installing importmap packages..."
+          php bin/console importmap:install
+        env:
+          APP_ENV: test
+          DATABASE_URL: mysql://root:root@127.0.0.1:3306/test_db?serverVersion=11.0.2-MariaDB&charset=utf8mb4
+
       - name: Compile assets for tests
         run: |
           echo "📦 Compiling assets..."
