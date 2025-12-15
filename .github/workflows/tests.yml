@@ -32,7 +32,7 @@ jobs:
         run: composer update
 
       - name: Cache Composer packages
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: vendor
           key: composer-${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
