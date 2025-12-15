@@ -221,27 +221,19 @@ jobs:
             exit 1
           fi
 
-      - name: Run PHPUnit tests (if available)
-        run: |
-          if [ -x "vendor/bin/phpunit" ]; then
-            echo "✅ Running PHPUnit tests..."
-            vendor/bin/phpunit --testdox --colors=always
-          else
-            echo "⚠️  PHPUnit not found or not executable, skipping..."
-          fi
-        env:
-          DATABASE_URL: mysql://root:root@127.0.0.1:3306/test_db?serverVersion=11.0.2-MariaDB&charset=utf8mb4
-
-      - name: Run Pest tests (if available)
+      - name: Run tests with auto-detected framework
         run: |
           if [ -x "vendor/bin/pest" ]; then
-            echo "✅ Running Pest tests..."
+            echo "✅ Pest detected - Running tests with Pest..."
             vendor/bin/pest --colors=always
-          elif composer show pestphp/pest >/dev/null 2>&1; then
-            echo "✅ Pest is installed, running via PHP..."
-            php vendor/pestphp/pest/bin/pest --colors=always
+          elif [ -x "vendor/bin/phpunit" ]; then
+            echo "✅ PHPUnit detected - Running tests with PHPUnit..."
+            vendor/bin/phpunit --testdox --colors=always
           else
-            echo "⚠️  Pest not found, skipping..."
+            echo "❌ No test framework found in vendor/bin!"
+            echo "Available binaries in vendor/bin:"
+            ls -la vendor/bin/ || echo "vendor/bin directory not found"
+            exit 1
           fi
         env:
           DATABASE_URL: mysql://root:root@127.0.0.1:3306/test_db?serverVersion=11.0.2-MariaDB&charset=utf8mb4
