@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php-versions: ['8.2', '8.3']
+        php-versions: ['8.2', '8.3', '8.4']
 
     steps:
       - name: Checkout
@@ -48,7 +48,7 @@ jobs:
         run: bin/console about
 
       - name: Coding standards checks (php_codesniffer + php-cs-fixer)
-        if: matrix.php-versions == '8.2'
+        if: matrix.php-versions == '8.3'
         run: make qa-cs-fixer
 
       - name: Static analysis of PHP code (PHPStan)
