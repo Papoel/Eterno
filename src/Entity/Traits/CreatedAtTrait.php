@@ -10,12 +10,12 @@ use Doctrine\ORM\Mapping as ORM;
 trait CreatedAtTrait
 {
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, options: ['default' => 'CURRENT_TIMESTAMP'])]
-    private \DateTimeImmutable $createdAt;
+    private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $updatedAt = null;
 
-    public function getCreatedAt(): \DateTimeImmutable
+    public function getCreatedAt(): ?\DateTimeImmutable
     {
         return $this->createdAt;
     }
@@ -45,8 +45,10 @@ trait CreatedAtTrait
     #[ORM\PrePersist]
     public function createdTimestamps(): void
     {
-        $timezone = new \DateTimeZone(timezone: 'Europe/Paris');
-        $this->setCreatedAt(new \DateTimeImmutable(datetime: 'now', timezone: $timezone));
+        if (null === $this->createdAt) {
+            $timezone = new \DateTimeZone(timezone: 'Europe/Paris');
+            $this->setCreatedAt(new \DateTimeImmutable(datetime: 'now', timezone: $timezone));
+        }
     }
 
     /**
