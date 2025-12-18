@@ -48,8 +48,18 @@ class AdminController extends AbstractController
 
         // Traduire les noms des mois en français
         $monthNamesFrench = [
-            'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',
-            'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre',
+            'Janvier',
+            'Février',
+            'Mars',
+            'Avril',
+            'Mai',
+            'Juin',
+            'Juillet',
+            'Août',
+            'Septembre',
+            'Octobre',
+            'Novembre',
+            'Décembre',
         ];
 
         // Utiliser array_combine pour associer les données des messages avec les noms des mois en français
@@ -61,8 +71,8 @@ class AdminController extends AbstractController
         // Obtenir le numéro du mois actuel (1 pour janvier, 2 pour février, etc.)
         $currentMonth = (int) date(format: 'n');
 
-        // Parcourir les quatre derniers mois, y compris le mois actuel
-        for ($i = 0; $i < 4; ++$i) {
+        // Parcourir les douzes derniers mois, y compris le mois actuel
+        for ($i = 0; $i < 12; ++$i) {
             // Calculer le mois en soustrayant $i de la valeur du mois actuel
             $month = $currentMonth - $i;
 
