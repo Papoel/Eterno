@@ -306,28 +306,23 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-composer-php8.3-${{ hashFiles('**/composer.lock') }}
+          key: ${{ runner.os }}-composer-php8.3-${{ hashFiles('**/composer.json') }}
           restore-keys: |
             ${{ runner.os }}-composer-php8.3-
             ${{ runner.os }}-composer-
 
       - name: Install Composer dependencies
-        run: |
-          if [ "${{ matrix.php-versions }}" = "8.3" ]; then
-            composer update --no-ansi --no-interaction --no-progress --prefer-dist --optimize-autoloader
-          else
-            composer install --no-ansi --no-interaction --no-progress --prefer-dist --optimize-autoloader
-          fi
+        run: composer update --no-ansi --no-interaction --no-progress --prefer-dist --optimize-autoloader --prefer-stable
 
       - name: Pull PHPQA Docker image
-        run: docker pull jakzal/phpqa:php${{ matrix.php-versions }}-alpine
+        run: docker pull jakzal/phpqa:php8.3-alpine
 
       - name: Generate PHPMetrics report
         run: |
           docker run --rm \
             -v $PWD:/project \
             -w /project \
-            ${{ env.PHPQA_IMAGE }} \
+            jakzal/phpqa:php8.3-alpine \
             phpmetrics --report-html=var/phpmetrics ./src
 
       - name: Upload PHPMetrics report
