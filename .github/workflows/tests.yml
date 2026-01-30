@@ -74,20 +74,20 @@ jobs:
           php bin/console about
 
       - name: Pull PHPQA Docker image
-        run: docker pull ${{ env.PHPQA_IMAGE }}
+        run: docker pull jakzal/phpqa:php${{ matrix.php-versions }}-alpine
 
       - name: Cache PHPQA Docker image
         uses: actions/cache@v4
         with:
           path: /var/lib/docker
-          key: docker-phpqa-${{ env.PHPQA_IMAGE }}
+          key: docker-phpqa-php${{ matrix.php-versions }}-alpine
 
       - name: Run PHP CS Fixer (dry-run)
         run: |
           docker run --rm \
             -v $PWD:/project \
             -w /project \
-            ${{ env.PHPQA_IMAGE }} \
+            jakzal/phpqa:php${{ matrix.php-versions }}-alpine \
             php-cs-fixer fix ./src --rules=@Symfony --verbose --dry-run --diff
         continue-on-error: false
 
@@ -96,7 +96,7 @@ jobs:
           docker run --rm \
             -v $PWD:/project \
             -w /project \
-            ${{ env.PHPQA_IMAGE }} \
+            jakzal/phpqa:php${{ matrix.php-versions }}-alpine \
             phpstan analyse --configuration=.github/workflows/phpstan.ci.neon --memory-limit=1G
         continue-on-error: false
 
@@ -320,7 +320,7 @@ jobs:
           fi
 
       - name: Pull PHPQA Docker image
-        run: docker pull ${{ env.PHPQA_IMAGE }}
+        run: docker pull jakzal/phpqa:php${{ matrix.php-versions }}-alpine
 
       - name: Generate PHPMetrics report
         run: |
