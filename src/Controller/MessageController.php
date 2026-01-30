@@ -42,7 +42,7 @@ class MessageController extends AbstractController
 
         $user = $this->getUser();
 
-        if (!($user instanceof User)) {
+        if (!$user instanceof User) {
             throw $this->createAccessDeniedException('Vous devez être connecté pour accéder à cette page.');
         }
 
