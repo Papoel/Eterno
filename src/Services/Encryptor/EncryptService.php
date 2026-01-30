@@ -30,11 +30,8 @@ readonly class EncryptService implements EncryptorInterface
             throw new \RuntimeException(message: 'La clé privée ne peut pas être vide.');
         }
 
-        // Get cipher IV length
+        // Get cipher IV length (validated in constructor, so this will always return a valid int)
         $ivLength = openssl_cipher_iv_length(cipher_algo: self::CIPHER_METHOD);
-        if (false === $ivLength) {
-            throw new \RuntimeException(message: 'Echec de la récupération de la longueur du vecteur d\'initialisation.');
-        }
 
         // Generate random IV
         $iv = openssl_random_pseudo_bytes($ivLength);
