@@ -58,7 +58,12 @@ jobs:
             ${{ runner.os }}-composer-
 
       - name: Install Composer dependencies
-        run: composer install --no-ansi --no-interaction --no-progress --prefer-dist --optimize-autoloader
+        run: |
+          if [ "${{ matrix.php-versions }}" = "8.3" ]; then
+            composer update --no-ansi --no-interaction --no-progress --prefer-dist --optimize-autoloader
+          else
+            composer install --no-ansi --no-interaction --no-progress --prefer-dist --optimize-autoloader
+          fi
 
       - name: Check platform requirements
         run: composer check-platform-reqs
@@ -178,7 +183,12 @@ jobs:
             ${{ runner.os }}-composer-
 
       - name: Install Composer dependencies
-        run: composer install --no-ansi --no-interaction --no-progress --prefer-dist
+        run: |
+          if [ "${{ matrix.php-versions }}" = "8.3" ]; then
+            composer update --no-ansi --no-interaction --no-progress --prefer-dist --optimize-autoloader
+          else
+            composer install --no-ansi --no-interaction --no-progress --prefer-dist --optimize-autoloader
+          fi
 
       - name: Wait for MySQL to be ready
         run: |
@@ -302,7 +312,12 @@ jobs:
             ${{ runner.os }}-composer-
 
       - name: Install Composer dependencies
-        run: composer install --no-ansi --no-interaction --no-progress --prefer-dist
+        run: |
+          if [ "${{ matrix.php-versions }}" = "8.3" ]; then
+            composer update --no-ansi --no-interaction --no-progress --prefer-dist --optimize-autoloader
+          else
+            composer install --no-ansi --no-interaction --no-progress --prefer-dist --optimize-autoloader
+          fi
 
       - name: Pull PHPQA Docker image
         run: docker pull ${{ env.PHPQA_IMAGE }}
