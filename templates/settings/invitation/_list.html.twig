@@ -14,7 +14,7 @@
                 {% if not invitation.accepted %}
                     <span class="badge bg-warning rounded-pill text-center text-dark" style="position: absolute; left: 60%; top: 25%">En attente</span>
                     <span style="position: absolute; right: .5rem; top: 25%" class="badge bg-info rounded-pill remaining-time" id="remainingTime_{{ loop.index }}"
-                          data-created-at="{{ invitation.createdAt|date("Y-m-d\TH:i:sP") }}">Calcul...</span>
+                          data-created-at="{{ invitation.createdAt|date('c') }}">Calcul...</span>
                 {% else %}
                     <span class="badge bg-success rounded-pill ms-2" style="position: absolute; right: .5rem; top: 25%">Accepté</span>
                 {% endif %}
