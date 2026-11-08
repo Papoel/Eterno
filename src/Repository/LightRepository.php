@@ -25,7 +25,7 @@ class LightRepository extends ServiceEntityRepository
     public function countLights(): int
     {
         $result = $this->createQueryBuilder(alias: 'l')
-            ->select(select: 'COUNT(l.id)')
+            ->select('COUNT(l.id)')
             ->getQuery()
             ->getSingleScalarResult();
 

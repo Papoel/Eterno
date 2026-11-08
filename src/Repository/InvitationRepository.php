@@ -41,7 +41,7 @@ class InvitationRepository extends ServiceEntityRepository
     public function countInvitationsAccepted(): int
     {
         $result = $this->createQueryBuilder(alias: 'i')
-            ->select(select: 'COUNT(i.id)')
+            ->select('COUNT(i.id)')
             ->andWhere('i.accepted = :accepted')
             ->setParameter(key: 'accepted', value: true)
             ->getQuery()
@@ -58,7 +58,7 @@ class InvitationRepository extends ServiceEntityRepository
     public function countInvitationsNotAccepted(): int
     {
         $result = $this->createQueryBuilder(alias: 'i')
-            ->select(select: 'COUNT(i.id)')
+            ->select('COUNT(i.id)')
             ->andWhere('i.accepted = :accepted')
             ->setParameter(key: 'accepted', value: false)
             ->getQuery()
@@ -79,7 +79,7 @@ class InvitationRepository extends ServiceEntityRepository
         return $this->createQueryBuilder(alias: 'i')
             ->select('COUNT(i.id) as invitationsSent', 'SUM(CASE WHEN i.accepted = true THEN 1 ELSE 0 END) as invitationsAccepted', 'u.id as userId')
             ->leftJoin(join: 'i.friend', alias: 'u')
-            ->groupBy(groupBy: 'u.id')
+            ->groupBy('u.id')
             ->getQuery()
             ->getResult();
     }

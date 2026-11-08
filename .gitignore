@@ -28,6 +28,8 @@
 
 ###> developper ###
 /src/Docs/Prod
+.php-cs-fixer.cache
+###< developper ###
 
 ###> phpstan/phpstan ###
 phpstan.neon

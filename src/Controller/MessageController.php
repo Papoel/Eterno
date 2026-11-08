@@ -115,7 +115,7 @@ class MessageController extends AbstractController
         );
 
         return $this->redirectToRoute(route: 'app_message_new', parameters: [
-            'receiver' => $request->get(key: 'receiver'),
+            'receiver' => $request->request->getString(key: 'receiver'),
         ]);
     }
 }
