@@ -1,0 +1,99 @@
+{% extends 'base.html.twig' %}
+{% block title %}Lumières du site{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
+{% endblock %}
+
+{% block body %}
+    <section class="sb-nav-fixed">
+        <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+            <a class="navbar-brand ps-3 gradient-text" href="{{ path('admin.index') }}">Eterno</a>
+        </nav>
+
+        <div id="layoutSidenav">
+            {{ include('admin/Layout/_layoutSidenav_nav.html.twig') }}
+
+            <div id="layoutSidenav_content">
+                <main>
+                    <div class="container-fluid px-4">
+                        <h1 class="mt-4">ETERNO</h1>
+                        <ol class="breadcrumb mb-4">
+                            <li class="breadcrumb-item"><a href="{{ path('admin.index') }}">Tableau de bord</a></li>
+                            <li class="breadcrumb-item active">Liste des Lumières</li>
+                        </ol>
+
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <i class="fas fa-lightbulb me-1"></i>
+                                {{ lights|length }} Lumière{{ lights|length > 1 ? 's' }} créée{{ lights|length > 1 ? 's' }}
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-hover align-middle">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">Photo</th>
+                                            <th scope="col">Nom</th>
+                                            <th scope="col">Propriétaire</th>
+                                            <th scope="col">Naissance</th>
+                                            <th scope="col">Décès</th>
+                                            <th scope="col">Âge</th>
+                                            <th scope="col">Messages</th>
+                                            <th scope="col">Créée le</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for light in lights %}
+                                            <tr>
+                                                <td>
+                                                    {% if light.photo is not same as 'default.jpg' %}
+                                                        <img src="{{ asset('/assets/uploads/photos/lights/' ~ light.photo) }}"
+                                                             alt="miniature {{ light.fullname }}"
+                                                             class="rounded-circle"
+                                                             width="40" height="40"
+                                                             style="object-fit: cover;">
+                                                    {% else %}
+                                                        <span class="rounded-circle bg-secondary-subtle d-inline-flex align-items-center justify-content-center"
+                                                              style="width: 40px; height: 40px;">
+                                                            <i class="fas fa-lightbulb text-secondary"></i>
+                                                        </span>
+                                                    {% endif %}
+                                                </td>
+                                                <td class="fw-semibold">{{ light.fullname }}</td>
+                                                <td>
+                                                    {{ light.userAccount.fullname }}<br>
+                                                    <small class="text-muted">{{ light.userAccount.email }}</small>
+                                                </td>
+                                                <td>{{ light.birthdayAt ? light.birthdayAt|date('d/m/Y') : '—' }}</td>
+                                                <td>{{ light.deceasedAt ? light.deceasedAt|date('d/m/Y') : '—' }}</td>
+                                                <td>{{ light.age is not null ? light.age ~ ' ans' : '—' }}</td>
+                                                <td>
+                                                    <span class="badge bg-success">{{ light.messages|length }}</span>
+                                                </td>
+                                                <td>{{ light.createdAt|format_datetime('long', 'short') }}</td>
+                                            </tr>
+                                        {% else %}
+                                            <tr>
+                                                <td colspan="8" class="text-center text-muted py-4">
+                                                    Aucune Lumière créée pour le moment.
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </div>
+    </section>
+
+    {% block javascripts %}
+        {{ parent() }}
+        <script src="{{ asset('js/admin.js') }}"></script>
+    {% endblock %}
+{% endblock %}

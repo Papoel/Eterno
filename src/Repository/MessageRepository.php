@@ -56,6 +56,23 @@ class MessageRepository extends ServiceEntityRepository
         }, array: $result);
     }
 
+    /**
+     * Retourne tous les messages avec l'expéditeur et la Lumière associée
+     * chargés en une seule requête (évite le N+1).
+     *
+     * @return Message[]
+     */
+    public function findAllWithRelations(): array
+    {
+        return $this->createQueryBuilder(alias: 'm')
+            ->addSelect('u', 'l')
+            ->innerJoin('m.userAccount', 'u')
+            ->innerJoin('m.light', 'l')
+            ->orderBy('m.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
     public function countMessages(): int
     {
         $result = $this->createQueryBuilder(alias: 'm')
@@ -71,38 +88,32 @@ class MessageRepository extends ServiceEntityRepository
         return $result;
     }
 
+    /**
+     * Nombre de messages envoyés par mois sur les 12 derniers mois glissants.
+     *
+     * @return array<string, int> clés au format 'Y-m', du plus ancien au plus récent
+     */
     public function countMessagesByMonth(): array
     {
-        $queryBuilder = $this->createQueryBuilder(alias: 't')
-            ->select('SUBSTRING(t.createdAt, 6, 2) AS mois, COUNT(t) AS nombre_messages')
-            ->where('SUBSTRING(t.createdAt, 1, 4) = :annee')
-            ->setParameter(key: 'annee', value: date('Y'))
+        $firstMonth = (new \DateTimeImmutable(datetime: 'first day of this month'))->modify(modifier: '-11 months');
+
+        $results = $this->createQueryBuilder(alias: 'm')
+            ->select('SUBSTRING(m.createdAt, 1, 7) AS mois, COUNT(m.id) AS nombre')
+            ->where('m.createdAt >= :debut')
+            ->setParameter(key: 'debut', value: $firstMonth)
             ->groupBy('mois')
-            ->orderBy(sort: 'mois', order: 'ASC');
+            ->getQuery()
+            ->getResult();
 
-        $results = $queryBuilder->getQuery()->getResult();
+        $counts = array_column(array: $results, column_key: 'nombre', index_key: 'mois');
 
-        $message_mensuel = [];
-
-        // Initialiser le tableau avec tous les mois de l'année en cours et un nombre de messages de zéro
-        $mois_de_l_annee = [];
-        for ($mois = 1; $mois <= 12; ++$mois) {
-            $mois_de_l_annee[$mois] = 0;
+        $data = [];
+        for ($i = 11; $i >= 0; --$i) {
+            $key = (new \DateTimeImmutable(datetime: 'first day of this month'))->modify(modifier: "-{$i} months")->format(format: 'Y-m');
+            $data[$key] = (int) ($counts[$key] ?? 0);
         }
 
-        // Remplir le tableau avec les résultats de la requête
-        foreach ($results as $result) {
-            $mois = \DateTime::createFromFormat(format: '!m', datetime: $result['mois'])->format(format: 'F');
-            $mois_de_l_annee[(int) $result['mois']] = $result['nombre_messages'];
-        }
-
-        // Formater les noms des mois en français
-        foreach ($mois_de_l_annee as $mois => $nombre_messages) {
-            $nom_mois = \DateTime::createFromFormat(format: '!m', datetime: $mois)->format(format: 'F');
-            $message_mensuel[$nom_mois] = $nombre_messages;
-        }
-
-        return $message_mensuel;
+        return $data;
     }
 
     /*public function countMessagesPerMonth(int $month): int

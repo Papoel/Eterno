@@ -72,6 +72,22 @@ class InvitationRepository extends ServiceEntityRepository
     }
 
     /**
+     * Retourne toutes les invitations avec l'utilisateur invitant chargé
+     * en une seule requête (évite le N+1).
+     *
+     * @return Invitation[]
+     */
+    public function findAllWithFriend(): array
+    {
+        return $this->createQueryBuilder(alias: 'i')
+            ->addSelect('u')
+            ->leftJoin('i.friend', 'u')
+            ->orderBy('i.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
      * @return array<int, array{invitationsSent: int|string, invitationsAccepted: int|string, userId: string}>
      */
     public function getUserInvitationStats(): array

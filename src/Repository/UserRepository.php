@@ -61,4 +61,32 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 
         return $result;
     }
+
+    /**
+     * Nombre d'utilisateurs inscrits par mois sur les 12 derniers mois glissants.
+     *
+     * @return array<string, int> clés au format 'Y-m', du plus ancien au plus récent
+     */
+    public function countUsersByMonth(): array
+    {
+        $firstMonth = (new \DateTimeImmutable(datetime: 'first day of this month'))->modify(modifier: '-11 months');
+
+        $results = $this->createQueryBuilder(alias: 'u')
+            ->select('SUBSTRING(u.createdAt, 1, 7) AS mois, COUNT(u.id) AS nombre')
+            ->where('u.createdAt >= :debut')
+            ->setParameter(key: 'debut', value: $firstMonth)
+            ->groupBy('mois')
+            ->getQuery()
+            ->getResult();
+
+        $counts = array_column(array: $results, column_key: 'nombre', index_key: 'mois');
+
+        $data = [];
+        for ($i = 11; $i >= 0; --$i) {
+            $key = (new \DateTimeImmutable(datetime: 'first day of this month'))->modify(modifier: "-{$i} months")->format(format: 'Y-m');
+            $data[$key] = (int) ($counts[$key] ?? 0);
+        }
+
+        return $data;
+    }
 }

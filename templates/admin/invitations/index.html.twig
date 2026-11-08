@@ -1,0 +1,90 @@
+{% extends 'base.html.twig' %}
+{% block title %}Invitations envoyées{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
+{% endblock %}
+
+{% block body %}
+    <section class="sb-nav-fixed">
+        <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+            <a class="navbar-brand ps-3 gradient-text" href="{{ path('admin.index') }}">Eterno</a>
+        </nav>
+
+        <div id="layoutSidenav">
+            {{ include('admin/Layout/_layoutSidenav_nav.html.twig') }}
+
+            <div id="layoutSidenav_content">
+                <main>
+                    <div class="container-fluid px-4">
+                        <h1 class="mt-4">ETERNO</h1>
+                        <ol class="breadcrumb mb-4">
+                            <li class="breadcrumb-item"><a href="{{ path('admin.index') }}">Tableau de bord</a></li>
+                            <li class="breadcrumb-item active">Invitations envoyées</li>
+                        </ol>
+
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <i class="fas fa-envelope me-1"></i>
+                                {{ invitations|length }} invitation{{ invitations|length > 1 ? 's' }} envoyée{{ invitations|length > 1 ? 's' }}
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-hover align-middle">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">Email invité</th>
+                                            <th scope="col">Invité par</th>
+                                            <th scope="col">Statut</th>
+                                            <th scope="col">Envoyée le</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for invitation in invitations %}
+                                            <tr>
+                                                <td class="fw-semibold">{{ invitation.email }}</td>
+                                                <td>
+                                                    {% if invitation.friend %}
+                                                        {{ invitation.friend.fullname }}<br>
+                                                        <small class="text-muted">{{ invitation.friend.email }}</small>
+                                                    {% else %}
+                                                        <span class="text-muted">—</span>
+                                                    {% endif %}
+                                                </td>
+                                                <td>
+                                                    {% if invitation.accepted %}
+                                                        <span class="badge bg-success">
+                                                            <i class="fas fa-check-circle me-1"></i>Acceptée
+                                                        </span>
+                                                    {% else %}
+                                                        <span class="badge bg-warning text-dark">
+                                                            <i class="fas fa-hourglass-half me-1"></i>En attente
+                                                        </span>
+                                                    {% endif %}
+                                                </td>
+                                                <td>{{ invitation.createdAt|format_datetime('long', 'short') }}</td>
+                                            </tr>
+                                        {% else %}
+                                            <tr>
+                                                <td colspan="4" class="text-center text-muted py-4">
+                                                    Aucune invitation envoyée pour le moment.
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </div>
+    </section>
+
+    {% block javascripts %}
+        {{ parent() }}
+        <script src="{{ asset('js/admin.js') }}"></script>
+    {% endblock %}
+{% endblock %}
