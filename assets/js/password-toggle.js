@@ -58,3 +58,27 @@ document.addEventListener('DOMContentLoaded', () => {
     const passwordToggle = new PasswordToggle();
     passwordToggle.init();
 });
+
+// Gestion générique des icônes .password-icon présentes dans un .input-group
+// (pages register, settings). Sont exclus :
+// - #show-hide, déjà géré par la classe PasswordToggle (page login)
+// - les spans .input-group-text, gérés par admin.js (pages admin)
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.password-icon').forEach((icon) => {
+        if (icon.id === 'show-hide' || icon.classList.contains('input-group-text')) {
+            return;
+        }
+
+        icon.addEventListener('click', () => {
+            const input = icon.closest('.input-group')?.querySelector('input');
+            if (!input) {
+                return;
+            }
+
+            const show = input.type === 'password';
+            input.type = show ? 'text' : 'password';
+            icon.classList.toggle('fa-eye', show);
+            icon.classList.toggle('fa-eye-slash', !show);
+        });
+    });
+});

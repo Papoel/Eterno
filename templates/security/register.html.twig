@@ -112,4 +112,23 @@
             </div>
         </div>
     </div>
+
+    <script>
+        // Délégation : Font Awesome remplace les <i> par des <svg> au chargement,
+        // le listener doit être sur un parent stable (document), pas sur l'icône.
+        document.addEventListener('click', (e) => {
+            const icon = e.target.closest('.input-group .password-icon');
+            if (!icon) {
+                return;
+            }
+            const input = icon.closest('.input-group').querySelector('input');
+            if (!input) {
+                return;
+            }
+            const show = input.type === 'password';
+            input.type = show ? 'text' : 'password';
+            icon.classList.toggle('fa-eye', show);
+            icon.classList.toggle('fa-eye-slash', !show);
+        });
+    </script>
 {% endblock %}
