@@ -36,8 +36,8 @@ class MessageRepository extends ServiceEntityRepository
         $lightIdBinary = Uuid::fromString(uuid: $lightId)->toBinary();
 
         $qb = $this->createQueryBuilder(alias: 'm')
-            ->select(select: 'm')
-            ->where(predicates: 'm.userAccount = :userId')
+            ->select('m')
+            ->where('m.userAccount = :userId')
             ->andWhere('m.light = :lightId')
             ->setParameter(key: 'userId', value: $userIdBinary)
             ->setParameter(key: 'lightId', value: $lightIdBinary)
@@ -59,7 +59,7 @@ class MessageRepository extends ServiceEntityRepository
     public function countMessages(): int
     {
         $result = $this->createQueryBuilder(alias: 'm')
-            ->select(select: 'COUNT(m.id)')
+            ->select('COUNT(m.id)')
             ->getQuery()
             ->getSingleScalarResult();
 
@@ -74,10 +74,10 @@ class MessageRepository extends ServiceEntityRepository
     public function countMessagesByMonth(): array
     {
         $queryBuilder = $this->createQueryBuilder(alias: 't')
-            ->select(select: 'SUBSTRING(t.createdAt, 6, 2) AS mois, COUNT(t) AS nombre_messages')
-            ->where(predicates: 'SUBSTRING(t.createdAt, 1, 4) = :annee')
+            ->select('SUBSTRING(t.createdAt, 6, 2) AS mois, COUNT(t) AS nombre_messages')
+            ->where('SUBSTRING(t.createdAt, 1, 4) = :annee')
             ->setParameter(key: 'annee', value: date('Y'))
-            ->groupBy(groupBy: 'mois')
+            ->groupBy('mois')
             ->orderBy(sort: 'mois', order: 'ASC');
 
         $results = $queryBuilder->getQuery()->getResult();
@@ -108,7 +108,7 @@ class MessageRepository extends ServiceEntityRepository
     /*public function countMessagesPerMonth(int $month): int
     {
         $results = $this->createQueryBuilder('m')
-            ->select(select: 'm.createdAt')
+            ->select('m.createdAt')
             ->getQuery()
             ->getResult();
 
