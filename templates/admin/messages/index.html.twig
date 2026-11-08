@@ -1,0 +1,85 @@
+{% extends 'base.html.twig' %}
+{% block title %}Messages envoyés{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
+{% endblock %}
+
+{% block body %}
+    <section class="sb-nav-fixed">
+        <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+            <a class="navbar-brand ps-3 gradient-text" href="{{ path('admin.index') }}">Eterno</a>
+        </nav>
+
+        <div id="layoutSidenav">
+            {{ include('admin/Layout/_layoutSidenav_nav.html.twig') }}
+
+            <div id="layoutSidenav_content">
+                <main>
+                    <div class="container-fluid px-4">
+                        <h1 class="mt-4">ETERNO</h1>
+                        <ol class="breadcrumb mb-4">
+                            <li class="breadcrumb-item"><a href="{{ path('admin.index') }}">Tableau de bord</a></li>
+                            <li class="breadcrumb-item active">Messages envoyés</li>
+                        </ol>
+
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <i class="fas fa-comment me-1"></i>
+                                {{ messages|length }} message{{ messages|length > 1 ? 's' }} envoyé{{ messages|length > 1 ? 's' }}
+                            </div>
+                            <div class="card-body">
+                                <p class="text-muted small">
+                                    <i class="fas fa-lock me-1"></i>
+                                    Le contenu des messages est chiffré et reste privé : seules les métadonnées
+                                    sont affichées.
+                                </p>
+                                <div class="table-responsive">
+                                    <table class="table table-hover align-middle">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">Expéditeur</th>
+                                            <th scope="col">Lumière destinataire</th>
+                                            <th scope="col">Contenu</th>
+                                            <th scope="col">Envoyé le</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for message in messages %}
+                                            <tr>
+                                                <td>
+                                                    {{ message.userAccount.fullname }}<br>
+                                                    <small class="text-muted">{{ message.userAccount.email }}</small>
+                                                </td>
+                                                <td class="fw-semibold">{{ message.light.fullname }}</td>
+                                                <td>
+                                                    <span class="badge bg-secondary-subtle text-secondary">
+                                                        <i class="fas fa-lock me-1"></i>Chiffré
+                                                    </span>
+                                                </td>
+                                                <td>{{ message.createdAt|format_datetime('long', 'short') }}</td>
+                                            </tr>
+                                        {% else %}
+                                            <tr>
+                                                <td colspan="4" class="text-center text-muted py-4">
+                                                    Aucun message envoyé pour le moment.
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </div>
+    </section>
+
+    {% block javascripts %}
+        {{ parent() }}
+        <script src="{{ asset('js/admin.js') }}"></script>
+    {% endblock %}
+{% endblock %}

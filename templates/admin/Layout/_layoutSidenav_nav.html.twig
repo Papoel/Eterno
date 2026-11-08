@@ -34,6 +34,36 @@
                     </nav>
                 </div>
 
+                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseContent" aria-expanded="false" aria-controls="collapseContent">
+                    <div>
+                        <i class="fas fa-database me-1"></i>
+                        <span>Contenu</span>
+                    </div>
+                    <div class="sb-sidenav-collapse-arrow">
+                        <i class="fas fa-angle-down"></i>
+                    </div>
+                </a>
+                <div class="collapse" id="collapseContent" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
+                    <nav class="sb-sidenav-menu-nested nav">
+                        <a class="nav-link" href="{{ path('admin.light.index') }}">
+                            <i class="fas fa-lightbulb me-1"></i>
+                            Lumières
+                        </a>
+                    </nav>
+                    <nav class="sb-sidenav-menu-nested nav">
+                        <a class="nav-link" href="{{ path('admin.message.index') }}">
+                            <i class="fas fa-comment me-1"></i>
+                            Messages
+                        </a>
+                    </nav>
+                    <nav class="sb-sidenav-menu-nested nav">
+                        <a class="nav-link" href="{{ path('admin.invitation.index') }}">
+                            <i class="fas fa-envelope me-1"></i>
+                            Invitations
+                        </a>
+                    </nav>
+                </div>
+
             </div>
         </div>
 

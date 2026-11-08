@@ -35,4 +35,21 @@ class LightRepository extends ServiceEntityRepository
 
         return $result;
     }
+
+    /**
+     * Retourne toutes les Lumières avec leur propriétaire et leurs messages
+     * chargés en une seule requête (évite le N+1).
+     *
+     * @return Light[]
+     */
+    public function findAllWithRelations(): array
+    {
+        return $this->createQueryBuilder(alias: 'l')
+            ->addSelect('u', 'm')
+            ->leftJoin('l.userAccount', 'u')
+            ->leftJoin('l.messages', 'm')
+            ->orderBy('l.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
 }
