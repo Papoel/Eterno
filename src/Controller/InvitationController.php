@@ -7,6 +7,7 @@ use App\Entity\User;
 use App\Form\Account\RegistrationFormType;
 use App\Security\MainAuthenticator;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,6 +26,7 @@ class InvitationController extends AbstractController
     #[Route('/invitation/{uuid}', name: 'invitation.verify')]
     public function verify(
         Request $request,
+        #[MapEntity(mapping: ['uuid' => 'uuid'])]
         Invitation $invitation,
         UserAuthenticatorInterface $userAuthenticator,
         MainAuthenticator $authenticator,
