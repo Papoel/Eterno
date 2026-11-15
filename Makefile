@@ -416,5 +416,5 @@ deploy-prod: ## Reconstruit le cache et les assets pour la production
 	$(BIN) importmap:install --env=prod
 	@echo "$(GREEN)Compilation de l'asset map...$(NC)"
 	$(BIN) asset-map:compile --env=prod
- 	@echo "$(GREEN)✅ Reconstruction terminée.$(NC)"
+	@echo "$(GREEN)✅ Reconstruction terminée.$(NC)"
 .PHONY: deploy-prod
