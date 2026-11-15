@@ -400,3 +400,21 @@ check-dump: ## Vérifier les occurrences de {{ dump() }} dans les fichiers du do
 		echo "\033[31mLe dossier 'templates' n'existe pas. Assurez-vous qu'il est présent.\033[0m"; \
 		exit 1; \
 	fi
+
+# --------------------
+# Mise en production
+# --------------------
+## —— 🚢 Déploiement ——————————————————————————————————————————
+
+deploy-prod: ## Reconstruit le cache et les assets pour la production
+	@echo "$(GREEN)Suppression du cache de production...$(NC)"
+	rm -rf var/cache/prod
+	@echo "$(GREEN)Préchauffage du cache...$(NC)"
+	$(BIN) cache:warmup --env=prod
+	@echo "$(GREEN)Installation des assets...$(NC)"
+	$(BIN) assets:install public --env=prod
+	$(BIN) importmap:install --env=prod
+	@echo "$(GREEN)Compilation de l'asset map...$(NC)"
+	$(BIN) asset-map:compile --env=prod
+ 	@echo "$(GREEN)✅ Reconstruction terminée.$(NC)"
+.PHONY: deploy-prod
